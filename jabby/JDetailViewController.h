@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AFHTTPRequestOperationManager.h"
 
 @interface JDetailViewController : UIViewController <UISplitViewControllerDelegate>
 
