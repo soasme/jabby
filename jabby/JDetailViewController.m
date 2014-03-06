@@ -37,12 +37,12 @@
 
     if (self.detailItem) {
         self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"timeStamp"] description];
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        [manager GET:@"https://api.github.com/repos/soasme/retries/branches" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSLog(@"JSON: %@", responseObject);
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
-        }];
+//        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//        [manager GET:@"https://api.github.com/repos/soasme/retries/branches" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//            NSLog(@"JSON: %@", responseObject);
+//        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//            NSLog(@"Error: %@", error);
+//        }];
     }
 }
 
