@@ -15,6 +15,16 @@
 
 @implementation JDetailViewController
 
+- (JAppDelegate *)appDelegate
+{
+    return (JAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
+- (XMPPStream *)xmppStream
+{
+    return [[self appDelegate] xmppStream];
+}
+
 #pragma mark - Managing the detail item
 
 - (void)setDetailItem:(id)newDetailItem
@@ -51,6 +61,26 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
+    
+    [self appDelegate].messageDelegate = self;
+}
+
+- (void)onReceivedMessage:(XMPPMessage *)message
+{
+    if ([message isMessageWithBody]) {
+        NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+        [body setStringValue: [NSString stringWithFormat:@"Echo: %@",[message body]]];
+        NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+        [mes addAttributeWithName:@"type" stringValue:@"chat"];
+        [mes addAttributeWithName:@"to" stringValue:[[message from] bare]]; // soasme@gmail.com
+        [mes addAttributeWithName:@"from" stringValue:[[self xmppStream].myJID full]];
+        [mes addChild:body];
+        [[self xmppStream] sendElement:mes];
+    } else {
+        // active? pause? typing?
+        // http://wiki.jabbercn.org/XEP-0085#.E5.AE.9A.E4.B9.89
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning

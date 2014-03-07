@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "AFHTTPRequestOperationManager.h"
+#import "JAppDelegate.h"
 
-@interface JDetailViewController : UIViewController <UISplitViewControllerDelegate>
+@interface JDetailViewController : UIViewController <UISplitViewControllerDelegate, JMessageDelegate>
 
 @property (strong, nonatomic) id detailItem;
 
