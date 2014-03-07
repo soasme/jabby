@@ -11,7 +11,7 @@
 @class JDetailViewController;
 
 #import <CoreData/CoreData.h>
-#import "XMPP.h"
+#import "JAppDelegate.h"
 
 @interface JMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
@@ -20,6 +20,6 @@
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
-@property (strong, nonatomic) XMPPStream *stream;
+
 
 @end

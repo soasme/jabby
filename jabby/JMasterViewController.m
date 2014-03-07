@@ -16,6 +16,16 @@
 
 @implementation JMasterViewController
 
+- (JAppDelegate *)appDelegate
+{
+    return (JAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
+- (XMPPStream *)xmppStream
+{
+    return [[self appDelegate] xmppStream];
+}
+
 - (void)awakeFromNib
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -35,29 +45,12 @@
     self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (JDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
-    XMPPStream *stream = [[XMPPStream alloc] init];
-    self.stream = stream;
-    stream.myJID = [XMPPJID jidWithString:@"soasme.insecure@gmail.com"];
-    NSError *error = nil;
-    if (![stream connectWithTimeout: 2 error:&error]) {
-        NSLog(@"Ooops, forgot something");
-    } else {
-        [self.stream addDelegate:self delegateQueue:dispatch_get_main_queue()];
-        NSLog(@"Success Connect to gtalk");
-    }
+    JAppDelegate *delegate = [self appDelegate];
+    [delegate connect];
     
 }
 
-- (void)xmppStreamDidConnect:(XMPPStream *)sender
-{
-    NSError *error = nil;
-    if (![self.stream authenticateWithPassword:@"soasme.test" error:&error]) {
-        NSLog(@"Auth fail.");
-    } else {
-        NSLog(@"Auth success");
-    }
-    
-}
+
 
 - (void)didReceiveMemoryWarning
 {

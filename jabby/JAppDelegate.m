@@ -77,6 +77,57 @@
     }
 }
 
+- (BOOL)connect {
+    [self setupStream];
+    xmppStream.myJID = [XMPPJID jidWithString:@"soasme.insecure@gmail.com"];
+    NSError *error = nil;
+    if (![xmppStream connectWithTimeout: 2 error:&error]) {
+        NSLog(@"Ooops, forgot something");
+        return FALSE;
+    } else {
+        NSLog(@"Success Connect to gtalk");
+        return TRUE;
+    }
+}
+
+- (void)disconnect {
+    [self goOffline];
+    [xmppStream disconnect];
+}
+
+- (void)setupStream {
+    xmppStream = [[XMPPStream alloc] init];
+    [xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+}
+
+- (void)goOnline {
+    XMPPPresence *presence = [XMPPPresence presence];
+    [[self xmppStream] sendElement:presence];
+}
+- (void)goOffline {
+    XMPPPresence *presence = [XMPPPresence presenceWithType:@"unavailable"];
+    [[self xmppStream] sendElement:presence];
+}
+
+- (void)xmppStreamDidConnect:(XMPPStream *)sender
+{
+    NSError *error = nil;
+    if (![xmppStream authenticateWithPassword:@"soasme.test" error:&error]) {
+        NSLog(@"Auth fail. %@ %@", error, [error userInfo]);
+    } else {
+        NSLog(@"Auth success");
+    }
+}
+- (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
+{
+    [self goOnline];
+}
+- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
+{
+    NSLog(@"message = %@", message); 
+}
+
+
 #pragma mark - Core Data stack
 
 // Returns the managed object context for the application.
@@ -159,3 +210,4 @@
 }
 
 @end
+
