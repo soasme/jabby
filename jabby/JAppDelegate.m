@@ -102,11 +102,11 @@
 
 - (void)goOnline {
     XMPPPresence *presence = [XMPPPresence presence];
-    [[self xmppStream] sendElement:presence];
+    [xmppStream sendElement:presence];
 }
 - (void)goOffline {
     XMPPPresence *presence = [XMPPPresence presenceWithType:@"unavailable"];
-    [[self xmppStream] sendElement:presence];
+    [xmppStream sendElement:presence];
 }
 
 - (void)xmppStreamDidConnect:(XMPPStream *)sender
@@ -121,10 +121,22 @@
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
     [self goOnline];
+//    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+//    [body setStringValue:@"test"];
+//    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+//    [mes addAttributeWithName:@"type" stringValue:@"chat"];
+//    [mes addAttributeWithName:@"to" stringValue:@"soasme@gmail.com"];
+//    [mes addAttributeWithName:@"from" stringValue:[xmppStream.myJID full]];
+//    [mes addChild:body];
+//    [xmppStream sendElement:mes];
 }
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
     NSLog(@"message = %@", message); 
+}
+- (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
+{
+    NSLog(@"presence = %@", presence);
 }
 
 
