@@ -98,6 +98,7 @@
 - (void)setupStream {
     xmppStream = [[XMPPStream alloc] init];
     [xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    xmppStream.enableBackgroundingOnSocket = YES;
 }
 
 - (void)goOnline {
@@ -124,13 +125,13 @@
 }
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
-    NSLog(@"message = %@", message);
+    NSLog(@"message = %@",  [[message from] bare]);
     // echo
     NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
     [body setStringValue:[message body]];
     NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
     [mes addAttributeWithName:@"type" stringValue:@"chat"];
-    [mes addAttributeWithName:@"to" stringValue:@"1e6hri4nzpkx71vqdroamlu9u2@public.talk.google.com"]; // soasme@gmail.com
+    [mes addAttributeWithName:@"to" stringValue:[[message from] bare]]; // soasme@gmail.com
     [mes addAttributeWithName:@"from" stringValue:[xmppStream.myJID full]];
     [mes addChild:body];
     [xmppStream sendElement:mes];
@@ -138,6 +139,7 @@
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
     NSLog(@"presence = %@", presence);
+    NSLog(@"%@", [[presence from] user]);
 }
 
 
