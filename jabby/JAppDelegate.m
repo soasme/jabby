@@ -97,6 +97,7 @@
 
 - (void)setupStream {
     xmppStream = [[XMPPStream alloc] init];
+    self.xmppStream = xmppStream;
     [xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
     xmppStream.enableBackgroundingOnSocket = YES;
 }
@@ -125,16 +126,13 @@
 }
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
-    NSLog(@"message = %@",  [[message from] bare]);
-    // echo
-    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-    [body setStringValue:[message body]];
-    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
-    [mes addAttributeWithName:@"type" stringValue:@"chat"];
-    [mes addAttributeWithName:@"to" stringValue:[[message from] bare]]; // soasme@gmail.com
-    [mes addAttributeWithName:@"from" stringValue:[xmppStream.myJID full]];
-    [mes addChild:body];
-    [xmppStream sendElement:mes];
+    NSLog(@"message = %@",  message);
+
+    
+    // delegate to messageDelegate
+    [self.messageDelegate onReceivedMessage:message];
+    
+    
 }
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
