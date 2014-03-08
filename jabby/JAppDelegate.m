@@ -15,6 +15,9 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+@synthesize xmppStream = _xmppStream;
+@synthesize messageDelegate = _messageDelegate;
+@synthesize friendListDelegate = _friendListDelegate;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -79,9 +82,9 @@
 
 - (BOOL)connect {
     [self setupStream];
-    xmppStream.myJID = [XMPPJID jidWithString:@"soasme.insecure@gmail.com"];
+    self.xmppStream.myJID = [XMPPJID jidWithString:@"soasme.insecure@gmail.com"];
     NSError *error = nil;
-    if (![xmppStream connectWithTimeout: 2 error:&error]) {
+    if (![self.xmppStream connectWithTimeout: 2 error:&error]) {
         NSLog(@"Ooops, forgot something");
         return FALSE;
     } else {
@@ -92,29 +95,28 @@
 
 - (void)disconnect {
     [self goOffline];
-    [xmppStream disconnect];
+    [self.xmppStream disconnect];
 }
 
 - (void)setupStream {
-    xmppStream = [[XMPPStream alloc] init];
-    self.xmppStream = xmppStream;
-    [xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    xmppStream.enableBackgroundingOnSocket = YES;
+    self.xmppStream = [[XMPPStream alloc] init];
+    [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    self.xmppStream.enableBackgroundingOnSocket = YES;
 }
 
 - (void)goOnline {
     XMPPPresence *presence = [XMPPPresence presence];
-    [xmppStream sendElement:presence];
+    [self.xmppStream sendElement:presence];
 }
 - (void)goOffline {
     XMPPPresence *presence = [XMPPPresence presenceWithType:@"unavailable"];
-    [xmppStream sendElement:presence];
+    [self.xmppStream sendElement:presence];
 }
 
 - (void)xmppStreamDidConnect:(XMPPStream *)sender
 {
     NSError *error = nil;
-    if (![xmppStream authenticateWithPassword:@"soasme.test" error:&error]) {
+    if (![self.xmppStream authenticateWithPassword:@"soasme.test" error:&error]) {
         NSLog(@"Auth fail. %@ %@", error, [error userInfo]);
     } else {
         NSLog(@"Auth success");
@@ -131,8 +133,16 @@
 }
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
-    NSLog(@"presence = %@", presence);
-    NSLog(@"%@", [[presence from] user]);
+    NSString *presenceType = [presence type];
+    NSString *userId = [[sender myJID] user];
+    NSString *presenceFromUser = [[presence from] user];
+    if (![presenceFromUser isEqualToString:userId]) {
+        if ([presenceType isEqualToString:@"available"]) {
+            [self.friendListDelegate onPresence:presenceFromUser];
+        } else if ([presenceType isEqualToString:@"unavailable"]) {
+            [self.friendListDelegate onAbsence:presenceFromUser];
+        }
+    }
 }
 
 
