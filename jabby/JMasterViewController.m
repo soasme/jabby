@@ -46,10 +46,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+//    self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
+//    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
+//    self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (JDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
     JAppDelegate *appDelegate = [self appDelegate];
@@ -143,18 +143,28 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        self.detailViewController.detailItem = object;
-    }
+//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+//        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+//        self.detailViewController.detailItem = object;
+//    }
+    //
+//    XMPPPresence *presence = (XMPPPresence *)[self.friendList objectAtIndex:indexPath.row];
+//    self.detailViewController.detailItem = presence;
+//    [self performSegueWithIdentifier:@"chat" sender:self];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
+//    if ([[segue identifier] isEqualToString:@"showDetail"]) {
+//        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+//        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+//        [[segue destinationViewController] setDetailItem:object];
+//    }
+    if ([[segue identifier] isEqualToString:@"chat"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        [[segue destinationViewController] setDetailItem:object];
+        XMPPPresence *presence = (XMPPPresence *)[self.friendList objectAtIndex:indexPath.row];
+        XMPPvCardTemp *card = [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
+        [[segue destinationViewController] setDetailItem:presence andCard:card];
     }
 }
 
@@ -261,19 +271,21 @@
 {
 //    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
 //    cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
-    cell.textLabel.text = @"灵小句";
+    XMPPPresence *presence = (XMPPPresence *)[self.friendList objectAtIndex:indexPath.row];
+    XMPPvCardTemp *card = [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
+    cell.textLabel.text = [card formattedName];
 }
 
 
 # pragma mark - JFriendListDelegate
 -(void)onAbsence:(XMPPPresence *)presence {
-    NSLog(@"%@", presence);
+    [self.friendList removeObject:presence];
+    [self.tableView reloadData];
     
 }
 -(void)onPresence:(XMPPPresence *)presence {
-    NSLog(@"presence %@", [presence from]);
-    XMPPvCardTemp *card = [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
-    [self.friendList addObject:[card formattedName]];
+    [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
+    [self.friendList addObject:presence];
     [self.tableView reloadData];
 }
 
