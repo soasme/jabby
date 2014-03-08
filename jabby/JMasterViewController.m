@@ -10,13 +10,18 @@
 
 #import "JDetailViewController.h"
 
-@interface JMasterViewController () <JFriendListDelegate>
+@interface JMasterViewController () <JFriendListDelegate, XMPPvCardTempModuleDelegate>
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
+@property (strong, nonatomic) NSMutableArray *friendList;
+
 @end
 
+
 @implementation JMasterViewController
+
+@synthesize friendList = _friendList;
 
 - (JAppDelegate *)appDelegate
 {
@@ -52,6 +57,10 @@
     [appDelegate connect];
     appDelegate.friendListDelegate = self;
     
+    self.friendList = [NSMutableArray array];
+    
+    
+    
 }
 
 
@@ -86,13 +95,15 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[self.fetchedResultsController sections] count];
+    // return [[self.fetchedResultsController sections] count];
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
-    return [sectionInfo numberOfObjects];
+//    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
+//    return [sectionInfo numberOfObjects];
+    return self.friendList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -248,17 +259,39 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
+//    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
+    cell.textLabel.text = @"灵小句";
 }
 
 
 # pragma mark - JFriendListDelegate
 -(void)onAbsence:(XMPPPresence *)presence {
-    
+    NSLog(@"%@", presence);
     
 }
 -(void)onPresence:(XMPPPresence *)presence {
+    NSLog(@"presence %@", [presence from]);
+    XMPPvCardTemp *card = [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
+    [self.friendList addObject:[card formattedName]];
+    [self.tableView reloadData];
+}
+
+#pragma mark - vcard
+- (void)xmppvCardTempModule:(XMPPvCardTempModule *)vCardTempModule
+        didReceivevCardTemp:(XMPPvCardTemp *)vCardTemp
+                     forJID:(XMPPJID *)jid
+{
+    NSLog(@"did receive card: %@", vCardTemp);
+}
+
+- (void)xmppvCardTempModuleDidUpdateMyvCard:(XMPPvCardTempModule *)vCardTempModule
+{
+    NSLog(@"did updated: %@", vCardTempModule);
+}
+
+- (void)xmppvCardTempModule:(XMPPvCardTempModule *)vCardTempModule failedToUpdateMyvCard:(NSXMLElement *)error
+{
     
 }
 
