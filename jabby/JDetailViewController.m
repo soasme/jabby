@@ -287,6 +287,7 @@
     
     self.willSendImage = [info objectForKey:UIImagePickerControllerEditedImage];
     [self.messages addObject:[NSDictionary dictionaryWithObject:self.willSendImage forKey:@"Image"]];
+    [self.messages addObject:[NSDictionary dictionaryWithObject:@"发送图片什么的好麻烦 没什么时间搞哎" forKey:@"Text"]];
     [self.timestamps addObject:[NSDate date]];
     [self.tableView reloadData];
     [self scrollToBottomAnimated:YES];
