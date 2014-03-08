@@ -98,21 +98,14 @@
 {
     if ([message isMessageWithBody]) {
         //[messages addObject:message];
+        [JSMessageSoundEffect playMessageReceivedSound];
         [self.timestamps addObject:[NSDate date]];
         [self.messages addObject:[NSDictionary dictionaryWithObject:[message body] forKey:@"Text"]];
         [self.tableView reloadData];
         [self scrollToBottomAnimated:YES];
         NSLog(@"%@", self.messages);
         
-//        NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-//        NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
-//        [mes addAttributeWithName:@"type" stringValue:@"chat"];
-//        [mes addAttributeWithName:@"to" stringValue:[[message from] bare]];
-//        [mes addAttributeWithName:@"from" stringValue:[[self xmppStream].myJID full]];
-//        [body setStringValue:[message body]];
-//        [mes addChild:body];
-//        [[self xmppStream] sendElement:mes];
-//        [messages addObject:mes];
+
         
         
         
@@ -181,11 +174,17 @@
     [self.messages addObject:[NSDictionary dictionaryWithObject:text forKey:@"Text"]];
     
     [self.timestamps addObject:[NSDate date]];
+    [JSMessageSoundEffect playMessageSentSound];
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+    [mes addAttributeWithName:@"type" stringValue:@"chat"];
+    [mes addAttributeWithName:@"to" stringValue:@"1e6hri4nzpkx71vqdroamlu9u2@public.talk.google.com"];
+    [mes addAttributeWithName:@"from" stringValue:[[self xmppStream].myJID full]];
+    [body setStringValue:text];
+    [mes addChild:body];
+    [[self xmppStream] sendElement:mes];
+    //[messages addObject:mes];
     
-    if((self.messages.count - 1) % 2)
-        [JSMessageSoundEffect playMessageSentSound];
-    else
-        [JSMessageSoundEffect playMessageReceivedSound];
     
     [self finishSend];
 }
@@ -232,8 +231,10 @@
      JSMessagesViewTimestampPolicyEveryFive,
      JSMessagesViewTimestampPolicyCustom
      */
-    return JSMessagesViewTimestampPolicyEveryThree;
+    return JSMessagesViewTimestampPolicyCustom;
 }
+
+
 
 - (JSMessagesViewAvatarPolicy)avatarPolicy
 {
@@ -242,7 +243,7 @@
      JSMessagesViewAvatarPolicyBoth,
      JSMessagesViewAvatarPolicyNone
      */
-    return JSMessagesViewAvatarPolicyBoth;
+    return JSMessagesViewAvatarPolicyNone;
 }
 
 - (JSAvatarStyle)avatarStyle
@@ -252,7 +253,7 @@
      JSAvatarStyleSquare,
      JSAvatarStyleNone
      */
-    return JSAvatarStyleCircle;
+    return JSAvatarStyleNone;
 }
 
 - (JSInputBarStyle)inputBarStyle
@@ -282,7 +283,8 @@
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self.timestamps objectAtIndex:indexPath.row];
+//    return [self.timestamps objectAtIndex:indexPath.row];
+    return nil;
 }
 
 - (UIImage *)avatarImageForIncomingMessage
