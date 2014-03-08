@@ -10,6 +10,7 @@
 
 #import <UIKit/UIKit.h>
 #import "XMPPFramework.h"
+#import "XMPPRosterCoreDataStorage.h"
 #import "JFriendListDelegate.h"
 #import "JMessageDelegate.h"
 
@@ -27,6 +28,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (strong, nonatomic) XMPPStream *xmppStream;
 @property (strong, nonatomic) XMPPRoster *xmppRoster;
+@property (strong, nonatomic) XMPPRosterCoreDataStorage *xmppRosterStorage;
 @property (strong, nonatomic) id<JFriendListDelegate> friendListDelegate;
 @property (strong, nonatomic) id<JMessageDelegate> messageDelegate;
 

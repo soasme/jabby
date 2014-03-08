@@ -19,6 +19,7 @@
 @synthesize messageDelegate = _messageDelegate;
 @synthesize friendListDelegate = _friendListDelegate;
 @synthesize xmppRoster = _xmppRoster;
+@synthesize xmppRosterStorage = _xmppRosterStorage;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -102,6 +103,11 @@
     self.xmppStream = [[XMPPStream alloc] init];
     [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
     self.xmppStream.enableBackgroundingOnSocket = YES;
+    
+    self.xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] initWithInMemoryStore];
+    self.xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:self.xmppRosterStorage];
+    self.xmppRoster.autoFetchRoster = YES;
+    self.xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
 }
 
 - (void)goOnline {
@@ -138,9 +144,9 @@
     NSString *presenceFromUser = [[presence from] user];
     if (![presenceFromUser isEqualToString:userId]) {
         if ([presenceType isEqualToString:@"available"]) {
-            [self.friendListDelegate onPresence:presenceFromUser];
+            [self.friendListDelegate onPresence:presence];
         } else if ([presenceType isEqualToString:@"unavailable"]) {
-            [self.friendListDelegate onAbsence:presenceFromUser];
+            [self.friendListDelegate onAbsence:presence];
         }
     }
 }
