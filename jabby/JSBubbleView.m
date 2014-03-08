@@ -237,7 +237,7 @@ CGFloat const kJSAvatarSize = 50.0f;
 		{
 			if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending)
 			{
-                UIColor* textColor = [UIColor whiteColor];
+                UIColor* textColor = [UIColor blackColor];
                 if (self.selectedToShowCopyMenu)
                     textColor = [UIColor lightTextColor];
                 
