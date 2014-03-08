@@ -10,18 +10,23 @@
 
 @interface JDetailViewController ()
 {
-    NSMutableArray *messages;
+    //NSMutableArray *messages;
     IBOutlet UITableView *table;
 }
 
 
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
+@property (strong, nonatomic) NSMutableArray *timestamps;
+@property (strong, nonatomic) NSMutableArray *messages;
+
 - (void)configureView;
+
 @end
 
 
 
 @implementation JDetailViewController
+
 @synthesize table;
 @synthesize messages;
 
@@ -67,7 +72,16 @@
 
     self.table.delegate = self;
     self.table.dataSource = self;
+    
     messages = [NSMutableArray array];
+    
+    self.delegate = self;
+    self.dataSource = self;
+    
+    self.title = @"与 ... 聊天";
+    
+    self.messages = [NSMutableArray array];
+    self.timestamps = [NSMutableArray array];
     
 }
 
@@ -76,6 +90,8 @@
     [self setView:nil];
     [super viewDidUnload];
 }
+
+# pragma mark - JMessageDelegate
 
 - (void)onReceivedMessage:(XMPPMessage *)message
 {
@@ -92,12 +108,6 @@
         
         [messages addObject:message];
         [messages addObject:mes];
-
-        [self.table reloadData];
-        [self.table scrollToRowAtIndexPath:
-          [NSIndexPath indexPathForRow:[messages count]-1 inSection:0]
-                                   atScrollPosition: UITableViewScrollPositionBottom
-                                           animated:YES];
         
     } else {
         // active? pause? typing?
@@ -107,38 +117,32 @@
 }
 
 
-# pragma mark - UITableViewDataSource
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    
-    return 1;
-}
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [messages count];
-}
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *identifier = @"msgCell";
-    XMPPMessage *message = [messages objectAtIndex:indexPath.row];
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    if (cell == nil)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-    }
-    
-    cell.textLabel.text = [message body];
-    cell.detailTextLabel.text = [[message from] user];
-    cell.accessoryType = UITableViewCellAccessoryNone;
-    
-    return cell;
-}
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    // In the simplest, most efficient, case, reload the table view.
-    NSLog(@"Did change conteng");
-    [self.tableView reloadData];
-}
+//# pragma mark - UITableViewDataSource
+//-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+//    
+//    return 1;
+//}
+//-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+//{
+//    return [messages count];
+//}
+//-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    static NSString *identifier = @"msgCell";
+//    XMPPMessage *message = [messages objectAtIndex:indexPath.row];
+//    
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+//    if (cell == nil)
+//    {
+//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
+//    }
+//    
+//    cell.textLabel.text = [message body];
+//    cell.detailTextLabel.text = [[message from] user];
+//    cell.accessoryType = UITableViewCellAccessoryNone;
+//    
+//    return cell;
+//}
 
 //#pragma mark - Split view
 //

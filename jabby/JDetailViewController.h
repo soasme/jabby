@@ -9,12 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "AFHTTPRequestOperationManager.h"
 #import "JAppDelegate.h"
+#import "JSMessagesViewController.h"
 
-
-@interface JDetailViewController : UITableViewController <JMessageDelegate, UITableViewDataSource, UITableViewDelegate>;
+@interface JDetailViewController : JSMessagesViewController <
+    JMessageDelegate,
+    JSMessagesViewDelegate, JSMessagesViewDataSource,
+    UIImagePickerControllerDelegate, UINavigationControllerDelegate
+>;
 
 @property (retain, nonatomic) IBOutlet UITableView *table;
-@property (retain, nonatomic) NSMutableArray *messages;
+
 @property (strong, nonatomic) id detailItem;
 
 
