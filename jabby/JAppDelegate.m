@@ -20,6 +20,9 @@
 @synthesize friendListDelegate = _friendListDelegate;
 @synthesize xmppRoster = _xmppRoster;
 @synthesize xmppRosterStorage = _xmppRosterStorage;
+@synthesize xmppvCardAvatarModule = _xmppvCardAvatarModule;
+@synthesize xmppvCardStorage = _xmppvCardStorage;
+@synthesize xmppvCardTempModule = _xmppvCardTempModule;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -108,6 +111,14 @@
     self.xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:self.xmppRosterStorage];
     self.xmppRoster.autoFetchRoster = YES;
     self.xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
+    [self.xmppRoster activate:self.xmppStream];
+    [self.xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    
+    self.xmppvCardStorage = [XMPPvCardCoreDataStorage sharedInstance];
+    self.xmppvCardTempModule = [[XMPPvCardTempModule alloc] initWithvCardStorage:self.xmppvCardStorage];
+    self.xmppvCardAvatarModule = [[XMPPvCardAvatarModule alloc] initWithvCardTempModule:self.xmppvCardTempModule];
+    [self.xmppvCardTempModule activate:self.xmppStream];
+    
 }
 
 - (void)goOnline {
@@ -232,6 +243,8 @@
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+
+
 
 @end
 
