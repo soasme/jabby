@@ -10,9 +10,13 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "JAppDelegate.h"
 
-@interface JDetailViewController : UIViewController <UISplitViewControllerDelegate, JMessageDelegate>
 
+@interface JDetailViewController : UITableViewController <JMessageDelegate, UITableViewDataSource, UITableViewDelegate>;
+
+@property (retain, nonatomic) IBOutlet UITableView *table;
+@property (retain, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) id detailItem;
+
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @end
