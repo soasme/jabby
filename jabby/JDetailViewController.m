@@ -118,33 +118,6 @@
 }
 
 
-//# pragma mark - UITableViewDataSource
-//-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-//    
-//    return 1;
-//}
-//-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//    return [messages count];
-//}
-//-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    static NSString *identifier = @"msgCell";
-//    XMPPMessage *message = [messages objectAtIndex:indexPath.row];
-//    
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-//    if (cell == nil)
-//    {
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-//    }
-//    
-//    cell.textLabel.text = [message body];
-//    cell.detailTextLabel.text = [[message from] user];
-//    cell.accessoryType = UITableViewCellAccessoryNone;
-//    
-//    return cell;
-//}
-
 //#pragma mark - Split view
 //
 //- (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
