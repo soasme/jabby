@@ -254,11 +254,12 @@
 
 
 # pragma mark - JFriendListDelegate
--(void)onAbsence:(NSString *)name {
-    NSLog(@"absence: %@", name);
+-(void)onAbsence:(XMPPPresence *)presence {
+    
+    
 }
--(void)onPresence:(NSString *)name {
-    NSLog(@"presence: %@", name);
+-(void)onPresence:(XMPPPresence *)presence {
+    
 }
 
 

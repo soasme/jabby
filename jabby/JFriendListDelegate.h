@@ -10,8 +10,8 @@
 
 @protocol JFriendListDelegate <NSObject>
 
--(void)onAbsence:(NSString *)name;
--(void)onPresence:(NSString *)name;
+-(void)onAbsence:(XMPPPresence *)presence;
+-(void)onPresence:(XMPPPresence *)presence;
 -(void)didConnect;
 
 @end
