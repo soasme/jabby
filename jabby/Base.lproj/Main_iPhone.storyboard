@@ -70,8 +70,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="Ah7-4n-0Wa" id="Zey-j7-4r8"/>
+                            <outlet property="delegate" destination="Ah7-4n-0Wa" id="OKv-Fu-XKo"/>
+                        </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Detail" id="cra-N8-TIN"/>
+                    <connections>
+                        <outlet property="table" destination="HSC-qg-2Su" id="1dF-Qb-TFU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
             </objects>
