@@ -45,8 +45,8 @@
     self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (JDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
-    JAppDelegate *delegate = [self appDelegate];
-    [delegate connect];
+    JAppDelegate *appDelegate = [self appDelegate];
+    [appDelegate connect];
     
 }
 
