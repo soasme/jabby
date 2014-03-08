@@ -57,6 +57,8 @@
     [appDelegate connect];
     appDelegate.friendListDelegate = self;
     
+    self.title = @"好友列表";
+    
     self.friendList = [NSMutableArray array];
     
     

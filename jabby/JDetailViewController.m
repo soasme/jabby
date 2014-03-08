@@ -90,7 +90,7 @@
     self.dataSource = self;
     
     //self.title = @"与 ... 聊天";
-    self.navigationController.navigationBar.topItem.title = @"返回";
+    //self.navigationController.navigationBar.topItem.title = @"返回";
     self.title = [NSString stringWithFormat:@"与 %@ 聊天", [self.card formattedName]];
     
     self.messages = [NSMutableArray array];
