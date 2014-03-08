@@ -18,6 +18,7 @@
 @synthesize xmppStream = _xmppStream;
 @synthesize messageDelegate = _messageDelegate;
 @synthesize friendListDelegate = _friendListDelegate;
+@synthesize xmppRoster = _xmppRoster;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -81,7 +82,6 @@
 }
 
 - (BOOL)connect {
-    [self setupStream];
     self.xmppStream.myJID = [XMPPJID jidWithString:@"soasme.insecure@gmail.com"];
     NSError *error = nil;
     if (![self.xmppStream connectWithTimeout: 2 error:&error]) {

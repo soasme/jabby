@@ -10,8 +10,10 @@
 
 #import "JDetailViewController.h"
 
-@interface JMasterViewController ()
+@interface JMasterViewController () <JFriendListDelegate>
+
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+
 @end
 
 @implementation JMasterViewController
@@ -46,7 +48,9 @@
     self.detailViewController = (JDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
     JAppDelegate *appDelegate = [self appDelegate];
+    [appDelegate setupStream];
     [appDelegate connect];
+    appDelegate.friendListDelegate = self;
     
 }
 
@@ -247,5 +251,15 @@
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
 }
+
+
+# pragma mark - JFriendListDelegate
+-(void)onAbsence:(NSString *)name {
+    NSLog(@"absence: %@", name);
+}
+-(void)onPresence:(NSString *)name {
+    NSLog(@"presence: %@", name);
+}
+
 
 @end

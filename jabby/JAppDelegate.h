@@ -6,17 +6,18 @@
 //  Copyright (c) 2014年 soasme. All rights reserved.
 //
 
+#define HAVE_XMPP_SUBSPEC_ROSTER 1
+
 #import <UIKit/UIKit.h>
-#import "XMPP.h"
+#import "XMPPFramework.h"
 #import "JFriendListDelegate.h"
 #import "JMessageDelegate.h"
 
+
+
 @interface JAppDelegate : UIResponder <UIApplicationDelegate> {
-    XMPPStream *xmppStream;
     BOOL isOpen;
     NSString *password;
-    id<JFriendListDelegate> friendListDelegate;
-    id<JMessageDelegate> messageDelegate;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -25,6 +26,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (strong, nonatomic) XMPPStream *xmppStream;
+@property (strong, nonatomic) XMPPRoster *xmppRoster;
 @property (strong, nonatomic) id<JFriendListDelegate> friendListDelegate;
 @property (strong, nonatomic) id<JMessageDelegate> messageDelegate;
 
