@@ -5,6 +5,12 @@
 //  Created by 林 炬 on 14-3-6.
 //  Copyright (c) 2014年 soasme. All rights reserved.
 //
+// TODO
+//* Save latest chat message
+//* upload image
+//* set the right title
+//* get the right person
+//* handle incoming and outgoing background
 
 #import "JDetailViewController.h"
 
@@ -103,13 +109,6 @@
         [self.messages addObject:[NSDictionary dictionaryWithObject:[message body] forKey:@"Text"]];
         [self.tableView reloadData];
         [self scrollToBottomAnimated:YES];
-        NSLog(@"%@", self.messages);
-        
-
-        
-        
-        
-        
     } else {
         // active? pause? typing?
         // http://wiki.jabbercn.org/XEP-0085#.E5.AE.9A.E4.B9.89
