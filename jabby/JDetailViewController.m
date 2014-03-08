@@ -8,16 +8,18 @@
 
 #import "JDetailViewController.h"
 
-@interface JDetailViewController ()
-{
-    //NSMutableArray *messages;
-    IBOutlet UITableView *table;
-}
-
+@interface JDetailViewController () <
+    JMessageDelegate,
+    JSMessagesViewDelegate,
+    JSMessagesViewDataSource,
+    UIImagePickerControllerDelegate,
+    UINavigationControllerDelegate
+>
 
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 @property (strong, nonatomic) NSMutableArray *timestamps;
 @property (strong, nonatomic) NSMutableArray *messages;
+@property (nonatomic,strong) UIImage *willSendImage;
 
 - (void)configureView;
 
@@ -29,6 +31,8 @@
 
 @synthesize table;
 @synthesize messages;
+@synthesize willSendImage;
+@synthesize timestamps;
 
 - (JAppDelegate *)appDelegate
 {
@@ -69,9 +73,6 @@
     [self configureView];
     
     [self appDelegate].messageDelegate = self;
-
-    self.table.delegate = self;
-    self.table.dataSource = self;
     
     messages = [NSMutableArray array];
     
@@ -96,18 +97,25 @@
 - (void)onReceivedMessage:(XMPPMessage *)message
 {
     if ([message isMessageWithBody]) {
-        NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+        //[messages addObject:message];
+        [self.timestamps addObject:[NSDate date]];
+        [self.messages addObject:[NSDictionary dictionaryWithObject:[message body] forKey:@"Text"]];
+        [self.tableView reloadData];
+        [self scrollToBottomAnimated:YES];
+        NSLog(@"%@", self.messages);
         
-        NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
-        [mes addAttributeWithName:@"type" stringValue:@"chat"];
-        [mes addAttributeWithName:@"to" stringValue:[[message from] bare]];
-        [mes addAttributeWithName:@"from" stringValue:[[self xmppStream].myJID full]];
-        [body setStringValue:[message body]];
-        [mes addChild:body];
-        [[self xmppStream] sendElement:mes];
+//        NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+//        NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+//        [mes addAttributeWithName:@"type" stringValue:@"chat"];
+//        [mes addAttributeWithName:@"to" stringValue:[[message from] bare]];
+//        [mes addAttributeWithName:@"from" stringValue:[[self xmppStream].myJID full]];
+//        [body setStringValue:[message body]];
+//        [mes addChild:body];
+//        [[self xmppStream] sendElement:mes];
+//        [messages addObject:mes];
         
-        [messages addObject:message];
-        [messages addObject:mes];
+        
+        
         
     } else {
         // active? pause? typing?
@@ -159,5 +167,165 @@
 //    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
 //    self.masterPopoverController = nil;
 //}
+
+
+#pragma mark - Table view data source
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.messages.count;
+}
+
+#pragma mark - Messages view delegate
+- (void)sendPressed:(UIButton *)sender withText:(NSString *)text
+{
+    [self.messages addObject:[NSDictionary dictionaryWithObject:text forKey:@"Text"]];
+    
+    [self.timestamps addObject:[NSDate date]];
+    
+    if((self.messages.count - 1) % 2)
+        [JSMessageSoundEffect playMessageSentSound];
+    else
+        [JSMessageSoundEffect playMessageReceivedSound];
+    
+    [self finishSend];
+}
+
+- (void)cameraPressed:(id)sender{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:picker animated:YES completion:NULL];
+}
+
+- (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return (indexPath.row % 2) ? JSBubbleMessageTypeIncoming : JSBubbleMessageTypeOutgoing;
+}
+
+- (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return JSBubbleMessageStyleFlat;
+}
+
+- (JSBubbleMediaType)messageMediaTypeForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Text"]){
+        return JSBubbleMediaTypeText;
+    }else if ([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"]){
+        return JSBubbleMediaTypeImage;
+    }
+    
+    return -1;
+}
+
+- (UIButton *)sendButton
+{
+    return [UIButton defaultSendButton];
+}
+
+- (JSMessagesViewTimestampPolicy)timestampPolicy
+{
+    /*
+     JSMessagesViewTimestampPolicyAll = 0,
+     JSMessagesViewTimestampPolicyAlternating,
+     JSMessagesViewTimestampPolicyEveryThree,
+     JSMessagesViewTimestampPolicyEveryFive,
+     JSMessagesViewTimestampPolicyCustom
+     */
+    return JSMessagesViewTimestampPolicyEveryThree;
+}
+
+- (JSMessagesViewAvatarPolicy)avatarPolicy
+{
+    /*
+     JSMessagesViewAvatarPolicyIncomingOnly = 0,
+     JSMessagesViewAvatarPolicyBoth,
+     JSMessagesViewAvatarPolicyNone
+     */
+    return JSMessagesViewAvatarPolicyBoth;
+}
+
+- (JSAvatarStyle)avatarStyle
+{
+    /*
+     JSAvatarStyleCircle = 0,
+     JSAvatarStyleSquare,
+     JSAvatarStyleNone
+     */
+    return JSAvatarStyleCircle;
+}
+
+- (JSInputBarStyle)inputBarStyle
+{
+    /*
+     JSInputBarStyleDefault,
+     JSInputBarStyleFlat
+     
+     */
+    return JSInputBarStyleFlat;
+}
+
+//  Optional delegate method
+//  Required if using `JSMessagesViewTimestampPolicyCustom`
+//
+//  - (BOOL)hasTimestampForRowAtIndexPath:(NSIndexPath *)indexPath
+//
+
+#pragma mark - Messages view data source
+- (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Text"]){
+        return [[self.messages objectAtIndex:indexPath.row] objectForKey:@"Text"];
+    }
+    return nil;
+}
+
+- (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self.timestamps objectAtIndex:indexPath.row];
+}
+
+- (UIImage *)avatarImageForIncomingMessage
+{
+    return [UIImage imageNamed:@"demo-avatar-jobs"];
+}
+
+- (UIImage *)avatarImageForOutgoingMessage
+{
+    return [UIImage imageNamed:@"demo-avatar-woz"];
+}
+
+- (id)dataForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"]){
+        return [[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"];
+    }
+    return nil;
+    
+}
+
+#pragma UIImagePicker Delegate
+
+#pragma mark - Image picker delegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+	NSLog(@"Chose image!  Details:  %@", info);
+    
+    self.willSendImage = [info objectForKey:UIImagePickerControllerEditedImage];
+    [self.messages addObject:[NSDictionary dictionaryWithObject:self.willSendImage forKey:@"Image"]];
+    [self.timestamps addObject:[NSDate date]];
+    [self.tableView reloadData];
+    [self scrollToBottomAnimated:YES];
+    
+	
+    [self dismissViewControllerAnimated:YES completion:NULL];
+    
+}
+
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:NULL];
+    
+}
 
 @end

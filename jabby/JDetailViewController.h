@@ -11,11 +11,7 @@
 #import "JAppDelegate.h"
 #import "JSMessagesViewController.h"
 
-@interface JDetailViewController : JSMessagesViewController <
-    JMessageDelegate,
-    JSMessagesViewDelegate, JSMessagesViewDataSource,
-    UIImagePickerControllerDelegate, UINavigationControllerDelegate
->;
+@interface JDetailViewController : JSMessagesViewController ;
 
 @property (retain, nonatomic) IBOutlet UITableView *table;
 
