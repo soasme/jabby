@@ -126,7 +126,7 @@
 }
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
-    NSLog(@"message = %@",  message);
+//    NSLog(@"message = %@",  message);
 
     
     // delegate to messageDelegate
