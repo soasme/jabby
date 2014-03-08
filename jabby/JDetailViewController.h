@@ -16,7 +16,10 @@
 @property (retain, nonatomic) IBOutlet UITableView *table;
 
 @property (strong, nonatomic) id detailItem;
-
+@property (strong, nonatomic) id card;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+
+- (void)setDetailItem:(id)newDetailItem andCard:(id)card;
+
 @end

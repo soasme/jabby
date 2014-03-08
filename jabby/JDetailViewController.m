@@ -39,6 +39,7 @@
 @synthesize messages;
 @synthesize willSendImage;
 @synthesize timestamps;
+@synthesize card = _card;
 
 - (JAppDelegate *)appDelegate
 {
@@ -52,14 +53,17 @@
 
 #pragma mark - Managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
+- (void)setDetailItem:(id)newDetailItem andCard:(id)card
 {
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
-        
-        // Update the view.
-        [self configureView];
     }
+    if (self.card != card) {
+        self.card = card;
+    }
+        // Update the view.
+    [self configureView];
+    
 
     if (self.masterPopoverController != nil) {
         [self.masterPopoverController dismissPopoverAnimated:YES];
@@ -85,7 +89,9 @@
     self.delegate = self;
     self.dataSource = self;
     
-    self.title = @"与 ... 聊天";
+    //self.title = @"与 ... 聊天";
+    self.navigationController.navigationBar.topItem.title = @"返回";
+    self.title = [NSString stringWithFormat:@"与 %@ 聊天", [self.card formattedName]];
     
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
