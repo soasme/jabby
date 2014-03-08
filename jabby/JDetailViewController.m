@@ -53,17 +53,8 @@
 
 - (void)configureView
 {
-    // Update the user interface for the detail item.
 
-    if (self.detailItem) {
-        self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"timeStamp"] description];
-//        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//        [manager GET:@"https://api.github.com/repos/soasme/retries/branches" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//            NSLog(@"JSON: %@", responseObject);
-//        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//            NSLog(@"Error: %@", error);
-//        }];
-    }
+
 }
 
 - (void)viewDidLoad
@@ -73,7 +64,7 @@
     [self configureView];
     
     [self appDelegate].messageDelegate = self;
-    
+
     self.table.delegate = self;
     self.table.dataSource = self;
     messages = [NSMutableArray array];
@@ -90,19 +81,17 @@
 {
     if ([message isMessageWithBody]) {
         NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-//        [body setStringValue: [NSString stringWithFormat:@"Echo: %@",[message body]]];
-        [body setStringValue:[message body]];
+        
         NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
         [mes addAttributeWithName:@"type" stringValue:@"chat"];
-        [mes addAttributeWithName:@"to" stringValue:[[message from] bare]]; // soasme@gmail.com
+        [mes addAttributeWithName:@"to" stringValue:[[message from] bare]];
         [mes addAttributeWithName:@"from" stringValue:[[self xmppStream].myJID full]];
+        [body setStringValue:[message body]];
         [mes addChild:body];
         [[self xmppStream] sendElement:mes];
         
-        
         [messages addObject:message];
         [messages addObject:mes];
-        // try to load data
 
         [self.table reloadData];
         [self.table scrollToRowAtIndexPath:
@@ -117,11 +106,6 @@
     
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 # pragma mark - UITableViewDataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -134,19 +118,19 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"reload");
-    
     static NSString *identifier = @"msgCell";
+    XMPPMessage *message = [messages objectAtIndex:indexPath.row];
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
     }
-    //NSMutableDictionary *dict = [messages objectAtIndex:indexPath.row];
-    XMPPMessage *message = [messages objectAtIndex:indexPath.row];
+    
     cell.textLabel.text = [message body];
     cell.detailTextLabel.text = [[message from] user];
     cell.accessoryType = UITableViewCellAccessoryNone;
+    
     return cell;
 }
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
