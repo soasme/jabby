@@ -110,6 +110,7 @@
 {
     if ([message isMessageWithBody]) {
         //[messages addObject:message];
+        NSLog(@"%@", message);
         [JSMessageSoundEffect playMessageReceivedSound];
         [self.timestamps addObject:[NSDate date]];
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[message body],@"Text",[user displayName],@"Sender", nil];
@@ -150,19 +151,21 @@
 #pragma mark - Messages view delegate
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:text,@"Text",@"self",@"Sender", nil];
-    [self.messages addObject:dict];
     
-    [self.timestamps addObject:[NSDate date]];
-    [JSMessageSoundEffect playMessageSentSound];
     NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
     NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
     [mes addAttributeWithName:@"type" stringValue:@"chat"];
-    [mes addAttributeWithName:@"to" stringValue:@"1e6hri4nzpkx71vqdroamlu9u2@public.talk.google.com"];
+    [mes addAttributeWithName:@"to" stringValue:[[_detailItem from] bare]];
     [mes addAttributeWithName:@"from" stringValue:[[self xmppStream].myJID full]];
     [body setStringValue:text];
     [mes addChild:body];
     [[self xmppStream] sendElement:mes];
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:text,@"Text",@"self",@"Sender", nil];
+    [self.messages addObject:dict];
+    [self.timestamps addObject:[NSDate date]];
+    [JSMessageSoundEffect playMessageSentSound];
+    
     //[messages addObject:mes];
     
     

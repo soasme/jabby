@@ -10,7 +10,7 @@
 
 #import "JDetailViewController.h"
 
-@interface JMasterViewController () <JFriendListDelegate, XMPPvCardTempModuleDelegate>
+@interface JMasterViewController () <JFriendListDelegate, JMessageDelegate, XMPPvCardTempModuleDelegate>
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
@@ -56,6 +56,7 @@
     [appDelegate setupStream];
     [appDelegate connect];
     appDelegate.friendListDelegate = self;
+    appDelegate.messageDelegate = self;
     
     self.title = @"好友列表";
     
@@ -289,12 +290,13 @@
     
 }
 -(void)onPresence:(XMPPPresence *)presence {
+    
     for (XMPPPresence* p in self.friendList) {
         if ([[[presence from] user] isEqualToString:[[p from] user]]) {
             return;
         }
     }
-    [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
+    [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:YES];
     [self.friendList addObject:presence];
     [self.tableView reloadData];
 }
@@ -315,6 +317,20 @@
 - (void)xmppvCardTempModule:(XMPPvCardTempModule *)vCardTempModule failedToUpdateMyvCard:(NSXMLElement *)error
 {
     
+}
+
+#pragma mark - JMessageDelegate
+-(void)onReceivedMessage:(XMPPMessage *)message from:(id)user
+{
+    if ([message isMessageWithBody]) {
+        for (XMPPPresence *p in self.friendList)
+        {
+            if ([[[user jid] user] isEqualToString: [[p from] user]])
+            {
+                
+            }
+        }
+    }
 }
 
 
