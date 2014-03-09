@@ -10,6 +10,6 @@
 
 @protocol JMessageDelegate <NSObject>
 
--(void)onReceivedMessage:(XMPPMessage *)message;
+-(void)onReceivedMessage:(XMPPMessage *)message from:(id)user;
 
 @end

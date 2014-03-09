@@ -146,7 +146,11 @@
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
     // delegate to messageDelegate
-    [self.messageDelegate onReceivedMessage:message];
+    
+    XMPPUserCoreDataStorageObject *user = [_xmppRosterStorage userForJID:[message from]
+                                                              xmppStream:self.xmppStream
+                                                    managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
+    [self.messageDelegate onReceivedMessage:message from:user];
 }
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {

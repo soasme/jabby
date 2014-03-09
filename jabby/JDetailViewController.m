@@ -106,13 +106,13 @@
 
 # pragma mark - JMessageDelegate
 
-- (void)onReceivedMessage:(XMPPMessage *)message
+- (void)onReceivedMessage:(XMPPMessage *)message from:(id)user
 {
     if ([message isMessageWithBody]) {
         //[messages addObject:message];
         [JSMessageSoundEffect playMessageReceivedSound];
         [self.timestamps addObject:[NSDate date]];
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[message body],@"Text",@"talker",@"Sender", nil];
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[message body],@"Text",[user displayName],@"Sender", nil];
         [self.messages addObject:dict];
         [self.tableView reloadData];
         [self scrollToBottomAnimated:YES];
