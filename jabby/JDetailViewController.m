@@ -112,7 +112,8 @@
         //[messages addObject:message];
         [JSMessageSoundEffect playMessageReceivedSound];
         [self.timestamps addObject:[NSDate date]];
-        [self.messages addObject:[NSDictionary dictionaryWithObject:[message body] forKey:@"Text"]];
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[message body],@"Text",@"talker",@"Sender", nil];
+        [self.messages addObject:dict];
         [self.tableView reloadData];
         [self scrollToBottomAnimated:YES];
     } else {
@@ -149,7 +150,8 @@
 #pragma mark - Messages view delegate
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
-    [self.messages addObject:[NSDictionary dictionaryWithObject:text forKey:@"Text"]];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:text,@"Text",@"self",@"Sender", nil];
+    [self.messages addObject:dict];
     
     [self.timestamps addObject:[NSDate date]];
     [JSMessageSoundEffect playMessageSentSound];
@@ -177,7 +179,11 @@
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return (indexPath.row % 2) ? JSBubbleMessageTypeIncoming : JSBubbleMessageTypeOutgoing;
+    if ([[[self.messages objectAtIndex:indexPath.row] objectForKey:@"Sender"] isEqualToString:@"self"]) {
+        return JSBubbleMessageTypeOutgoing;
+    } else {
+        return JSBubbleMessageTypeIncoming;
+    }
 }
 
 - (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -291,8 +297,8 @@
 	NSLog(@"Chose image!  Details:  %@", info);
     
     self.willSendImage = [info objectForKey:UIImagePickerControllerEditedImage];
-    [self.messages addObject:[NSDictionary dictionaryWithObject:self.willSendImage forKey:@"Image"]];
-    [self.messages addObject:[NSDictionary dictionaryWithObject:@"发送图片什么的好麻烦 没什么时间搞哎" forKey:@"Text"]];
+    NSDictionary *message = [NSDictionary dictionaryWithObjectsAndKeys:self.willSendImage,@"Image",@"self",@"Sender", nil];
+    [self.messages addObject:message];
     [self.timestamps addObject:[NSDate date]];
     [self.tableView reloadData];
     [self scrollToBottomAnimated:YES];
