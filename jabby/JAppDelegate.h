@@ -9,15 +9,7 @@
 #define HAVE_XMPP_SUBSPEC_ROSTER 1
 
 #import <UIKit/UIKit.h>
-#import "XMPPFramework.h"
-#import "XMPPRosterCoreDataStorage.h"
-#import "JFriendListDelegate.h"
-#import "XMPPvCardAvatarModule.h"
-#import "JMessageDelegate.h"
-#import "XMPPvCardCoreDataStorage.h"
-#import "XMPPvCardTemp.h"
-//#import "XMPPCapabilities.h"
-
+#import "JIMCenter.h"
 
 
 @interface JAppDelegate : UIResponder <UIApplicationDelegate> {
@@ -31,22 +23,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (strong, nonatomic) XMPPStream *xmppStream;
-
-@property (strong, nonatomic) XMPPRoster *xmppRoster;
-@property (strong, nonatomic) XMPPRosterCoreDataStorage *xmppRosterStorage;
-
-@property (strong, nonatomic) id<XMPPvCardAvatarStorage,XMPPvCardTempModuleStorage> xmppvCardStorage;
-@property (strong, nonatomic) XMPPvCardAvatarModule * xmppvCardAvatarModule;
-@property (strong, nonatomic) XMPPvCardTempModule * xmppvCardTempModule;
-
-//@property (strong, nonatomic) XMPPCapabilities * xmppCapabilities;
-//@property (strong, nonatomic) id<XMPPCapabilitiesStorage> xmppCapabilitiesStorage;
-
-@property (strong, nonatomic) id<JFriendListDelegate> friendListDelegate;
-@property (strong, nonatomic) id<JMessageDelegate> messageDelegate;
-
-
+@property (strong, nonatomic) JIMCenter *imCenter;
 
 
 - (void)saveContext;

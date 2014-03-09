@@ -28,9 +28,9 @@
     return (JAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
-- (XMPPStream *)xmppStream
+- (void)didConnect
 {
-    return [[self appDelegate] xmppStream];
+    
 }
 
 - (void)awakeFromNib
@@ -53,10 +53,8 @@
     self.detailViewController = (JDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
     JAppDelegate *appDelegate = [self appDelegate];
-    [appDelegate setupStream];
-    [appDelegate connect];
-    appDelegate.friendListDelegate = self;
-    appDelegate.messageDelegate = self;
+    appDelegate.imCenter.friendListDelegate = self;
+    appDelegate.imCenter.messageDelegate = self;
     
     self.title = @"好友列表";
     
@@ -169,7 +167,7 @@
     if ([[segue identifier] isEqualToString:@"chat"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         XMPPPresence *presence = (XMPPPresence *)[self.friendList objectAtIndex:indexPath.row];
-        XMPPvCardTemp *card = [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
+        XMPPvCardTemp *card = [[self appDelegate].imCenter.xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
         [[segue destinationViewController] setDetailItem:presence andCard:card];
     }
 }
@@ -278,7 +276,7 @@
 //    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
 //    cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
     XMPPPresence *presence = (XMPPPresence *)[self.friendList objectAtIndex:indexPath.row];
-    XMPPvCardTemp *card = [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
+    XMPPvCardTemp *card = [[self appDelegate].imCenter.xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
     cell.textLabel.text = [card formattedName];
 }
 
@@ -296,7 +294,7 @@
             return;
         }
     }
-    [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:YES];
+    [[self appDelegate].imCenter.xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:YES];
     [self.friendList addObject:presence];
     [self.tableView reloadData];
 }

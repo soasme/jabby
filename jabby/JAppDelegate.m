@@ -15,14 +15,8 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-@synthesize xmppStream = _xmppStream;
-@synthesize messageDelegate = _messageDelegate;
-@synthesize friendListDelegate = _friendListDelegate;
-@synthesize xmppRoster = _xmppRoster;
-@synthesize xmppRosterStorage = _xmppRosterStorage;
-@synthesize xmppvCardAvatarModule = _xmppvCardAvatarModule;
-@synthesize xmppvCardStorage = _xmppvCardStorage;
-@synthesize xmppvCardTempModule = _xmppvCardTempModule;
+@synthesize imCenter = _imCenter;
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -40,6 +34,11 @@
         JMasterViewController *controller = (JMasterViewController *)navigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
     }
+    
+    // Setup stream before all operations.
+    [self setupIMCenter];
+    
+    
     return YES;
 }
 							
@@ -82,87 +81,6 @@
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         } 
-    }
-}
-
-- (BOOL)connect {
-    self.xmppStream.myJID = [XMPPJID jidWithString:@"soasme.insecure@gmail.com"];
-    NSError *error = nil;
-    if (![self.xmppStream connectWithTimeout: 2 error:&error]) {
-        NSLog(@"Ooops, forgot something");
-        return FALSE;
-    } else {
-        NSLog(@"Success Connect to gtalk");
-        return TRUE;
-    }
-}
-
-- (void)disconnect {
-    [self goOffline];
-    [self.xmppStream disconnect];
-}
-
-- (void)setupStream {
-    self.xmppStream = [[XMPPStream alloc] init];
-    [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    self.xmppStream.enableBackgroundingOnSocket = YES;
-    
-    self.xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] initWithInMemoryStore];
-    self.xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:self.xmppRosterStorage];
-    self.xmppRoster.autoFetchRoster = YES;
-    self.xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
-    [self.xmppRoster activate:self.xmppStream];
-    [self.xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    
-    self.xmppvCardStorage = [XMPPvCardCoreDataStorage sharedInstance];
-    self.xmppvCardTempModule = [[XMPPvCardTempModule alloc] initWithvCardStorage:self.xmppvCardStorage];
-    self.xmppvCardAvatarModule = [[XMPPvCardAvatarModule alloc] initWithvCardTempModule:self.xmppvCardTempModule];
-    [self.xmppvCardTempModule activate:self.xmppStream];
-    
-}
-
-- (void)goOnline {
-    XMPPPresence *presence = [XMPPPresence presence];
-    [self.xmppStream sendElement:presence];
-}
-- (void)goOffline {
-    XMPPPresence *presence = [XMPPPresence presenceWithType:@"unavailable"];
-    [self.xmppStream sendElement:presence];
-}
-
-- (void)xmppStreamDidConnect:(XMPPStream *)sender
-{
-    NSError *error = nil;
-    if (![self.xmppStream authenticateWithPassword:@"soasme.test" error:&error]) {
-        NSLog(@"Auth fail. %@ %@", error, [error userInfo]);
-    } else {
-        NSLog(@"Auth success");
-    }
-}
-- (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
-{
-    [self goOnline];
-}
-- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
-{
-    // delegate to messageDelegate
-    
-    XMPPUserCoreDataStorageObject *user = [_xmppRosterStorage userForJID:[message from]
-                                                              xmppStream:self.xmppStream
-                                                    managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
-    [self.messageDelegate onReceivedMessage:message from:user];
-}
-- (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
-{
-    NSString *presenceType = [presence type];
-    NSString *userId = [[sender myJID] user];
-    NSString *presenceFromUser = [[presence from] user];
-    if (![presenceFromUser isEqualToString:userId]) {
-        if ([presenceType isEqualToString:@"available"]) {
-            [self.friendListDelegate onPresence:presence];
-        } else if ([presenceType isEqualToString:@"unavailable"]) {
-            [self.friendListDelegate onAbsence:presence];
-        }
     }
 }
 
@@ -248,7 +166,13 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
-
+- (BOOL)setupIMCenter
+{
+    self.imCenter = [[JIMCenter alloc] init];
+    [self.imCenter setupStream];
+    [self.imCenter connect];
+    return YES;
+}
 
 @end
 

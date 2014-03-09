@@ -46,11 +46,6 @@
     return (JAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
-- (XMPPStream *)xmppStream
-{
-    return [[self appDelegate] xmppStream];
-}
-
 #pragma mark - Managing the detail item
 
 - (void)setDetailItem:(id)newDetailItem andCard:(id)card
@@ -82,7 +77,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
     
-    [self appDelegate].messageDelegate = self;
+    [self appDelegate].imCenter.messageDelegate = self;
     
     messages = [NSMutableArray array];
     
@@ -156,10 +151,10 @@
     NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
     [mes addAttributeWithName:@"type" stringValue:@"chat"];
     [mes addAttributeWithName:@"to" stringValue:[[_detailItem from] bare]];
-    [mes addAttributeWithName:@"from" stringValue:[[self xmppStream].myJID full]];
+    [mes addAttributeWithName:@"from" stringValue:[[self appDelegate].imCenter.xmppStream.myJID full]];
     [body setStringValue:text];
     [mes addChild:body];
-    [[self xmppStream] sendElement:mes];
+    [[self appDelegate].imCenter.xmppStream sendElement:mes];
     
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:text,@"Text",@"self",@"Sender", nil];
     [self.messages addObject:dict];
