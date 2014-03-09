@@ -29,11 +29,5 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
-// XMPP delegation.
-- (BOOL)connect;
-- (void)disconnect;
-- (void)setupStream;
-- (void)goOnline;
-- (void)goOffline;
 
 @end

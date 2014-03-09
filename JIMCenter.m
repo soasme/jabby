@@ -10,6 +10,7 @@
 
 @implementation JIMCenter
 
+@synthesize xmppStream = _xmppStream;
 @synthesize xmppRoster = _xmppRoster;
 @synthesize xmppRosterStorage = _xmppRosterStorage;
 @synthesize xmppvCardAvatarModule = _xmppvCardAvatarModule;
@@ -17,6 +18,7 @@
 @synthesize xmppvCardTempModule = _xmppvCardTempModule;
 @synthesize messageDelegate = _messageDelegate;
 @synthesize friendListDelegate = _friendListDelegate;
+@synthesize xmppReconnect = _xmppReconnect;
 
 - (id)initWithXMPP:(XMPPStream *)stream
 {
@@ -60,6 +62,11 @@
     self.xmppvCardTempModule = [[XMPPvCardTempModule alloc] initWithvCardStorage:self.xmppvCardStorage];
     self.xmppvCardAvatarModule = [[XMPPvCardAvatarModule alloc] initWithvCardTempModule:self.xmppvCardTempModule];
     [self.xmppvCardTempModule activate:self.xmppStream];
+    
+    self.xmppReconnect = [[XMPPReconnect alloc] init];
+    self.xmppReconnect.autoReconnect = YES;
+    [self.xmppReconnect activate:self.xmppStream];
+    [self.xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
     
 }
 
