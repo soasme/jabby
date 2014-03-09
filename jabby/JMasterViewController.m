@@ -286,6 +286,11 @@
     
 }
 -(void)onPresence:(XMPPPresence *)presence {
+    for (XMPPPresence* p in self.friendList) {
+        if ([[[presence from] user] isEqualToString:[[p from] user]]) {
+            return;
+        }
+    }
     [[self appDelegate].xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
     [self.friendList addObject:presence];
     [self.tableView reloadData];
