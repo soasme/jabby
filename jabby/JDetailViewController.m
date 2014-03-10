@@ -114,8 +114,11 @@
     NSEntityDescription *messageEntity = [[self appDelegate].imCenter.messageStorage messageEntity:moc];
 	
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bareJidStr == %@",
+                              [[_detailItem from] bare]];
     fetchRequest.entity = messageEntity;
     fetchRequest.fetchBatchSize = 20;
+    [fetchRequest setPredicate:predicate];
     
     NSError *error = nil;
     NSArray *meses = [moc executeFetchRequest:fetchRequest error:&error];
