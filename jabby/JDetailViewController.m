@@ -103,20 +103,15 @@
     
     XMPPJID *myJID = [self appDelegate].imCenter.xmppStream.myJID;
     NSManagedObjectContext *moc = [[self appDelegate].imCenter.messageStorage mainThreadManagedObjectContext];
-	NSEntityDescription *messageEntity = [[self appDelegate].imCenter.messageStorage messageEntity:moc];
+    NSEntityDescription *messageEntity = [[self appDelegate].imCenter.messageStorage messageEntity:moc];
 	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"composing == YES"];
-	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	fetchRequest.entity = messageEntity;
-	fetchRequest.predicate = predicate;
-	fetchRequest.fetchBatchSize = 20;
-	
-	NSError *error = nil;
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    fetchRequest.entity = messageEntity;
+    fetchRequest.fetchBatchSize = 20;
+
+    NSError *error = nil;
     NSArray *meses = [moc executeFetchRequest:fetchRequest error:&error];
     NSLog(@"%@", meses);
-//    NSManagedObjectContext *context = [[self appDelegate].imCenter.messageStorage sha
-//    [[self appDelegate].imCenter.messageStorage contactWithJid:  streamJid:myJID managedObjectContext:(NSManagedObjectContext *)
 }
 
 - (void)viewDidUnload
