@@ -116,14 +116,20 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bareJidStr == %@",
                               [[_detailItem from] bare]];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
+    
     fetchRequest.entity = messageEntity;
     fetchRequest.fetchBatchSize = 20;
+    fetchRequest.fetchLimit = 20;
+    [fetchRequest setSortDescriptors:sortDescriptors];
     [fetchRequest setPredicate:predicate];
     
     NSError *error = nil;
     NSArray *meses = [moc executeFetchRequest:fetchRequest error:&error];
     
-    self.messages = [NSMutableArray arrayWithArray:meses];
+    self.messages = [NSMutableArray arrayWithArray:[[meses reverseObjectEnumerator] allObjects]];
+    
 }
 
 - (void)viewDidUnload
