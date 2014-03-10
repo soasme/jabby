@@ -106,8 +106,12 @@
     XMPPUserCoreDataStorageObject *user = [_xmppRosterStorage userForJID:[message from]
                                                               xmppStream:self.xmppStream
                                                     managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
-    [self.messageStorage archiveMessage:message outgoing:NO xmppStream:self.xmppStream];
-    [self.messageDelegate onReceivedMessage:message from:user];
+    if ([message isMessageWithBody]) {
+//        [self.messageStorage archiveMessage:message outgoing:NO xmppStream:self.xmppStream];
+        [self.messageDelegate onReceivedMessage:message from:user];
+        NSLog(@"did receive message %@", message);
+    }
+    
 }
 
 - (void)sendMessage:(NSString *)text to:(NSString *)bareJid {
@@ -119,8 +123,8 @@
     [body setStringValue:text];
     [mes addChild:body];
     [self.xmppStream sendElement:mes];
-    [self.messageStorage archiveMessage:[XMPPMessage messageFromElement:mes]
-                               outgoing:YES xmppStream:self.xmppStream];
+//    [self.messageStorage archiveMessage:[XMPPMessage messageFromElement:mes]
+//                               outgoing:YES xmppStream:self.xmppStream];
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
