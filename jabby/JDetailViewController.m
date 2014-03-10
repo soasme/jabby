@@ -182,27 +182,10 @@
 #pragma mark - Messages view delegate
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
-    
-    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
-    [mes addAttributeWithName:@"type" stringValue:@"chat"];
-    [mes addAttributeWithName:@"to" stringValue:[[_detailItem from] bare]];
-    [mes addAttributeWithName:@"from" stringValue:[[self appDelegate].imCenter.xmppStream.myJID full]];
-    [body setStringValue:text];
-    [mes addChild:body];
-    [[self appDelegate].imCenter.xmppStream sendElement:mes];
-    
-    //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:text,@"Text",@"self",@"Sender", nil];
-    //[self.messages addObject:dict];
-    //[self.timestamps addObject:[NSDate date]];
-    
-    [[self appDelegate].imCenter.messageStorage archiveMessage:[XMPPMessage messageFromElement:mes]
-                                                      outgoing:YES xmppStream:[self appDelegate].imCenter.xmppStream];
+    [[self appDelegate].imCenter sendMessage:text to:[[_detailItem from] bare]];
     [self fetchLatestMessage];
     [self.tableView reloadData];
     [JSMessageSoundEffect playMessageSentSound];
-    
-    
     [self finishSend];
 }
 

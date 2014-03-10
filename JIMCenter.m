@@ -106,9 +106,23 @@
     XMPPUserCoreDataStorageObject *user = [_xmppRosterStorage userForJID:[message from]
                                                               xmppStream:self.xmppStream
                                                     managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
-    [self.messageDelegate onReceivedMessage:message from:user];
     [self.messageStorage archiveMessage:message outgoing:NO xmppStream:self.xmppStream];
+    [self.messageDelegate onReceivedMessage:message from:user];
 }
+
+- (void)sendMessage:(NSString *)text to:(NSString *)bareJid {
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    NSXMLElement *mes = [NSXMLElement elementWithName:@"message"];
+    [mes addAttributeWithName:@"type" stringValue:@"chat"];
+    [mes addAttributeWithName:@"to" stringValue:bareJid];
+    [mes addAttributeWithName:@"from" stringValue:[self.xmppStream.myJID full]];
+    [body setStringValue:text];
+    [mes addChild:body];
+    [self.xmppStream sendElement:mes];
+    [self.messageStorage archiveMessage:[XMPPMessage messageFromElement:mes]
+                               outgoing:YES xmppStream:self.xmppStream];
+}
+
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
     NSString *presenceType = [presence type];
@@ -122,6 +136,8 @@
         }
     }
 }
+
+
 
 
 @end

@@ -42,5 +42,6 @@
 - (void)setupStream;
 - (void)goOnline;
 - (void)goOffline;
+- (void)sendMessage:(NSString *)text to:(NSString *)bareJid;
 
 @end
