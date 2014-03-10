@@ -104,7 +104,7 @@
     //XMPPJID *myJID = [self appDelegate].imCenter.xmppStream.myJID;
     
     [self fetchLatestMessage];
-    
+    [self reloadToBottom];
     
 }
 
@@ -139,8 +139,7 @@
 //        [self.timestamps addObject:[NSDate date]];
 //        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[message body],@"Text",[user displayName],@"Sender", nil];
 //        [self.messages addObject:dict];
-        [self.tableView reloadData];
-        [self scrollToBottomAnimated:YES];
+        [self reloadToBottom];
     } else {
         // active? pause? typing?
         // http://wiki.jabbercn.org/XEP-0085#.E5.AE.9A.E4.B9.89
@@ -148,6 +147,11 @@
     
 }
 
+- (void)reloadToBottom
+{
+    [self.tableView reloadData];
+    [self scrollToBottomAnimated:YES];
+}
 
 //#pragma mark - Split view
 //
