@@ -7,6 +7,8 @@
 //
 
 #define HAVE_XMPP_SUBSPEC_ROSTER 1
+#define DEBUG 1
+#define XMPP_LOGGING_ENABLED 1
 
 #import <UIKit/UIKit.h>
 #import "JIMCenter.h"

@@ -11,8 +11,10 @@
 #import "XMPPRosterCoreDataStorage.h"
 #import "XMPPvCardAvatarModule.h"
 #import "XMPPvCardCoreDataStorage.h"
+#import "XMPPMessageArchiving.h"
 #import "XMPPvCardTemp.h"
 #import "XMPPReconnect.h"
+#import "XMPPMessageArchivingCoreDataStorage.h"
 
 #import "JFriendListDelegate.h"
 #import "JMessageDelegate.h"
@@ -32,6 +34,8 @@
 @property (strong, nonatomic) XMPPvCardTempModule * xmppvCardTempModule;
 
 @property (strong, nonatomic) XMPPReconnect * xmppReconnect;
+
+@property (strong, nonatomic) XMPPMessageArchivingCoreDataStorage *messageStorage;
 
 - (BOOL)connect;
 - (BOOL)disconnect;

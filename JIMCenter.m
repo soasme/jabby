@@ -19,6 +19,7 @@
 @synthesize messageDelegate = _messageDelegate;
 @synthesize friendListDelegate = _friendListDelegate;
 @synthesize xmppReconnect = _xmppReconnect;
+@synthesize messageStorage = _messageStorage;
 
 - (id)initWithXMPP:(XMPPStream *)stream
 {
@@ -68,6 +69,12 @@
     [self.xmppReconnect activate:self.xmppStream];
     [self.xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
     
+    self.messageStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+    XMPPMessageArchiving *messageArchiving = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:self.messageStorage];
+    [messageArchiving setClientSideMessageArchivingOnly:YES];
+    [messageArchiving activate:self.xmppStream];
+    [messageArchiving addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    
 }
 
 - (void)goOnline {
@@ -100,6 +107,7 @@
                                                               xmppStream:self.xmppStream
                                                     managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
     [self.messageDelegate onReceivedMessage:message from:user];
+    [self.messageStorage archiveMessage:message outgoing:NO xmppStream:self.xmppStream];
 }
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
