@@ -101,17 +101,26 @@
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
     
-    XMPPJID *myJID = [self appDelegate].imCenter.xmppStream.myJID;
+    //XMPPJID *myJID = [self appDelegate].imCenter.xmppStream.myJID;
+    
+    [self fetchLatestMessage];
+    
+    
+}
+
+- (void)fetchLatestMessage
+{
     NSManagedObjectContext *moc = [[self appDelegate].imCenter.messageStorage mainThreadManagedObjectContext];
     NSEntityDescription *messageEntity = [[self appDelegate].imCenter.messageStorage messageEntity:moc];
 	
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     fetchRequest.entity = messageEntity;
     fetchRequest.fetchBatchSize = 20;
-
+    
     NSError *error = nil;
     NSArray *meses = [moc executeFetchRequest:fetchRequest error:&error];
-    NSLog(@"%@", meses);
+    
+    self.messages = [NSMutableArray arrayWithArray:meses];
 }
 
 - (void)viewDidUnload
@@ -127,9 +136,9 @@
     if ([message isMessageWithBody]) {
         //[messages addObject:message];
         [JSMessageSoundEffect playMessageReceivedSound];
-        [self.timestamps addObject:[NSDate date]];
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[message body],@"Text",[user displayName],@"Sender", nil];
-        [self.messages addObject:dict];
+//        [self.timestamps addObject:[NSDate date]];
+//        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[message body],@"Text",[user displayName],@"Sender", nil];
+//        [self.messages addObject:dict];
         [self.tableView reloadData];
         [self scrollToBottomAnimated:YES];
     } else {
@@ -176,15 +185,15 @@
     [mes addChild:body];
     [[self appDelegate].imCenter.xmppStream sendElement:mes];
     
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:text,@"Text",@"self",@"Sender", nil];
-    [self.messages addObject:dict];
-    [self.timestamps addObject:[NSDate date]];
+    //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:text,@"Text",@"self",@"Sender", nil];
+    //[self.messages addObject:dict];
+    //[self.timestamps addObject:[NSDate date]];
     
     [[self appDelegate].imCenter.messageStorage archiveMessage:[XMPPMessage messageFromElement:mes]
                                                       outgoing:YES xmppStream:[self appDelegate].imCenter.xmppStream];
+    [self fetchLatestMessage];
+    [self.tableView reloadData];
     [JSMessageSoundEffect playMessageSentSound];
-    
-    //[messages addObject:mes];
     
     
     [self finishSend];
@@ -200,7 +209,7 @@
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[[self.messages objectAtIndex:indexPath.row] objectForKey:@"Sender"] isEqualToString:@"self"]) {
+    if ([[self.messages objectAtIndex:indexPath.row] isOutgoing]) {
         return JSBubbleMessageTypeOutgoing;
     } else {
         return JSBubbleMessageTypeIncoming;
@@ -213,9 +222,9 @@
 }
 
 - (JSBubbleMediaType)messageMediaTypeForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Text"]){
+    if([[self.messages objectAtIndex:indexPath.row] body]){
         return JSBubbleMediaTypeText;
-    }else if ([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"]){
+    } else {
         return JSBubbleMediaTypeImage;
     }
     
@@ -280,8 +289,8 @@
 #pragma mark - Messages view data source
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Text"]){
-        return [[self.messages objectAtIndex:indexPath.row] objectForKey:@"Text"];
+    if([[self.messages objectAtIndex:indexPath.row] body]){
+        return [[self.messages objectAtIndex:indexPath.row] body];
     }
     return nil;
 }
@@ -303,9 +312,9 @@
 }
 
 - (id)dataForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"]){
-        return [[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"];
-    }
+//    if([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"]){
+//        return [[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"];
+//    }
     return nil;
     
 }
