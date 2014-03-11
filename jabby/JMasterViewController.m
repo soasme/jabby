@@ -321,14 +321,27 @@
 -(void)onReceivedMessage:(XMPPMessage *)message from:(id)user
 {
     if ([message isMessageWithBody]) {
-        for (XMPPPresence *p in self.friendList)
-        {
-            if ([[[user jid] user] isEqualToString: [[p from] user]])
-            {
-                
-            }
-        }
+//        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        NSString *notificationBody = [NSString stringWithFormat:@"%@: %@",[user displayName],[message body]];
+        [self sendNotification:notificationBody];
     }
+}
+
+- (void)sendNotification:(NSString *)text
+{
+    [self appDelegate].localNotification.applicationIconBadgeNumber = 1;
+    [self appDelegate].localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
+    [self appDelegate].localNotification.timeZone = [NSTimeZone defaultTimeZone];
+    [self appDelegate].localNotification.soundName = @"messageReceived.aiff";
+    [self appDelegate].localNotification.repeatInterval = 0;
+    
+    
+    [self appDelegate].localNotification.alertBody = text;
+    NSDictionary* infoDic = [NSDictionary dictionaryWithObject:@"value" forKey:@"key"];
+    [self appDelegate].localNotification.userInfo = infoDic;
+    
+    UIApplication *app=[UIApplication sharedApplication];
+    [app scheduleLocalNotification:[self appDelegate].localNotification];
 }
 
 

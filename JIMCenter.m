@@ -109,7 +109,6 @@
     if ([message isMessageWithBody]) {
 //        [self.messageStorage archiveMessage:message outgoing:NO xmppStream:self.xmppStream];
         [self.messageDelegate onReceivedMessage:message from:user];
-        NSLog(@"did receive message %@", message);
     }
     
 }

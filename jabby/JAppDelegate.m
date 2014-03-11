@@ -16,6 +16,7 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize imCenter = _imCenter;
+@synthesize localNotification = _localNotification;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -37,6 +38,7 @@
     
     // Setup stream before all operations.
     [self setupIMCenter];
+    self.localNotification = [[UILocalNotification alloc] init];
     
     
     return YES;
