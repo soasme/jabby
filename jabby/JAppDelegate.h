@@ -10,6 +10,7 @@
 #define DEBUG 1
 #define XMPP_LOGGING_ENABLED 1
 
+
 #import <UIKit/UIKit.h>
 #import "JIMCenter.h"
 
@@ -28,6 +29,10 @@
 @property (strong, nonatomic) UILocalNotification *localNotification;
 
 @property (strong, nonatomic) JIMCenter *imCenter;
+
+@property (nonatomic, retain) NSTimer *backgroundTimer;
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
+@property (nonatomic) BOOL didShowDisconnectionWarning;
 
 
 - (void)saveContext;

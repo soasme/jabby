@@ -17,6 +17,7 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize imCenter = _imCenter;
 @synthesize localNotification = _localNotification;
+@synthesize backgroundTask, backgroundTimer, didShowDisconnectionWarning;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -50,10 +51,65 @@
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
+
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    NSLog(@"Application entered background state.");
+    NSAssert(self.backgroundTask == UIBackgroundTaskInvalid, nil);
+    self.didShowDisconnectionWarning = NO;
+    
+    self.backgroundTask = [application beginBackgroundTaskWithExpirationHandler: ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Background task expired");
+            if (self.backgroundTimer)
+            {
+                [self.backgroundTimer invalidate];
+                self.backgroundTimer = nil;
+            }
+            [application endBackgroundTask:self.backgroundTask];
+            self.backgroundTask = UIBackgroundTaskInvalid;
+        });
+    }];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.backgroundTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(timerUpdate:) userInfo:nil repeats:YES];
+    });
+}
+
+- (void) timerUpdate:(NSTimer*)timer {
+    UIApplication *application = [UIApplication sharedApplication];
+    
+    NSLog(@"Timer update, background time left: %f", application.backgroundTimeRemaining);
+    
+    if ([application backgroundTimeRemaining] < 60 && !self.didShowDisconnectionWarning)
+    {
+        UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+        if (localNotif) {
+            localNotif.alertBody = @"Jabby网络连接超时";
+            localNotif.alertAction = @"好的";
+            localNotif.soundName = UILocalNotificationDefaultSoundName;
+            [application presentLocalNotificationNow:localNotif];
+        }
+        self.didShowDisconnectionWarning = YES;
+    }
+    if ([application backgroundTimeRemaining] < 10)
+    {
+        // Clean up here
+        [self.backgroundTimer invalidate];
+        self.backgroundTimer = nil;
+        
+//        OTRProtocolManager *protocolManager = [OTRProtocolManager sharedInstance];
+//        for(id key in protocolManager.protocolManagers)
+//        {
+//            id <OTRProtocol> protocol = [protocolManager.protocolManagers objectForKey:key];
+//            [protocol disconnect];
+//        }
+//        [OTRManagedAccount resetAccountsConnectionStatus];
+        
+        
+        [application endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -64,6 +120,22 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    /*
+     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+     */
+    NSLog(@"Application became active");
+    if (self.backgroundTimer)
+    {
+        [self.backgroundTimer invalidate];
+        self.backgroundTimer = nil;
+    }
+    if (self.backgroundTask != UIBackgroundTaskInvalid)
+    {
+        [application endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
+    }
+    
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -84,6 +156,20 @@
             abort();
         } 
     }
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification*)notification{
+    
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"LocalNotification" message:notification.alertBody delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//    [alert show];
+    
+    NSDictionary* dic = [[NSDictionary alloc]init];
+    //这里可以接受到本地通知中心发送的消息
+    dic = notification.userInfo;
+    NSLog(@"user info = %@",[dic objectForKey:@"key"]);
+    
+    // 图标上的数字减1
+    application.applicationIconBadgeNumber -= 1;
 }
 
 
