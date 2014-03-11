@@ -143,11 +143,8 @@
 - (void)onReceivedMessage:(XMPPMessage *)message from:(id)user
 {
     if ([message isMessageWithBody]) {
-        //[messages addObject:message];
+        [self fetchLatestMessage];
         [JSMessageSoundEffect playMessageReceivedSound];
-//        [self.timestamps addObject:[NSDate date]];
-//        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[message body],@"Text",[user displayName],@"Sender", nil];
-//        [self.messages addObject:dict];
         [self reloadToBottom];
     } else {
         // active? pause? typing?
@@ -189,10 +186,10 @@
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
     [[self appDelegate].imCenter sendMessage:text to:[[_detailItem from] bare]];
-    [self fetchLatestMessage];
-    [self.tableView reloadData];
     [JSMessageSoundEffect playMessageSentSound];
     [self finishSend];
+    [self fetchLatestMessage];
+    [self.tableView reloadData];
 }
 
 - (void)cameraPressed:(id)sender{
