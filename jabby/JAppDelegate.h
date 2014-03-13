@@ -15,7 +15,7 @@
 #import "JIMCenter.h"
 
 
-@interface JAppDelegate : UIResponder <UIApplicationDelegate> {
+@interface JAppDelegate : UIResponder <UIApplicationDelegate, JMessageDelegate> {
     BOOL isOpen;
     NSString *password;
 }
