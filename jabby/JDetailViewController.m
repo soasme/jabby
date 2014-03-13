@@ -63,15 +63,14 @@
 -(void)configureInfo:(NSDictionary *)dict
 {
     self.info = [NSDictionary dictionaryWithDictionary:dict];
+    if (self.masterPopoverController != nil) {
+        [self.masterPopoverController dismissPopoverAnimated:YES];
+    }
 }
 
 - (void)configureView
 {
 
-//    self.info = [NSDictionary dictionary];
-    //    if (self.masterPopoverController != nil) {
-    //        [self.masterPopoverController dismissPopoverAnimated:YES];
-    //    }
 }
 
 - (NSManagedObjectContext *)managedObjectContext
@@ -97,8 +96,7 @@
     self.delegate = self;
     self.dataSource = self;
     
-    //self.title = @"与 ... 聊天";
-    //self.navigationController.navigationBar.topItem.title = @"返回";
+
     self.title = [NSString stringWithFormat:@"与 %@ 聊天", [self hisName]];
     
     self.messages = [NSMutableArray array];
