@@ -37,6 +37,8 @@
 
 @property (strong, nonatomic) XMPPMessageArchivingCoreDataStorage *messageStorage;
 
+
+- (id)initWithFriends;
 - (BOOL)connect;
 - (BOOL)disconnect;
 - (void)setupStream;

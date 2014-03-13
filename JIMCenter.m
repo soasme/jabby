@@ -21,10 +21,12 @@
 @synthesize xmppReconnect = _xmppReconnect;
 @synthesize messageStorage = _messageStorage;
 
-- (id)initWithXMPP:(XMPPStream *)stream
+
+- (id)initWithFriends
 {
     if (self = [super init]) {
-        
+//        self.friends = [NSMutableArray array];
+        [self setupStream];
     }
     return self;
 }
@@ -52,7 +54,7 @@
     [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
     self.xmppStream.enableBackgroundingOnSocket = YES;
     
-    self.xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] initWithInMemoryStore];
+    self.xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
     self.xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:self.xmppRosterStorage];
     self.xmppRoster.autoFetchRoster = YES;
     self.xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
@@ -138,6 +140,27 @@
             [self.friendListDelegate onAbsence:presence];
         }
     }
+}
+
+- (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
+{
+    
+    if ([@"result" isEqualToString:iq.type])
+    {
+        NSMutableArray *friends = [NSMutableArray array];
+        NSArray *children = [iq.childElement children];
+        for (NSXMLElement *item in children)
+        {
+            NSString *jid = [item attributeStringValueForName:@"jid"];
+            NSString *name = [item attributeStringValueForName:@"name"];
+            // and subscription?
+            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:jid,@"jid",name,@"name", nil];
+            [friends addObject:dict];
+        }
+        [self.friendListDelegate didSetup:friends];
+    }
+    
+    return YES;
 }
 
 
