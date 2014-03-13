@@ -165,9 +165,9 @@
 //    }
     if ([[segue identifier] isEqualToString:@"chat"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        XMPPPresence *presence = (XMPPPresence *)[self.friendList objectAtIndex:indexPath.row];
-        XMPPvCardTemp *card = [[self appDelegate].imCenter.xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
-        [[segue destinationViewController] setDetailItem:presence andCard:card];
+        
+        NSDictionary *info = (NSDictionary *)[self.friendList objectAtIndex:indexPath.row];
+        [[segue destinationViewController] configureInfo:info];
     }
 }
 

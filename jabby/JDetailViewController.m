@@ -27,6 +27,7 @@
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (nonatomic,strong) UIImage *willSendImage;
 
+
 - (void)configureView;
 
 @end
@@ -39,36 +40,38 @@
 @synthesize messages;
 @synthesize willSendImage;
 @synthesize timestamps;
-@synthesize card = _card;
+@synthesize info;
 
 - (JAppDelegate *)appDelegate
 {
     return (JAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
-#pragma mark - Managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem andCard:(id)card
+
+- (NSString *)hisJidStr
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
-    }
-    if (self.card != card) {
-        self.card = card;
-    }
-        // Update the view.
-    [self configureView];
-    
+    return [self.info valueForKey:@"jid"];
+}
 
-    if (self.masterPopoverController != nil) {
-        [self.masterPopoverController dismissPopoverAnimated:YES];
-    }        
+- (NSString *)hisName
+{
+    return [self.info valueForKey:@"name"];
+}
+
+
+-(void)configureInfo:(NSDictionary *)dict
+{
+    self.info = [NSDictionary dictionaryWithDictionary:dict];
 }
 
 - (void)configureView
 {
 
-
+//    self.info = [NSDictionary dictionary];
+    //    if (self.masterPopoverController != nil) {
+    //        [self.masterPopoverController dismissPopoverAnimated:YES];
+    //    }
 }
 
 - (NSManagedObjectContext *)managedObjectContext
@@ -96,7 +99,7 @@
     
     //self.title = @"与 ... 聊天";
     //self.navigationController.navigationBar.topItem.title = @"返回";
-    self.title = [NSString stringWithFormat:@"与 %@ 聊天", [self.card formattedName]];
+    self.title = [NSString stringWithFormat:@"与 %@ 聊天", [self hisName]];
     
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
@@ -115,7 +118,7 @@
 	
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bareJidStr == %@",
-                              [[_detailItem from] bare]];
+                              [self hisJidStr]];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
     NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
     
@@ -185,7 +188,7 @@
 #pragma mark - Messages view delegate
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
-    [[self appDelegate].imCenter sendMessage:text to:[[_detailItem from] bare]];
+    [[self appDelegate].imCenter sendMessage:text to:[self hisJidStr]];
     [JSMessageSoundEffect playMessageSentSound];
     [self finishSend];
     [self fetchLatestMessage];
