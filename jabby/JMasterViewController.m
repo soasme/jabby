@@ -59,12 +59,11 @@
     self.title = @"好友列表";
     
     self.friendList = [NSMutableArray array];
-    
-    
-    
+
+    NSArray *jids =[[XMPPRosterCoreDataStorage sharedInstance] jidsForXMPPStream:[self appDelegate].imCenter.xmppStream];
+    NSLog(@"%@", jids);
     
 }
-
 
 
 
@@ -275,27 +274,31 @@
 {
 //    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
 //    cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
-    XMPPPresence *presence = (XMPPPresence *)[self.friendList objectAtIndex:indexPath.row];
-    XMPPvCardTemp *card = [[self appDelegate].imCenter.xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:NO];
-    cell.textLabel.text = [card formattedName];
+    NSDictionary *friend = (NSDictionary *)[self.friendList objectAtIndex:indexPath.row];
+    cell.textLabel.text = [friend valueForKey:@"name"];
 }
 
 
 # pragma mark - JFriendListDelegate
 -(void)onAbsence:(XMPPPresence *)presence {
-    [self.friendList removeObject:presence];
-    [self.tableView reloadData];
+//    [self.friendList removeObject:presence];
+//    [self.tableView reloadData];
     
 }
 -(void)onPresence:(XMPPPresence *)presence {
     
-    for (XMPPPresence* p in self.friendList) {
-        if ([[[presence from] user] isEqualToString:[[p from] user]]) {
-            return;
-        }
-    }
-    [[self appDelegate].imCenter.xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:YES];
-    [self.friendList addObject:presence];
+//    for (XMPPPresence* p in self.friendList) {
+//        if ([[[presence from] user] isEqualToString:[[p from] user]]) {
+//            return;
+//        }
+//    }
+//    [[self appDelegate].imCenter.xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:YES];
+//    [self.friendList addObject:presence];
+//    [self.tableView reloadData];
+}
+-(void)didSetup:(NSArray *)friends
+{
+    self.friendList = [NSMutableArray arrayWithArray:friends];
     [self.tableView reloadData];
 }
 

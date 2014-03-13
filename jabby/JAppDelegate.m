@@ -163,13 +163,13 @@
 //    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"LocalNotification" message:notification.alertBody delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
 //    [alert show];
     
-    NSDictionary* dic = [[NSDictionary alloc]init];
-    //这里可以接受到本地通知中心发送的消息
-    dic = notification.userInfo;
-    NSLog(@"user info = %@",[dic objectForKey:@"key"]);
-    
-    // 图标上的数字减1
-    application.applicationIconBadgeNumber -= 1;
+//    NSDictionary* dic = [[NSDictionary alloc]init];
+//    //这里可以接受到本地通知中心发送的消息
+//    dic = notification.userInfo;
+//    NSLog(@"user info = %@",[dic objectForKey:@"key"]);
+//    
+//    // 图标上的数字减1
+//    application.applicationIconBadgeNumber -= 1;
 }
 
 
@@ -256,8 +256,8 @@
 
 - (BOOL)setupIMCenter
 {
-    self.imCenter = [[JIMCenter alloc] init];
-    [self.imCenter setupStream];
+    self.imCenter = [[JIMCenter alloc] initWithFriends];
+    
     [self.imCenter connect];
     return YES;
 }
