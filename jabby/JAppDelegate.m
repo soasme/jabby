@@ -283,7 +283,7 @@
     self.localNotification.userInfo = userInfo;
     
     UIApplication *app=[UIApplication sharedApplication];
-    [app scheduleLocalNotification:self.localNotification];
+    [app presentLocalNotificationNow:self.localNotification];
 }
 
 @end
