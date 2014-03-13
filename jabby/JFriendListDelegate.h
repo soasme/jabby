@@ -12,6 +12,6 @@
 
 -(void)onAbsence:(XMPPPresence *)presence;
 -(void)onPresence:(XMPPPresence *)presence;
--(void)didConnect;
+-(void)didSetup:(NSArray *)friends;
 
 @end
