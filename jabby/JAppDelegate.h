@@ -37,6 +37,6 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
-
+- (void)sendNotification:(NSString *)text withUserInfo:(NSDictionary *)userInfo;
 
 @end

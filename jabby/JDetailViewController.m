@@ -89,7 +89,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
     
-    [self appDelegate].imCenter.messageDelegate = self;
+    
     
     messages = [NSMutableArray array];
     
@@ -107,6 +107,11 @@
     [self fetchLatestMessage];
     [self reloadToBottom];
     
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self appDelegate].imCenter.messageDelegate = self;
 }
 
 - (void)fetchLatestMessage

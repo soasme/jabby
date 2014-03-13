@@ -52,17 +52,21 @@
 //    self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (JDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
-    JAppDelegate *appDelegate = [self appDelegate];
-    appDelegate.imCenter.friendListDelegate = self;
-    appDelegate.imCenter.messageDelegate = self;
-    
     self.title = @"好友列表";
     
-    self.friendList = [NSMutableArray array];
+//    self.friendList = [NSMutableArray array];
+    self.friendList = [NSMutableArray arrayWithArray:[[self appDelegate].imCenter.xmppRosterStorage jidsForXMPPStream:[self appDelegate].imCenter.xmppStream]];
+    
 
     NSArray *jids =[[XMPPRosterCoreDataStorage sharedInstance] jidsForXMPPStream:[self appDelegate].imCenter.xmppStream];
     NSLog(@"%@", jids);
     
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    JAppDelegate *appDelegate = [self appDelegate];
+    appDelegate.imCenter.friendListDelegate = self;
+    appDelegate.imCenter.messageDelegate = self;
 }
 
 
@@ -324,28 +328,14 @@
 -(void)onReceivedMessage:(XMPPMessage *)message from:(id)user
 {
     if ([message isMessageWithBody]) {
-//        [[UIApplication sharedApplication] cancelAllLocalNotifications];
         NSString *notificationBody = [NSString stringWithFormat:@"%@: %@",[user displayName],[message body]];
-        [self sendNotification:notificationBody];
+        NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+                              [user jidStr],@"jid",[user displayName],@"name", nil];
+        [[self appDelegate] sendNotification:notificationBody withUserInfo:info];
     }
 }
 
-- (void)sendNotification:(NSString *)text
-{
-    [self appDelegate].localNotification.applicationIconBadgeNumber = 1;
-    [self appDelegate].localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
-    [self appDelegate].localNotification.timeZone = [NSTimeZone defaultTimeZone];
-    [self appDelegate].localNotification.soundName = @"messageReceived.aiff";
-    [self appDelegate].localNotification.repeatInterval = 0;
-    
-    
-    [self appDelegate].localNotification.alertBody = text;
-    NSDictionary* infoDic = [NSDictionary dictionaryWithObject:@"value" forKey:@"key"];
-    [self appDelegate].localNotification.userInfo = infoDic;
-    
-    UIApplication *app=[UIApplication sharedApplication];
-    [app scheduleLocalNotification:[self appDelegate].localNotification];
-}
+
 
 
 @end

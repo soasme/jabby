@@ -267,12 +267,7 @@
 #pragma mark - JMessageDelegate
 -(void)onReceivedMessage:(XMPPMessage *)message from:(id)user
 {
-    if ([message isMessageWithBody]) {
-        NSString *notificationBody = [NSString stringWithFormat:@"%@: %@",[user displayName],[message body]];
-        NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
-                              [user jidStr],@"jid",[user displayName],@"name", nil];
-        [self sendNotification:notificationBody withUserInfo:info];
-    }
+    
 }
 
 - (void)sendNotification:(NSString *)text withUserInfo:(NSDictionary *)userInfo
