@@ -49,6 +49,7 @@
 */
 
 - (IBAction)didLoginButtonTouchDown:(id)sender {
+    // TODO validate input text and dismiss after server validate.
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

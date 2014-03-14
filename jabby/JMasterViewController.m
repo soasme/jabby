@@ -10,6 +10,8 @@
 
 #import "JDetailViewController.h"
 
+#import "JLoginViewController.h"
+
 @interface JMasterViewController () <JFriendListDelegate, JMessageDelegate, XMPPvCardTempModuleDelegate>
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -54,12 +56,10 @@
     
     self.title = @"好友列表";
     
-//    self.friendList = [NSMutableArray array];
-    self.friendList = [NSMutableArray arrayWithArray:[[self appDelegate].imCenter.xmppRosterStorage jidsForXMPPStream:[self appDelegate].imCenter.xmppStream]];
     
 
-    NSArray *jids =[[XMPPRosterCoreDataStorage sharedInstance] jidsForXMPPStream:[self appDelegate].imCenter.xmppStream];
-    NSLog(@"%@", jids);
+    // TODO if not bundle with account:
+    // [self performSegueWithIdentifier:@"GoToLogin" sender:self];
     
 }
 

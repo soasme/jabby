@@ -9,6 +9,7 @@
 #import "JAppDelegate.h"
 
 #import "JMasterViewController.h"
+#import "JLoginViewController.h"
 
 @implementation JAppDelegate
 
@@ -35,6 +36,8 @@
         UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
         JMasterViewController *controller = (JMasterViewController *)navigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
+        
+        
     }
     
     // Setup stream before all operations.
