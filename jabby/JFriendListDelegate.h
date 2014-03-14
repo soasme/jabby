@@ -13,5 +13,6 @@
 -(void)onAbsence:(XMPPPresence *)presence;
 -(void)onPresence:(XMPPPresence *)presence;
 -(void)didSetup:(NSArray *)friends;
+-(void)needLogin;
 
 @end
