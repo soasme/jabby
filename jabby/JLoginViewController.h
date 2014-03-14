@@ -10,6 +10,8 @@
 
 @interface JLoginViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UITextField *accountInput;
+@property (weak, nonatomic) IBOutlet UITextField *passwordInput;
 @property (weak, nonatomic) IBOutlet UILabel *accountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;

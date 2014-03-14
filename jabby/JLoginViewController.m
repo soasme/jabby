@@ -12,6 +12,7 @@
 
 @end
 
+
 @implementation JLoginViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -48,8 +49,30 @@
 }
 */
 
+-(BOOL)validateWithUser:(NSString *)userText andPass:(NSString *)passText{
+    
+    if (userText.length > 0 && passText.length > 0) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (IBAction)didLoginButtonTouchDown:(id)sender {
     // TODO validate input text and dismiss after server validate.
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if ([self validateWithUser:_accountInput.text andPass:_passwordInput.text]) {
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:_accountInput.text forKey:@"UID"];
+        [defaults setObject:_passwordInput.text forKey:@"PASS"];
+        //保存
+        [defaults synchronize];
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请输入账号与密码" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    
 }
 @end
