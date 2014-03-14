@@ -32,7 +32,7 @@
 }
 
 - (BOOL)connect {
-    self.xmppStream.myJID = [XMPPJID jidWithString:@"soasme.insecure@gmail.com"];
+    self.xmppStream.myJID = [XMPPJID jidWithString:[[NSUserDefaults standardUserDefaults] stringForKey:@"UID"]];
     NSError *error = nil;
     if (![self.xmppStream connectWithTimeout: 2 error:&error]) {
         NSLog(@"Ooops, forgot something");
@@ -90,17 +90,17 @@
 
 - (void)xmppStreamDidConnect:(XMPPStream *)sender
 {
-    NSError *error = nil;
-    if (![self.xmppStream authenticateWithPassword:@"soasme.test" error:&error]) {
-        NSLog(@"Auth fail. %@ %@", error, [error userInfo]);
-    } else {
-        NSLog(@"Auth success");
-    }
+    [self auth];
 }
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
     [self goOnline];
 }
+
+- (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error {
+    [self.friendListDelegate needLogin];
+}
+
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
     // delegate to messageDelegate
@@ -113,6 +113,17 @@
         [self.messageDelegate onReceivedMessage:message from:user];
     }
     
+}
+
+- (void)auth
+{
+    NSError *error = nil;
+    NSString *password = [[NSUserDefaults standardUserDefaults] stringForKey:@"PASS"];
+    BOOL result = [self.xmppStream authenticateWithPassword:password error:&error];
+    if (result == NO) {
+        NSLog(@"auth fail, %@, %@", result, error);
+        [self.friendListDelegate needLogin];
+    }
 }
 
 - (void)sendMessage:(NSString *)text to:(NSString *)bareJid {
@@ -130,6 +141,7 @@
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
+    NSLog(@"presence %@", presence);
     NSString *presenceType = [presence type];
     NSString *userId = [[sender myJID] user];
     NSString *presenceFromUser = [[presence from] user];
@@ -144,7 +156,7 @@
 
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
 {
-    
+    NSLog(@"iq %@", iq);
     if ([@"result" isEqualToString:iq.type])
     {
         NSMutableArray *friends = [NSMutableArray array];
