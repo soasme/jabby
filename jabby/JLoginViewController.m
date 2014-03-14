@@ -8,12 +8,19 @@
 
 #import "JLoginViewController.h"
 
+
 @interface JLoginViewController ()
 
 @end
 
 
+
 @implementation JLoginViewController
+
+- (JAppDelegate *)appDelegate
+{
+    return (JAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -67,6 +74,8 @@
         [defaults setObject:_passwordInput.text forKey:@"PASS"];
         //保存
         [defaults synchronize];
+        [[self appDelegate].imCenter connect];
+        [[self appDelegate].imCenter auth];
         
         [self dismissViewControllerAnimated:YES completion:nil];
     }else {

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JAppDelegate.h"
 
 @interface JLoginViewController : UIViewController
 
@@ -16,5 +17,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 - (IBAction)didLoginButtonTouchDown:(id)sender;
-
+- (JAppDelegate *)appDelegate;
 @end
