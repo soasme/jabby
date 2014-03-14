@@ -54,7 +54,7 @@
     [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
     self.xmppStream.enableBackgroundingOnSocket = YES;
     
-    self.xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
+    self.xmppRosterStorage = [XMPPRosterCoreDataStorage sharedInstance];
     self.xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:self.xmppRosterStorage];
     self.xmppRoster.autoFetchRoster = YES;
     self.xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
