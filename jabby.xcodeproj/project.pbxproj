@@ -85,6 +85,7 @@
 		125C1B2618C7F90E00E79006 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 125C1AFE18C7F90E00E79006 /* CoreData.framework */; };
 		125C1B2E18C7F90E00E79006 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 125C1B2C18C7F90E00E79006 /* InfoPlist.strings */; };
 		125C1B3018C7F90E00E79006 /* jabbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 125C1B2F18C7F90E00E79006 /* jabbyTests.m */; };
+		12626D2018D28859003BD753 /* JLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12626D1F18D28859003BD753 /* JLoginViewController.m */; };
 		C7299C86FECE4CA0878E97CF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B4CB3F93E54040FFB0B6B34B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -197,6 +198,8 @@
 		125C1B2B18C7F90E00E79006 /* jabbyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "jabbyTests-Info.plist"; sourceTree = "<group>"; };
 		125C1B2D18C7F90E00E79006 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		125C1B2F18C7F90E00E79006 /* jabbyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jabbyTests.m; sourceTree = "<group>"; };
+		12626D1E18D28859003BD753 /* JLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLoginViewController.h; sourceTree = "<group>"; };
+		12626D1F18D28859003BD753 /* JLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLoginViewController.m; sourceTree = "<group>"; };
 		B4CB3F93E54040FFB0B6B34B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC900050D6B84DE590402DB1 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -386,6 +389,8 @@
 				125C1B1618C7F90E00E79006 /* JMasterViewController.m */,
 				125C1B1818C7F90E00E79006 /* JDetailViewController.h */,
 				125C1B1918C7F90E00E79006 /* JDetailViewController.m */,
+				12626D1E18D28859003BD753 /* JLoginViewController.h */,
+				12626D1F18D28859003BD753 /* JLoginViewController.m */,
 				125C1B1B18C7F90E00E79006 /* Images.xcassets */,
 				125C1B1218C7F90E00E79006 /* jabby.xcdatamodeld */,
 				125C1B0118C7F90E00E79006 /* Supporting Files */,
@@ -621,6 +626,7 @@
 				12432C4318CB439400EC5439 /* JIMCenter.m in Sources */,
 				1257408F18CAC9EA000422AC /* UIButton+JSMessagesView.m in Sources */,
 				125C1B1718C7F90E00E79006 /* JMasterViewController.m in Sources */,
+				12626D2018D28859003BD753 /* JLoginViewController.m in Sources */,
 				1257408818CAC9EA000422AC /* NSString+JSMessagesView.m in Sources */,
 				1257409118CAC9EA000422AC /* UIImage+JSMessagesView.m in Sources */,
 			);
