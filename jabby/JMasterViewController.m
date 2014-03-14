@@ -59,8 +59,10 @@
     
 
     // TODO if not bundle with account:
-    // [self performSegueWithIdentifier:@"GoToLogin" sender:self];
-    
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    if (![defaults stringForKey:@"UID"]) {
+        [self performSegueWithIdentifier:@"GoToLogin" sender:self];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -68,8 +70,6 @@
     appDelegate.imCenter.friendListDelegate = self;
     appDelegate.imCenter.messageDelegate = self;
 }
-
-
 
 
 - (void)didReceiveMemoryWarning
@@ -284,6 +284,9 @@
 
 
 # pragma mark - JFriendListDelegate
+- (void)needLogin {
+    [self performSegueWithIdentifier:@"GoToLogin" sender:self];
+}
 -(void)onAbsence:(XMPPPresence *)presence {
 //    [self.friendList removeObject:presence];
 //    [self.tableView reloadData];
