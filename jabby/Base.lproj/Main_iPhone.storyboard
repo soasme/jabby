@@ -42,7 +42,7 @@
                                 <rect key="frame" x="104" y="112" width="196" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                                 <connections>
                                     <outlet property="delegate" destination="BY0-6B-m5i" id="cpW-7c-V82"/>
                                 </connections>
@@ -57,7 +57,7 @@
                                 <rect key="frame" x="104" y="165" width="196" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="BY0-6B-m5i" id="Xga-Op-8AL"/>
                                 </connections>
@@ -86,7 +86,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="accountInput" destination="Yes-6h-r5P" id="Bt7-ot-YXT"/>
                         <outlet property="loginButton" destination="vGD-pk-ae2" id="2V0-iO-xZe"/>
+                        <outlet property="passwordInput" destination="Fv0-JW-8Pq" id="X8O-WW-5nD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jZ0-kK-Qhh" userLabel="First Responder" sceneMemberID="firstResponder"/>
