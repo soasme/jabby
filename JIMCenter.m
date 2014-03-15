@@ -175,6 +175,28 @@
     return YES;
 }
 
+- (NSMutableArray *)fetchLatestMessage:(NSString *)jidStr
+{
+    NSManagedObjectContext *moc = [self.messageStorage mainThreadManagedObjectContext];
+    NSEntityDescription *messageEntity = [self.messageStorage messageEntity:moc];
+	
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bareJidStr == %@", jidStr];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
+    
+    fetchRequest.entity = messageEntity;
+    fetchRequest.fetchBatchSize = 20;
+    fetchRequest.fetchLimit = 20;
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *meses = [moc executeFetchRequest:fetchRequest error:&error];
+    
+    return [NSMutableArray arrayWithArray:[[meses reverseObjectEnumerator] allObjects]];
+}
+
 
 
 

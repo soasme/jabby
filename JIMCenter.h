@@ -46,5 +46,6 @@
 - (void)goOnline;
 - (void)goOffline;
 - (void)sendMessage:(NSString *)text to:(NSString *)bareJid;
+- (NSMutableArray *)fetchLatestMessage:(NSString *)jidStr;
 
 @end
