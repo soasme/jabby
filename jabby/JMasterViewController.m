@@ -42,6 +42,10 @@
     self.title = @"Friends";
     self.detailViewController = (JDetailViewController *)[
         [self.splitViewController.viewControllers lastObject] topViewController];
+    
+    NSMutableArray *onlineFriends = [NSMutableArray array];
+    NSMutableArray *offlineFriends = [NSMutableArray array];
+    self.friendList = [NSMutableArray arrayWithObjects:onlineFriends,offlineFriends, nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -77,12 +81,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.friendList.count;
+    return [self.friendList[section] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -109,12 +113,35 @@
 //    [self performSegueWithIdentifier:@"chat" sender:self];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (tableView == self.tableView)
+    {
+        if (section == 0)
+        {
+            return @"online";
+        }
+        else if (section == 1)
+        {
+            return @"offline";
+        }
+        else
+        {
+            return nil;
+        }
+    }
+    else
+    {
+        return nil;
+    }
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"chat"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         
-        NSDictionary *info = (NSDictionary *)[self.friendList objectAtIndex:indexPath.row];
+        NSDictionary *info = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
         [[segue destinationViewController] configureInfo:info];
     }
 }
@@ -122,9 +149,11 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *friend = (NSDictionary *)[self.friendList objectAtIndex:indexPath.row];
+    NSDictionary *friend = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
     cell.textLabel.text = [friend valueForKey:@"name"];
 }
+
+
 
 
 # pragma mark - JFriendListDelegate
@@ -153,7 +182,7 @@
 
 -(void)didSetup:(NSArray *)friends
 {
-    self.friendList = [NSMutableArray arrayWithArray:friends];
+    self.friendList[1] = [NSMutableArray arrayWithArray:friends];
     [self.tableView reloadData];
 }
 
