@@ -285,11 +285,11 @@
 #pragma UIImagePicker Delegate
 
 #pragma mark - Image picker delegate
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)information
 {
-	NSLog(@"Chose image!  Details:  %@", info);
+	NSLog(@"Chose image!  Details:  %@", information);
     
-    self.willSendImage = [info objectForKey:UIImagePickerControllerEditedImage];
+    self.willSendImage = [information objectForKey:UIImagePickerControllerEditedImage];
     NSDictionary *message = [NSDictionary dictionaryWithObjectsAndKeys:self.willSendImage,@"Image",@"self",@"Sender", nil];
     [self.messages addObject:message];
     [self.timestamps addObject:[NSDate date]];
@@ -300,7 +300,6 @@
     [self dismissViewControllerAnimated:YES completion:NULL];
     
 }
-
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
