@@ -12,11 +12,7 @@
 
 #import "JLoginViewController.h"
 
-@interface JMasterViewController () <JFriendListDelegate, JMessageDelegate>
-
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
-
-@property (strong, nonatomic) NSMutableArray *friendList;
+@interface JMasterViewController ()
 
 @end
 
@@ -66,9 +62,9 @@
 {
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults stringForKey:@"UID"]) {
-        return YES;
-    } else {
         return NO;
+    } else {
+        return YES;
     }
 }
 
