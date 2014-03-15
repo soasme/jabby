@@ -25,7 +25,6 @@
 - (id)initWithFriends
 {
     if (self = [super init]) {
-//        self.friends = [NSMutableArray array];
         [self setupStream];
     }
     return self;
@@ -103,13 +102,10 @@
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
-    // delegate to messageDelegate
-    
     XMPPUserCoreDataStorageObject *user = [_xmppRosterStorage userForJID:[message from]
                                                               xmppStream:self.xmppStream
                                                     managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
     if ([message isMessageWithBody]) {
-//        [self.messageStorage archiveMessage:message outgoing:NO xmppStream:self.xmppStream];
         [self.messageDelegate onReceivedMessage:message from:user];
     }
     
@@ -121,7 +117,6 @@
     NSString *password = [[NSUserDefaults standardUserDefaults] stringForKey:@"PASS"];
     BOOL result = [self.xmppStream authenticateWithPassword:password error:&error];
     if (result == NO) {
-        NSLog(@"auth fail, %@, %@", result, error);
         [self.friendListDelegate needLogin];
     }
 }
@@ -135,13 +130,10 @@
     [body setStringValue:text];
     [mes addChild:body];
     [self.xmppStream sendElement:mes];
-//    [self.messageStorage archiveMessage:[XMPPMessage messageFromElement:mes]
-//                               outgoing:YES xmppStream:self.xmppStream];
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
-    NSLog(@"presence %@", presence);
     NSString *presenceType = [presence type];
     NSString *userId = [[sender myJID] user];
     NSString *presenceFromUser = [[presence from] user];
@@ -156,7 +148,6 @@
 
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
 {
-    NSLog(@"iq %@", iq);
     if ([@"result" isEqualToString:iq.type])
     {
         NSMutableArray *friends = [NSMutableArray array];
