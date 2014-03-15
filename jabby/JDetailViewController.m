@@ -6,11 +6,8 @@
 //  Copyright (c) 2014年 soasme. All rights reserved.
 //
 // TODO
-//* Save latest chat message
 //* upload image
-//* set the right title
-//* get the right person
-//* handle incoming and outgoing background
+
 
 #import "JDetailViewController.h"
 
@@ -46,7 +43,6 @@
 {
     return (JAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
-
 
 
 - (NSString *)hisJidStr
@@ -89,53 +85,21 @@
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
     
-    
-    
-    messages = [NSMutableArray array];
-    
     self.delegate = self;
     self.dataSource = self;
     
 
-    self.title = [NSString stringWithFormat:@"与 %@ 聊天", [self hisName]];
+    self.title = [self hisName];
     
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
-    
-    //XMPPJID *myJID = [self appDelegate].imCenter.xmppStream.myJID;
-    
-    [self fetchLatestMessage];
-    [self reloadToBottom];
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [self appDelegate].imCenter.messageDelegate = self;
-}
-
-- (void)fetchLatestMessage
-{
-    NSManagedObjectContext *moc = [[self appDelegate].imCenter.messageStorage mainThreadManagedObjectContext];
-    NSEntityDescription *messageEntity = [[self appDelegate].imCenter.messageStorage messageEntity:moc];
-	
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bareJidStr == %@",
-                              [self hisJidStr]];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
-    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
-    
-    fetchRequest.entity = messageEntity;
-    fetchRequest.fetchBatchSize = 20;
-    fetchRequest.fetchLimit = 20;
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    [fetchRequest setPredicate:predicate];
-    
-    NSError *error = nil;
-    NSArray *meses = [moc executeFetchRequest:fetchRequest error:&error];
-    
-    self.messages = [NSMutableArray arrayWithArray:[[meses reverseObjectEnumerator] allObjects]];
-    
+    self.messages = [[self appDelegate].imCenter fetchLatestMessage:[self hisJidStr]];
+    [self reloadToBottom];
 }
 
 - (void)viewDidUnload
@@ -149,7 +113,7 @@
 - (void)onReceivedMessage:(XMPPMessage *)message from:(id)user
 {
     if ([message isMessageWithBody]) {
-        [self fetchLatestMessage];
+        self.messages = [[self appDelegate].imCenter fetchLatestMessage:[self hisJidStr]];
         [JSMessageSoundEffect playMessageReceivedSound];
         [self reloadToBottom];
     } else {
@@ -194,7 +158,7 @@
     [[self appDelegate].imCenter sendMessage:text to:[self hisJidStr]];
     [JSMessageSoundEffect playMessageSentSound];
     [self finishSend];
-    [self fetchLatestMessage];
+    self.messages = [[self appDelegate].imCenter fetchLatestMessage:[self hisJidStr]];
     [self.tableView reloadData];
 }
 
