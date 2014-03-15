@@ -79,7 +79,7 @@
         
         [self dismissViewControllerAnimated:YES completion:nil];
     }else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请输入账号与密码" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Please input your account and password" delegate:nil cancelButtonTitle:@"confirm" otherButtonTitles:nil, nil];
         [alert show];
     }
     
