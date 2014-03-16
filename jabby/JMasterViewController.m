@@ -59,6 +59,7 @@
     if ([self missAccount]) {
         [self pushGoToLoginView];
     }
+    [self reloadFriendList];
 }
 
 - (void)didReceiveMemoryWarning
@@ -163,8 +164,6 @@
     NSDictionary *friend = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
     cell.textLabel.text = [friend valueForKey:@"name"];
 }
-
-
 
 
 # pragma mark - JFriendListDelegate
