@@ -47,5 +47,8 @@
 - (void)goOffline;
 - (void)sendMessage:(NSString *)text to:(NSString *)bareJid;
 - (NSMutableArray *)fetchLatestMessage:(NSString *)jidStr;
+- (XMPPUserCoreDataStorageObject *)getUserObject:(XMPPJID *)jid;
+- (XMPPUserCoreDataStorageObject *)getUserObjectByJidStr:(NSString *)jidStr;
+- (BOOL)isFriendOnline:(NSString *)jidStr;
 
 @end

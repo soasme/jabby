@@ -188,7 +188,24 @@
     return [NSMutableArray arrayWithArray:[[meses reverseObjectEnumerator] allObjects]];
 }
 
+- (XMPPUserCoreDataStorageObject *)getUserObject:(XMPPJID *)jid
+{
+    return [self.xmppRosterStorage userForJID:jid
+                                   xmppStream:self.xmppStream
+                                   managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
+}
 
+- (XMPPUserCoreDataStorageObject *)getUserObjectByJidStr:(NSString *)jidStr
+{
+    XMPPJID *jid = [XMPPJID jidWithString:jidStr];
+    return [self getUserObject:jid];
+}
+
+- (BOOL)isFriendOnline:(NSString *)jidStr
+{
+    XMPPUserCoreDataStorageObject *u =[self getUserObjectByJidStr:jidStr];
+    return [u isOnline];
+}
 
 
 @end
