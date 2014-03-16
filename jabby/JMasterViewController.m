@@ -38,6 +38,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if (![[self appDelegate].imCenter.xmppStream isConnected]) {
+        [[self appDelegate].imCenter connect];
+    }
 
     self.title = @"Friends";
     self.detailViewController = (JDetailViewController *)[
@@ -168,17 +172,18 @@
     
 }
 
--(void)onPresence:(XMPPPresence *)presence {
-    
-//    for (XMPPPresence* p in self.friendList) {
-//        if ([[[presence from] user] isEqualToString:[[p from] user]]) {
-//            return;
-//        }
-//    }
-//    [[self appDelegate].imCenter.xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:YES];
-//    [self.friendList addObject:presence];
-//    [self.tableView reloadData];
-    NSLog(@"presence %@", presence);
+-(void)onPresence:(XMPPPresence *)presence
+{
+    NSString *jid = [[presence from] bare];
+    NSArray *offline = [NSArray arrayWithArray:self.friendList[1]];
+    for (NSDictionary *people in offline) {
+        if ([[people valueForKey:@"jid"] isEqualToString:jid]) {
+            [self.friendList[1] removeObject:people];
+            [self.friendList[0] addObject:people];
+            [self.tableView reloadData];
+            return;
+        }
+    }
 }
 
 -(void)didSetup:(NSArray *)friends
