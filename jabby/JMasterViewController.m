@@ -119,11 +119,11 @@
     {
         if (section == 0)
         {
-            return @"online";
+            return @"Online";
         }
         else if (section == 1)
         {
-            return @"offline";
+            return @"Offline";
         }
         else
         {
@@ -178,6 +178,7 @@
 //    [[self appDelegate].imCenter.xmppvCardTempModule vCardTempForJID:[presence from] shouldFetch:YES];
 //    [self.friendList addObject:presence];
 //    [self.tableView reloadData];
+    NSLog(@"presence %@", presence);
 }
 
 -(void)didSetup:(NSArray *)friends
