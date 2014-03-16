@@ -71,6 +71,8 @@
             }
             [application endBackgroundTask:self.backgroundTask];
             self.backgroundTask = UIBackgroundTaskInvalid;
+            
+            
         });
     }];
     
@@ -80,6 +82,11 @@
 }
 
 - (void) timerUpdate:(NSTimer*)timer {
+    if (![self.imCenter.xmppStream isConnected]) {
+        NSLog(@"Try to reconnect");
+        [self.imCenter connect];
+    }
+    
     UIApplication *application = [UIApplication sharedApplication];
     
     NSLog(@"Timer update, background time left: %f", application.backgroundTimeRemaining);
