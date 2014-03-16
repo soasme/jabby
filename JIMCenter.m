@@ -21,11 +21,16 @@
 @synthesize xmppReconnect = _xmppReconnect;
 @synthesize messageStorage = _messageStorage;
 
+@synthesize onlineFriends = _onlineFriends;
+@synthesize offlineFriends = _offlineFriends;
+
 
 - (id)initWithFriends
 {
     if (self = [super init]) {
         [self setupStream];
+        self.onlineFriends = [NSMutableArray array];
+        self.offlineFriends = [NSMutableArray array];
     }
     return self;
 }
@@ -140,8 +145,26 @@
     if (![presenceFromUser isEqualToString:userId]) {
         if ([presenceType isEqualToString:@"available"]) {
             [self.friendListDelegate onPresence:presence];
+            
+            NSArray *online = [NSArray arrayWithArray:self.onlineFriends];
+            for (NSDictionary *people in online) {
+                if ([[people valueForKey:@"jid"] isEqualToString:presenceFromUser]) {
+                    [self.offlineFriends removeObject:people];
+                    [self.onlineFriends addObject:people];
+                    break;
+                }
+            }
         } else if ([presenceType isEqualToString:@"unavailable"]) {
             [self.friendListDelegate onAbsence:presence];
+            
+            NSArray *offline = [NSArray arrayWithArray:self.offlineFriends];
+            for (NSDictionary *people in offline) {
+                if ([[people valueForKey:@"jid"] isEqualToString:presenceFromUser]) {
+                    [self.onlineFriends removeObject:people];
+                    [self.offlineFriends addObject:people];
+                    break;
+                }
+            }
         }
     }
 }
@@ -160,8 +183,18 @@
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:jid,@"jid",name,@"name", nil];
             [friends addObject:dict];
         }
+        for (NSDictionary *people in friends) {
+            NSString *jid = [people valueForKey:@"jid"];
+            if ([self isFriendOnline:jid]) {
+                [self.onlineFriends addObject:people];
+            } else {
+                [self.offlineFriends addObject:people];
+            }
+        }
         [self.friendListDelegate didSetup:friends];
     }
+    
+    
     
     return YES;
 }
