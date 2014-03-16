@@ -81,6 +81,13 @@
     [self performSegueWithIdentifier:@"GoToLogin" sender:self];
 }
 
+- (void)reloadFriendList
+{
+    self.friendList[0] = [self appDelegate].imCenter.onlineFriends;
+    self.friendList[1] = [self appDelegate].imCenter.offlineFriends;
+    [self.tableView reloadData];
+}
+
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -167,44 +174,17 @@
 }
 
 -(void)onAbsence:(XMPPPresence *)presence {
-    NSString *jid = [[presence from] bare];
-    NSArray *online = [NSArray arrayWithArray:self.friendList[0]];
-    for (NSDictionary *people in online) {
-        if ([[people valueForKey:@"jid"] isEqualToString:jid]) {
-            [self.friendList[0] removeObject:people];
-            [self.friendList[1] addObject:people];
-            [self.tableView reloadData];
-            return;
-        }
-    }
-    
+    [self reloadFriendList];
 }
 
 -(void)onPresence:(XMPPPresence *)presence
 {
-    NSString *jid = [[presence from] bare];
-    NSArray *offline = [NSArray arrayWithArray:self.friendList[1]];
-    for (NSDictionary *people in offline) {
-        if ([[people valueForKey:@"jid"] isEqualToString:jid]) {
-            [self.friendList[1] removeObject:people];
-            [self.friendList[0] addObject:people];
-            [self.tableView reloadData];
-            return;
-        }
-    }
+    [self reloadFriendList];
 }
 
 -(void)didSetup:(NSArray *)friends
 {
-    for (NSDictionary *people in friends) {
-        NSString *jid = [people valueForKey:@"jid"];
-        if ([[self appDelegate].imCenter isFriendOnline:jid]) {
-            [self.friendList[0] addObject:people];
-        } else {
-            [self.friendList[1] addObject:people];
-        }
-    }
-    [self.tableView reloadData];
+    [self reloadFriendList];
 }
 
 
