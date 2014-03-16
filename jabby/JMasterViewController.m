@@ -39,9 +39,7 @@
 {
     [super viewDidLoad];
     
-    if (![[self appDelegate].imCenter.xmppStream isConnected]) {
-        [[self appDelegate].imCenter connect];
-    }
+
 
     self.title = @"Friends";
     self.detailViewController = (JDetailViewController *)[
@@ -50,6 +48,8 @@
     NSMutableArray *onlineFriends = [NSMutableArray array];
     NSMutableArray *offlineFriends = [NSMutableArray array];
     self.friendList = [NSMutableArray arrayWithObjects:onlineFriends,offlineFriends, nil];
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -167,8 +167,16 @@
 }
 
 -(void)onAbsence:(XMPPPresence *)presence {
-//    [self.friendList removeObject:presence];
-//    [self.tableView reloadData];
+    NSString *jid = [[presence from] bare];
+    NSArray *online = [NSArray arrayWithArray:self.friendList[0]];
+    for (NSDictionary *people in online) {
+        if ([[people valueForKey:@"jid"] isEqualToString:jid]) {
+            [self.friendList[0] removeObject:people];
+            [self.friendList[1] addObject:people];
+            [self.tableView reloadData];
+            return;
+        }
+    }
     
 }
 
@@ -188,7 +196,14 @@
 
 -(void)didSetup:(NSArray *)friends
 {
-    self.friendList[1] = [NSMutableArray arrayWithArray:friends];
+    for (NSDictionary *people in friends) {
+        NSString *jid = [people valueForKey:@"jid"];
+        if ([[self appDelegate].imCenter isFriendOnline:jid]) {
+            [self.friendList[0] addObject:people];
+        } else {
+            [self.friendList[1] addObject:people];
+        }
+    }
     [self.tableView reloadData];
 }
 
