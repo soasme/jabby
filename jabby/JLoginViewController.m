@@ -35,6 +35,18 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.loginButton.buttonColor = [UIColor turquoiseColor];
+    self.loginButton.shadowColor = [UIColor greenSeaColor];
+    self.loginButton.shadowHeight = 3.0f;
+    self.loginButton.cornerRadius = 6.0f;
+    self.loginButton.titleLabel.font = [UIFont boldFlatFontOfSize:16];
+    [self.loginButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [self.loginButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+    
+    [UIBarButtonItem configureFlatButtonsWithColor:[UIColor peterRiverColor]
+                                  highlightedColor:[UIColor belizeHoleColor]
+                                      cornerRadius:3];
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,8 +91,22 @@
         
         [self dismissViewControllerAnimated:YES completion:nil];
     }else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Please input your account and password" delegate:nil cancelButtonTitle:@"confirm" otherButtonTitles:nil, nil];
-        [alert show];
+        FUIAlertView *alertView = [[FUIAlertView alloc] initWithTitle:@"Warning"
+                                                              message:@"Please input your account and password"
+                                                             delegate:nil cancelButtonTitle:@"OK"
+                                                    otherButtonTitles:nil, nil];
+        alertView.titleLabel.textColor = [UIColor cloudsColor];
+        alertView.titleLabel.font = [UIFont boldFlatFontOfSize:16];
+        alertView.messageLabel.textColor = [UIColor cloudsColor];
+        alertView.messageLabel.font = [UIFont flatFontOfSize:14];
+        alertView.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
+        alertView.alertContainer.backgroundColor = [UIColor midnightBlueColor];
+        alertView.defaultButtonColor = [UIColor cloudsColor];
+        alertView.defaultButtonShadowColor = [UIColor asbestosColor];
+        alertView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
+        alertView.defaultButtonTitleColor = [UIColor asbestosColor];
+        [alertView show];
+        
     }
     
 }
