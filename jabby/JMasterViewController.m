@@ -56,10 +56,13 @@
     JAppDelegate *appDelegate = [self appDelegate];
     appDelegate.imCenter.friendListDelegate = self;
     appDelegate.imCenter.messageDelegate = self;
-    if ([self missAccount]) {
+    
+    [self reloadFriendList];
+    
+    if (![[self appDelegate] isConnected] && [self missAccount]) {
         [self pushGoToLoginView];
     }
-    [self reloadFriendList];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -69,16 +72,12 @@
 
 - (BOOL)missAccount
 {
-    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults stringForKey:@"UID"]) {
-        return NO;
-    } else {
-        return YES;
-    }
+    return ![[self appDelegate].imCenter.xmppStream isAuthenticated];
 }
 
 - (void)pushGoToLoginView
 {
+    
     [self performSegueWithIdentifier:@"GoToLogin" sender:self];
 }
 
@@ -169,7 +168,12 @@
 # pragma mark - JFriendListDelegate
 
 - (void)needLogin {
-    [self performSegueWithIdentifier:@"GoToLogin" sender:self];
+    if ([self missAccount]) {
+        FUIAlertView *alert = [[self appDelegate] alert:@"Authenticated Failed!" andTitle:@"Warning"];
+        [alert setOnDismissAction:^{
+            [self pushGoToLoginView];
+        }];
+    }
 }
 
 -(void)onAbsence:(XMPPPresence *)presence {
@@ -199,7 +203,7 @@
     }
 }
 
-
+#pragma mark - FUIAlertViewDelegate
 
 
 @end
