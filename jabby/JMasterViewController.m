@@ -107,9 +107,15 @@
     NSDictionary *friend = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
     NSString *jidStr = [friend valueForKey:@"jid"];
     // XMPPUserCoreDataStorageObject *user = [[self appDelegate].imCenter getUserObjectByJidStr:jidStr];
-    NSData *avatar = [[self appDelegate].imCenter getAvatar:jidStr];
+    NSData *avatarData = [[self appDelegate].imCenter getAvatar:jidStr];
+    UIImage *avatar;
+    if (avatarData) {
+        avatar = [UIImage imageWithData:avatarData];
+    } else {
+        avatar = [UIImage imageNamed:@"default_avatar.png"];
+    }
     cell.textLabel.text = [friend valueForKey:@"name"];
-    PBFlatRoundedImageView *avatarView = [PBFlatRoundedImageView contactImageViewWithImage:[UIImage imageWithData:avatar]];
+    PBFlatRoundedImageView *avatarView = [PBFlatRoundedImageView contactImageViewWithImage:avatar];
     [cell setIconImageView:avatarView];
 }
 
