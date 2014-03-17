@@ -14,6 +14,8 @@
 #import <UIKit/UIKit.h>
 #import "JIMCenter.h"
 #import "FUIAlertView.h"
+#import "UINavigationBar+FlatUI.h"
+#import "UIColor+FlatUI.h"
 
 
 @interface JAppDelegate : UIResponder <UIApplicationDelegate, JMessageDelegate> {

@@ -45,6 +45,7 @@
      [NSDictionary dictionaryWithObjectsAndKeys:
       [UIColor whiteColor], NSForegroundColorAttributeName,
       [UIFont fontWithName:@"ArialMT" size:20.0], NSFontAttributeName,nil]];
+    [application setStatusBarStyle:UIStatusBarStyleLightContent];
     
     // Setup stream before all operations.
     [self setupIMCenter];
