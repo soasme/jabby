@@ -268,9 +268,8 @@
 - (BOOL)setupIMCenter
 {
     self.imCenter = [[JIMCenter alloc] initWithFriends];
-    
-    [self.imCenter connect];
     self.imCenter.messageDelegate = self;
+    isConnected = [self.imCenter connect];
     return YES;
 }
 
@@ -314,6 +313,11 @@
     alertView.defaultButtonTitleColor = [UIColor asbestosColor];
     [alertView show];
     return alertView;
+}
+
+- (BOOL)isConnected
+{
+    return isConnected;
 }
 
 @end

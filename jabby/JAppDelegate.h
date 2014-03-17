@@ -17,8 +17,7 @@
 
 
 @interface JAppDelegate : UIResponder <UIApplicationDelegate, JMessageDelegate> {
-    BOOL isOpen;
-    NSString *password;
+    BOOL isConnected;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -40,5 +39,6 @@
 - (NSURL *)applicationDocumentsDirectory;
 - (void)sendNotification:(NSString *)text withUserInfo:(NSDictionary *)userInfo;
 - (FUIAlertView *)alert:(NSString *)message andTitle:(NSString *)title;
+- (BOOL)isConnected;
 
 @end
