@@ -39,7 +39,6 @@
     self.xmppStream.myJID = [XMPPJID jidWithString:[[NSUserDefaults standardUserDefaults] stringForKey:@"UID"]];
     NSError *error = nil;
     if (![self.xmppStream connectWithTimeout: 2 error:&error]) {
-        NSLog(@"Ooops, forgot something");
         return FALSE;
     } else {
         NSLog(@"Success Connect to gtalk");
