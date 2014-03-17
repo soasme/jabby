@@ -49,6 +49,7 @@
     NSMutableArray *offlineFriends = [NSMutableArray array];
     self.friendList = [NSMutableArray arrayWithObjects:onlineFriends,offlineFriends, nil];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+
     
 }
 
@@ -102,27 +103,6 @@
     return [self.friendList[section] count];
 }
 
-
-- (PBFlatGroupedStyleCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *cellID = @"Cell";
-    PBFlatGroupedStyleCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (cell == nil) {
-        cell = [[PBFlatGroupedStyleCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellID];
-    }
-    [cell setFirstCell:NO];
-    [cell setLastCell:NO];
-    
-    if(indexPath.row == 0) {
-        [cell setFirstCell:YES];
-    } else if (indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 1) {
-        [cell setLastCell:YES];
-    }
-    [self configureCell:cell forIndexPath:indexPath];
-    
-    return cell;
-}
-
 - (void)configureCell:(PBFlatGroupedStyleCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *friend = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
     NSString *jidStr = [friend valueForKey:@"jid"];
@@ -144,15 +124,10 @@
     return NO;
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-//    return 30.0f;
-//}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *__view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 30.0f)];
-    [__view setBackgroundColor:[UIColor clearColor]];
-    return __view;
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30.0f;
 }
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -161,27 +136,18 @@
 //    [self performSegueWithIdentifier:@"chat" sender:self];
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return nil;
+}
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (tableView == self.tableView)
-    {
-        if (section == 0)
-        {
-            return @"Online";
-        }
-        else if (section == 1)
-        {
-            return @"Offline";
-        }
-        else
-        {
-            return nil;
-        }
+    if (section == 0) {
+        return @"Online";
+    } else if (section == 1) {
+        return @"Offline";
     }
-    else
-    {
-        return nil;
-    }
+    return nil;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

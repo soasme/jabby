@@ -14,9 +14,10 @@
 #import "JAppDelegate.h"
 #import "PBFlatGroupedStyleCell.h"
 #import "PBFlatRoundedImageView.h"
+#import "PBFlatGroupedTableViewController.h"
 
 
-@interface JMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate,
+@interface JMasterViewController : PBFlatGroupedTableViewController <NSFetchedResultsControllerDelegate,
     JFriendListDelegate, JMessageDelegate, FUIAlertViewDelegate>
 
 @property (strong, nonatomic) JDetailViewController *detailViewController;
