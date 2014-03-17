@@ -10,10 +10,12 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "JAppDelegate.h"
 #import "JSMessagesViewController.h"
+#import "PBFlatBarButtonItems.h"
 
 @interface JDetailViewController : JSMessagesViewController ;
 
 @property (retain, nonatomic) IBOutlet UITableView *table;
+@property (weak, nonatomic) IBOutlet UINavigationItem *navigationItem;
 
 
 @property (strong, nonatomic) NSDictionary* info;
