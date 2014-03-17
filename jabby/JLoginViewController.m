@@ -91,22 +91,7 @@
         
         [self dismissViewControllerAnimated:YES completion:nil];
     }else {
-        FUIAlertView *alertView = [[FUIAlertView alloc] initWithTitle:@"Warning"
-                                                              message:@"Please input your account and password"
-                                                             delegate:nil cancelButtonTitle:@"OK"
-                                                    otherButtonTitles:nil, nil];
-        alertView.titleLabel.textColor = [UIColor cloudsColor];
-        alertView.titleLabel.font = [UIFont boldFlatFontOfSize:16];
-        alertView.messageLabel.textColor = [UIColor cloudsColor];
-        alertView.messageLabel.font = [UIFont flatFontOfSize:14];
-        alertView.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
-        alertView.alertContainer.backgroundColor = [UIColor midnightBlueColor];
-        alertView.defaultButtonColor = [UIColor cloudsColor];
-        alertView.defaultButtonShadowColor = [UIColor asbestosColor];
-        alertView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
-        alertView.defaultButtonTitleColor = [UIColor asbestosColor];
-        [alertView show];
-        
+        [[self appDelegate] alert:@"Please input your account and password" andTitle:@"Warning"];
     }
     
 }
