@@ -148,9 +148,12 @@
             NSArray *online = [NSArray arrayWithArray:self.onlineFriends];
             for (NSDictionary *people in online) {
                 if ([[people valueForKey:@"jid"] isEqualToString:presenceFromUser]) {
-                    [self.offlineFriends removeObject:people];
-                    [self.onlineFriends addObject:people];
-                    break;
+                    if ([self.offlineFriends containsObject:people]) {
+                        [self.offlineFriends removeObject:people];
+                    }
+                    if (![self.onlineFriends containsObject:people]) {
+                        [self.onlineFriends addObject:people];
+                    }
                 }
             }
         } else if ([presenceType isEqualToString:@"unavailable"]) {
@@ -159,9 +162,12 @@
             NSArray *offline = [NSArray arrayWithArray:self.offlineFriends];
             for (NSDictionary *people in offline) {
                 if ([[people valueForKey:@"jid"] isEqualToString:presenceFromUser]) {
-                    [self.onlineFriends removeObject:people];
-                    [self.offlineFriends addObject:people];
-                    break;
+                    if ([self.onlineFriends containsObject:people]) {
+                        [self.onlineFriends removeObject:people];
+                    }
+                    if (![self.offlineFriends containsObject:people]) {
+                        [self.offlineFriends addObject:people];
+                    }
                 }
             }
         }
@@ -184,9 +190,9 @@
         }
         for (NSDictionary *people in friends) {
             NSString *jid = [people valueForKey:@"jid"];
-            if ([self isFriendOnline:jid]) {
+            if ([self isFriendOnline:jid] && ![self.onlineFriends containsObject:people]) {
                 [self.onlineFriends addObject:people];
-            } else {
+            } else if (![self.offlineFriends containsObject:people]) {
                 [self.offlineFriends addObject:people];
             }
         }
