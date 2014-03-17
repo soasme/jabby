@@ -144,6 +144,9 @@
             <objects>
                 <viewController title="chat" id="Ah7-4n-0Wa" customClass="JDetailViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" title="Title" id="lWE-Ou-cNQ"/>
+                    <connections>
+                        <outlet property="leftBarButton" destination="lWE-Ou-cNQ" id="dJM-er-r0Y"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
             </objects>
