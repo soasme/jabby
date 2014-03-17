@@ -95,12 +95,12 @@
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
     
-    [self.navigationItem setLeftBarButtonItem:[PBFlatBarButtonItems backBarButtonItemWithTarget:self selector:@selector(showLeftMenu:)]];
+    [self.navigationItem setLeftBarButtonItem:
+        [PBFlatBarButtonItems backBarButtonItemWithTarget:self
+                              selector:@selector(showLeftMenu:)]];
 }
 
 -(void)showLeftMenu:(UIBarButtonItem *)sender {
-    //[self dismissModalViewControllerAnimated:YES];
-    //[self performSegueWithIdentifier:@"leftMenu" sender:sender];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
