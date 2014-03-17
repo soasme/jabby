@@ -12,6 +12,8 @@
 
 #import <CoreData/CoreData.h>
 #import "JAppDelegate.h"
+#import "PBFlatGroupedStyleCell.h"
+#import "PBFlatRoundedImageView.h"
 
 
 @interface JMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate,

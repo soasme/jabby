@@ -48,7 +48,7 @@
     NSMutableArray *onlineFriends = [NSMutableArray array];
     NSMutableArray *offlineFriends = [NSMutableArray array];
     self.friendList = [NSMutableArray arrayWithObjects:onlineFriends,offlineFriends, nil];
-    
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
 }
 
@@ -102,12 +102,37 @@
     return [self.friendList[section] count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+
+- (PBFlatGroupedStyleCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    [self configureCell:cell atIndexPath:indexPath];
+    static NSString *cellID = @"Cell";
+    PBFlatGroupedStyleCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (cell == nil) {
+        cell = [[PBFlatGroupedStyleCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellID];
+    }
+    [cell setFirstCell:NO];
+    [cell setLastCell:NO];
+    
+    if(indexPath.row == 0) {
+        [cell setFirstCell:YES];
+    } else if (indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 1) {
+        [cell setLastCell:YES];
+    }
+    [self configureCell:cell forIndexPath:indexPath];
+    
     return cell;
 }
+
+- (void)configureCell:(PBFlatGroupedStyleCell *)cell forIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *friend = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
+    NSString *jidStr = [friend valueForKey:@"jid"];
+    // XMPPUserCoreDataStorageObject *user = [[self appDelegate].imCenter getUserObjectByJidStr:jidStr];
+    NSData *avatar = [[self appDelegate].imCenter getAvatar:jidStr];
+    cell.textLabel.text = [friend valueForKey:@"name"];
+    PBFlatRoundedImageView *avatarView = [PBFlatRoundedImageView contactImageViewWithImage:[UIImage imageWithData:avatar]];
+    [cell setIconImageView:avatarView];
+}
+
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -117,6 +142,16 @@
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return NO;
+}
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//    return 30.0f;
+//}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *__view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 30.0f)];
+    [__view setBackgroundColor:[UIColor clearColor]];
+    return __view;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
