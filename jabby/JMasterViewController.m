@@ -59,7 +59,9 @@
     
     [self reloadFriendList];
     
-    if (![[self appDelegate] isConnected] && [self missAccount]) {
+    if (![[self appDelegate] isConnected] &&
+        ![[self appDelegate].imCenter.xmppStream isConnecting] &&
+        [self missAccount]) {
         [self pushGoToLoginView];
     }
     
