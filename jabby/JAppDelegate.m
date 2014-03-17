@@ -24,21 +24,27 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    UINavigationController *navigationController;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-        UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
+        navigationController = [splitViewController.viewControllers lastObject];
         splitViewController.delegate = (id)navigationController.topViewController;
-        
         UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
         JMasterViewController *controller = (JMasterViewController *)masterNavigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
     } else {
-        UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+        navigationController = (UINavigationController *)self.window.rootViewController;
+        
         JMasterViewController *controller = (JMasterViewController *)navigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
         
         
     }
+    [navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
+    [navigationController.navigationBar setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      [UIColor whiteColor], NSForegroundColorAttributeName,
+      [UIFont fontWithName:@"ArialMT" size:20.0], NSFontAttributeName,nil]];
     
     // Setup stream before all operations.
     [self setupIMCenter];
