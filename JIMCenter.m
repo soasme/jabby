@@ -141,36 +141,38 @@
 {
     NSString *presenceType = [presence type];
     NSString *userId = [[sender myJID] user];
-    NSString *presenceFromUser = [[presence from] user];
+    NSString *presenceFromUser = [[presence from] bare];
     if (![presenceFromUser isEqualToString:userId]) {
         if ([presenceType isEqualToString:@"available"]) {
-            [self.friendListDelegate onPresence:presence];
             
-            NSArray *online = [NSArray arrayWithArray:self.onlineFriends];
-            for (NSDictionary *people in online) {
-                if ([[people valueForKey:@"jid"] isEqualToString:presenceFromUser]) {
-                    if ([self.offlineFriends containsObject:people]) {
-                        [self.offlineFriends removeObject:people];
-                    }
-                    if (![self.onlineFriends containsObject:people]) {
-                        [self.onlineFriends addObject:people];
-                    }
-                }
-            }
-        } else if ([presenceType isEqualToString:@"unavailable"]) {
-            [self.friendListDelegate onAbsence:presence];
             
             NSArray *offline = [NSArray arrayWithArray:self.offlineFriends];
             for (NSDictionary *people in offline) {
                 if ([[people valueForKey:@"jid"] isEqualToString:presenceFromUser]) {
-                    if ([self.onlineFriends containsObject:people]) {
-                        [self.onlineFriends removeObject:people];
-                    }
-                    if (![self.offlineFriends containsObject:people]) {
-                        [self.offlineFriends addObject:people];
-                    }
+                    
+                        [self.offlineFriends removeObject:people];
+                    
+                    
+                        [self.onlineFriends addObject:people];
+                    
                 }
             }
+            [self.friendListDelegate onPresence:presence];
+        } else if ([presenceType isEqualToString:@"unavailable"]) {
+            
+            
+            NSArray *online = [NSArray arrayWithArray:self.onlineFriends];
+            for (NSDictionary *people in online) {
+                if ([[people valueForKey:@"jid"] isEqualToString:presenceFromUser]) {
+                    
+                        [self.onlineFriends removeObject:people];
+                    
+                    
+                        [self.offlineFriends addObject:people];
+                    
+                }
+            }
+            [self.friendListDelegate onAbsence:presence];
         }
     }
 }
