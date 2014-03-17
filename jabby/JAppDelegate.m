@@ -10,6 +10,7 @@
 
 #import "JMasterViewController.h"
 #import "JLoginViewController.h"
+#import "PBFlatSettings.h"
 
 @implementation JAppDelegate
 
@@ -46,6 +47,12 @@
       [UIColor whiteColor], NSForegroundColorAttributeName,
       [UIFont fontWithName:@"ArialMT" size:20.0], NSFontAttributeName,nil]];
     [application setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    [UIBarButtonItem configureFlatButtonsWithColor:[UIColor peterRiverColor]
+                                  highlightedColor:[UIColor belizeHoleColor]
+                                      cornerRadius:5];
+    [[PBFlatSettings sharedInstance] setMainColor:[UIColor whiteColor]];
+
     
     // Setup stream before all operations.
     [self setupIMCenter];
