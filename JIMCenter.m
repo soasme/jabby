@@ -68,6 +68,7 @@
     self.xmppvCardTempModule = [[XMPPvCardTempModule alloc] initWithvCardStorage:self.xmppvCardStorage];
     self.xmppvCardAvatarModule = [[XMPPvCardAvatarModule alloc] initWithvCardTempModule:self.xmppvCardTempModule];
     [self.xmppvCardTempModule activate:self.xmppStream];
+    [self.xmppvCardAvatarModule activate:self.xmppStream];
     
     self.xmppReconnect = [[XMPPReconnect alloc] init];
     self.xmppReconnect.autoReconnect = YES;
@@ -243,6 +244,12 @@
 {
     XMPPUserCoreDataStorageObject *u =[self getUserObjectByJidStr:jidStr];
     return [u isOnline];
+}
+
+- (NSData *)getAvatar:(NSString *)jidStr
+{
+    XMPPJID *jid = [XMPPJID jidWithString:jidStr];
+    return [self.xmppvCardAvatarModule photoDataForJID:jid];
 }
 
 

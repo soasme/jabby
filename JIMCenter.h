@@ -52,5 +52,6 @@
 - (XMPPUserCoreDataStorageObject *)getUserObject:(XMPPJID *)jid;
 - (XMPPUserCoreDataStorageObject *)getUserObjectByJidStr:(NSString *)jidStr;
 - (BOOL)isFriendOnline:(NSString *)jidStr;
+- (NSData *)getAvatar:(NSString *)jidStr;
 
 @end
