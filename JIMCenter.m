@@ -187,6 +187,9 @@
         {
             NSString *jid = [item attributeStringValueForName:@"jid"];
             NSString *name = [item attributeStringValueForName:@"name"];
+            if (!jid || !name) {
+                continue;
+            }
             // and subscription?
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:jid,@"jid",name,@"name", nil];
             [friends addObject:dict];
