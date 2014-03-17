@@ -13,6 +13,7 @@
 
 #import <UIKit/UIKit.h>
 #import "JIMCenter.h"
+#import "FUIAlertView.h"
 
 
 @interface JAppDelegate : UIResponder <UIApplicationDelegate, JMessageDelegate> {
@@ -38,6 +39,6 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 - (void)sendNotification:(NSString *)text withUserInfo:(NSDictionary *)userInfo;
-- (void)alert:(NSString *)message andTitle:(NSString *)title;
+- (FUIAlertView *)alert:(NSString *)message andTitle:(NSString *)title;
 
 @end

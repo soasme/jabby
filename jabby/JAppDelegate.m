@@ -296,7 +296,7 @@
     [app presentLocalNotificationNow:self.localNotification];
 }
 
-- (void)alert:(NSString *)message andTitle:(NSString *)title
+- (FUIAlertView *)alert:(NSString *)message andTitle:(NSString *)title
 {
     FUIAlertView *alertView = [[FUIAlertView alloc] initWithTitle:title
                                                           message:message
@@ -313,6 +313,7 @@
     alertView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
     alertView.defaultButtonTitleColor = [UIColor asbestosColor];
     [alertView show];
+    return alertView;
 }
 
 @end
