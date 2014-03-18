@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		123D2E4418D74BB9003345D7 /* default_avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 123D2E4318D74BB9003345D7 /* default_avatar.png */; };
 		12432C4318CB439400EC5439 /* JIMCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 12432C4218CB439400EC5439 /* JIMCenter.m */; };
 		1257405918CAC9EA000422AC /* bubble-default-incoming-green.png in Resources */ = {isa = PBXBuildFile; fileRef = 1257401118CAC9E9000422AC /* bubble-default-incoming-green.png */; };
 		1257405A18CAC9EA000422AC /* bubble-default-incoming-green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1257401218CAC9E9000422AC /* bubble-default-incoming-green@2x.png */; };
@@ -100,6 +101,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		123D2E4318D74BB9003345D7 /* default_avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_avatar.png; sourceTree = "<group>"; };
 		12432C4118CB439400EC5439 /* JIMCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JIMCenter.h; sourceTree = "<group>"; };
 		12432C4218CB439400EC5439 /* JIMCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JIMCenter.m; sourceTree = "<group>"; };
 		1257401118CAC9E9000422AC /* bubble-default-incoming-green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bubble-default-incoming-green.png"; path = "jabby/bubble-default-incoming-green.png"; sourceTree = "<group>"; };
@@ -231,6 +233,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		123D2E4218D74B9B003345D7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				123D2E4318D74BB9003345D7 /* default_avatar.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		12432C4018CB431D00EC5439 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +356,7 @@
 		125C1AEC18C7F90E00E79006 = {
 			isa = PBXGroup;
 			children = (
+				123D2E4218D74B9B003345D7 /* Resources */,
 				12432C4018CB431D00EC5439 /* Model */,
 				1257409318CAC9FB000422AC /* JSMessageView */,
 				125C1B0018C7F90E00E79006 /* jabby */,
@@ -540,6 +551,7 @@
 				1257407C18CAC9EA000422AC /* input-bar@2x.png in Resources */,
 				1257406018CAC9EA000422AC /* bubble-default-outgoing-green@2x.png in Resources */,
 				1257406D18CAC9EA000422AC /* bubble-flat-outgoing.png in Resources */,
+				123D2E4418D74BB9003345D7 /* default_avatar.png in Resources */,
 				1257406C18CAC9EA000422AC /* bubble-flat-outgoing-selected@2x.png in Resources */,
 				1257408D18CAC9EA000422AC /* send.png in Resources */,
 				1257407118CAC9EA000422AC /* bubble-square-incoming.png in Resources */,
