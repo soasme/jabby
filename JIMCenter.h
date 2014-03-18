@@ -53,5 +53,6 @@
 - (XMPPUserCoreDataStorageObject *)getUserObjectByJidStr:(NSString *)jidStr;
 - (BOOL)isFriendOnline:(NSString *)jidStr;
 - (NSData *)getAvatar:(NSString *)jidStr;
+- (BOOL)connectedToNetwork:(SCNetworkConnectionFlags)connectionFlags;
 
 @end
