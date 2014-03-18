@@ -142,8 +142,8 @@
 		1257403418CAC9EA000422AC /* input-bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "input-bar@2x.png"; path = "jabby/input-bar@2x.png"; sourceTree = "<group>"; };
 		1257403518CAC9EA000422AC /* input-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "input-field.png"; path = "jabby/input-field.png"; sourceTree = "<group>"; };
 		1257403618CAC9EA000422AC /* input-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "input-field@2x.png"; path = "jabby/input-field@2x.png"; sourceTree = "<group>"; };
-		1257403718CAC9EA000422AC /* JFriendListDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JFriendListDelegate.h; path = jabby/JFriendListDelegate.h; sourceTree = "<group>"; };
-		1257403818CAC9EA000422AC /* JMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMessageDelegate.h; path = jabby/JMessageDelegate.h; sourceTree = "<group>"; };
+		1257403718CAC9EA000422AC /* JFriendListDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFriendListDelegate.h; sourceTree = "<group>"; };
+		1257403818CAC9EA000422AC /* JMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMessageDelegate.h; sourceTree = "<group>"; };
 		1257403918CAC9EA000422AC /* JSBubbleMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSBubbleMessageCell.h; path = jabby/JSBubbleMessageCell.h; sourceTree = "<group>"; };
 		1257403A18CAC9EA000422AC /* JSBubbleMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSBubbleMessageCell.m; path = jabby/JSBubbleMessageCell.m; sourceTree = "<group>"; };
 		1257403B18CAC9EA000422AC /* JSBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSBubbleView.h; path = jabby/JSBubbleView.h; sourceTree = "<group>"; };
@@ -248,14 +248,13 @@
 				12432C4218CB439400EC5439 /* JIMCenter.m */,
 			);
 			name = Model;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		1257409318CAC9FB000422AC /* JSMessageView */ = {
 			isa = PBXGroup;
 			children = (
 				1257409418CACA1B000422AC /* Resources */,
-				1257403718CAC9EA000422AC /* JFriendListDelegate.h */,
-				1257403818CAC9EA000422AC /* JMessageDelegate.h */,
 				1257403918CAC9EA000422AC /* JSBubbleMessageCell.h */,
 				1257403A18CAC9EA000422AC /* JSBubbleMessageCell.m */,
 				1257403B18CAC9EA000422AC /* JSBubbleView.h */,
@@ -282,6 +281,7 @@
 				1257405818CAC9EA000422AC /* UIView+AnimationOptionsForCurve.m */,
 			);
 			name = JSMessageView;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		1257409418CACA1B000422AC /* Resources */ = {
@@ -357,8 +357,6 @@
 			isa = PBXGroup;
 			children = (
 				123D2E4218D74B9B003345D7 /* Resources */,
-				12432C4018CB431D00EC5439 /* Model */,
-				1257409318CAC9FB000422AC /* JSMessageView */,
 				125C1B0018C7F90E00E79006 /* jabby */,
 				125C1B2918C7F90E00E79006 /* jabbyTests */,
 				125C1AF718C7F90E00E79006 /* Frameworks */,
@@ -392,16 +390,13 @@
 		125C1B0018C7F90E00E79006 /* jabby */ = {
 			isa = PBXGroup;
 			children = (
+				12D117CC18D89AE20005986B /* Delegate */,
+				12432C4018CB431D00EC5439 /* Model */,
+				12D117CB18D89AA50005986B /* View */,
+				12D117C918D89A450005986B /* Controller */,
+				12D117CA18D89A760005986B /* StoryBoard */,
 				125C1B0918C7F90E00E79006 /* JAppDelegate.h */,
 				125C1B0A18C7F90E00E79006 /* JAppDelegate.m */,
-				125C1B0C18C7F90E00E79006 /* Main_iPhone.storyboard */,
-				125C1B0F18C7F90E00E79006 /* Main_iPad.storyboard */,
-				125C1B1518C7F90E00E79006 /* JMasterViewController.h */,
-				125C1B1618C7F90E00E79006 /* JMasterViewController.m */,
-				125C1B1818C7F90E00E79006 /* JDetailViewController.h */,
-				125C1B1918C7F90E00E79006 /* JDetailViewController.m */,
-				12626D1E18D28859003BD753 /* JLoginViewController.h */,
-				12626D1F18D28859003BD753 /* JLoginViewController.m */,
 				125C1B1B18C7F90E00E79006 /* Images.xcassets */,
 				125C1B1218C7F90E00E79006 /* jabby.xcdatamodeld */,
 				125C1B0118C7F90E00E79006 /* Supporting Files */,
@@ -436,6 +431,45 @@
 				125C1B2C18C7F90E00E79006 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		12D117C918D89A450005986B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				125C1B1518C7F90E00E79006 /* JMasterViewController.h */,
+				125C1B1618C7F90E00E79006 /* JMasterViewController.m */,
+				125C1B1818C7F90E00E79006 /* JDetailViewController.h */,
+				125C1B1918C7F90E00E79006 /* JDetailViewController.m */,
+				12626D1E18D28859003BD753 /* JLoginViewController.h */,
+				12626D1F18D28859003BD753 /* JLoginViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		12D117CA18D89A760005986B /* StoryBoard */ = {
+			isa = PBXGroup;
+			children = (
+				125C1B0C18C7F90E00E79006 /* Main_iPhone.storyboard */,
+				125C1B0F18C7F90E00E79006 /* Main_iPad.storyboard */,
+			);
+			name = StoryBoard;
+			sourceTree = "<group>";
+		};
+		12D117CB18D89AA50005986B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1257409318CAC9FB000422AC /* JSMessageView */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		12D117CC18D89AE20005986B /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				1257403718CAC9EA000422AC /* JFriendListDelegate.h */,
+				1257403818CAC9EA000422AC /* JMessageDelegate.h */,
+			);
+			name = Delegate;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
