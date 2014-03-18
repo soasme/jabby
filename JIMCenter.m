@@ -72,6 +72,8 @@
     
     self.xmppReconnect = [[XMPPReconnect alloc] init];
     self.xmppReconnect.autoReconnect = YES;
+    self.xmppReconnect.reconnectDelay = 3;
+    self.xmppReconnect.reconnectTimerInterval = 3;
     [self.xmppReconnect activate:self.xmppStream];
     [self.xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
     
@@ -257,5 +259,26 @@
     return [self.xmppvCardAvatarModule photoDataForJID:jid];
 }
 
+#pragma mark - XMPPReconnectDelegate
+- (void)xmppReconnect:(XMPPReconnect *)sender didDetectAccidentalDisconnect:(SCNetworkConnectionFlags)connectionFlags {
+    NSLog(@"didDetectAccidentalDisconnect %@ %d", sender, connectionFlags);
+}
+- (BOOL)xmppReconnect:(XMPPReconnect *)sender shouldAttemptAutoReconnect:(SCNetworkConnectionFlags)connectionFlags {
+    NSLog(@" shouldAttemptAutoReconnect %@ %d %d", sender, connectionFlags, [self connectedToNetwork:connectionFlags]);
+    return NO;
+}
+- (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
+    NSLog(@"disconnect");
+    [self.xmppReconnect manualStart];
+}
+
+
+
+
+- (BOOL)connectedToNetwork:(SCNetworkConnectionFlags)connectionFlags{
+    BOOL isReachable = connectionFlags & kSCNetworkFlagsReachable;
+    BOOL needsConnection = connectionFlags & kSCNetworkFlagsConnectionRequired;
+    return (isReachable && !needsConnection) ? YES : NO;
+}
 
 @end
