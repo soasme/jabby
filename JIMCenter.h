@@ -15,6 +15,7 @@
 #import "XMPPvCardTemp.h"
 #import "XMPPReconnect.h"
 #import "XMPPMessageArchivingCoreDataStorage.h"
+#import "XMPPReconnect.h"
 
 #import "JFriendListDelegate.h"
 #import "JMessageDelegate.h"
@@ -23,6 +24,7 @@
 
 @property (strong, nonatomic) id<JFriendListDelegate> friendListDelegate;
 @property (strong, nonatomic) id<JMessageDelegate> messageDelegate;
+@property (strong, nonatomic) id<XMPPReconnectDelegate> reconnectDelegate;
 
 @property (strong, nonatomic) XMPPStream *xmppStream;
 

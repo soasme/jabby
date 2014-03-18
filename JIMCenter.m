@@ -18,6 +18,7 @@
 @synthesize xmppvCardTempModule = _xmppvCardTempModule;
 @synthesize messageDelegate = _messageDelegate;
 @synthesize friendListDelegate = _friendListDelegate;
+@synthesize reconnectDelegate = _reconnectDelegate;
 @synthesize xmppReconnect = _xmppReconnect;
 @synthesize messageStorage = _messageStorage;
 
@@ -259,13 +260,13 @@
     return [self.xmppvCardAvatarModule photoDataForJID:jid];
 }
 
-#pragma mark - XMPPReconnectDelegate
+//#pragma mark - XMPPReconnectDelegate
 - (void)xmppReconnect:(XMPPReconnect *)sender didDetectAccidentalDisconnect:(SCNetworkConnectionFlags)connectionFlags {
     NSLog(@"didDetectAccidentalDisconnect %@ %d", sender, connectionFlags);
 }
 - (BOOL)xmppReconnect:(XMPPReconnect *)sender shouldAttemptAutoReconnect:(SCNetworkConnectionFlags)connectionFlags {
     NSLog(@" shouldAttemptAutoReconnect %@ %d %d", sender, connectionFlags, [self connectedToNetwork:connectionFlags]);
-    return NO;
+    return YES;
 }
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
     NSLog(@"disconnect");
