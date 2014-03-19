@@ -149,16 +149,6 @@ static JIMCenter *sharedIMCenterInstance = nil;
                                                                    userInfo:userInfo];
         [[self notiCenter] postNotification:notification];
     }
-    
-    
-    // deprecated
-//    XMPPUserCoreDataStorageObject *user = [_xmppRosterStorage userForJID:[message from]
-//                                                              xmppStream:self.xmppStream
-//                                                    managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
-//    if ([message isMessageWithBody]) {
-//        [self.messageDelegate onReceivedMessage:message from:user];
-//    }
-    
 }
 
 - (void)auth
