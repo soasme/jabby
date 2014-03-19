@@ -54,14 +54,14 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    JAppDelegate *appDelegate = [self appDelegate];
-    appDelegate.imCenter.friendListDelegate = self;
-    appDelegate.imCenter.messageDelegate = self;
+    JIMCenter *imCenter = [JIMCenter sharedInstance];
+    imCenter.friendListDelegate = self;
+    imCenter.messageDelegate = self;
     
     [self reloadFriendList];
     
-    if (![[self appDelegate] isConnected] &&
-        ![[self appDelegate].imCenter.xmppStream isConnecting] &&
+    if (![imCenter.xmppStream isConnected] &&
+        ![imCenter.xmppStream isConnecting] &&
         [self missAccount]) {
         [self pushGoToLoginView];
     }
@@ -75,7 +75,7 @@
 
 - (BOOL)missAccount
 {
-    return ![[self appDelegate].imCenter.xmppStream isAuthenticated];
+    return ![[JIMCenter sharedInstance].xmppStream isAuthenticated];
 }
 
 - (void)pushGoToLoginView
@@ -86,8 +86,8 @@
 
 - (void)reloadFriendList
 {
-    self.friendList[0] = [self appDelegate].imCenter.onlineFriends;
-    self.friendList[1] = [self appDelegate].imCenter.offlineFriends;
+    self.friendList[0] = [JIMCenter sharedInstance].onlineFriends;
+    self.friendList[1] = [JIMCenter sharedInstance].offlineFriends;
     [self.tableView reloadData];
 }
 
@@ -107,7 +107,7 @@
     NSDictionary *friend = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
     NSString *jidStr = [friend valueForKey:@"jid"];
     // XMPPUserCoreDataStorageObject *user = [[self appDelegate].imCenter getUserObjectByJidStr:jidStr];
-    NSData *avatarData = [[self appDelegate].imCenter getAvatar:jidStr];
+    NSData *avatarData = [[JIMCenter sharedInstance] getAvatar:jidStr];
     UIImage *avatar;
     if (avatarData) {
         avatar = [UIImage imageWithData:avatarData];
