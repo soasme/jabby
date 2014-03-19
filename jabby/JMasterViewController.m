@@ -63,6 +63,8 @@
      addObserver:self selector:@selector(didPresenceOnFriendList:) name:@"Presence" object:nil];
     [[NSNotificationCenter defaultCenter]
      addObserver:self selector:@selector(didAbsenceOnFriendList:) name:@"Absence" object:nil];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self selector:@selector(didIQReceivedOnFriendList:) name:@"IQ Received" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -193,7 +195,7 @@
     [self reloadFriendList];
 }
 
--(void)didSetup:(NSArray *)friends
+-(void)didIQReceivedOnFriendList:(NSNotification *)notification
 {
     [self reloadFriendList];
 }

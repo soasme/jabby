@@ -259,7 +259,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
                 [self.offlineFriends addObject:people];
             }
         }
-        [self.friendListDelegate didSetup:friends];
+        [[self notiCenter] postNotificationName:@"IQ Received" object:nil];
     }
     
     
