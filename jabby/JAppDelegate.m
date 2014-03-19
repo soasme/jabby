@@ -281,7 +281,7 @@
 
 - (BOOL)setupIMCenter
 {
-    self.imCenter = [[JIMCenter alloc] initWithFriends];
+    self.imCenter = [JIMCenter sharedInstance];
     self.imCenter.messageDelegate = self;
     isConnected = [self.imCenter connect];
     return YES;
