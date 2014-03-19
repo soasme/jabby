@@ -12,7 +12,6 @@
 #import "JDetailViewController.h"
 
 @interface JDetailViewController () <
-    JMessageDelegate,
     JSMessagesViewDelegate,
     JSMessagesViewDataSource,
     UIImagePickerControllerDelegate,
@@ -21,7 +20,7 @@
 
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 @property (strong, nonatomic) NSMutableArray *timestamps;
-@property (strong, nonatomic) NSMutableArray *messages;
+@property (nonatomic) NSMutableArray *messages;
 @property (nonatomic,strong) UIImage *willSendImage;
 
 
@@ -98,16 +97,30 @@
     [self.navigationItem setLeftBarButtonItem:
         [PBFlatBarButtonItems backBarButtonItemWithTarget:self
                               selector:@selector(showLeftMenu:)]];
+    
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self
+        selector:@selector(didChatMessageIncoming:)
+        name:@"Chat Message Incoming"
+        object:nil];
 }
 
--(void)showLeftMenu:(UIBarButtonItem *)sender {
+-(void)showLeftMenu:(UIBarButtonItem *)sender
+{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)didChatMessageIncoming:(NSNotification*)notification
+{
+//    XMPPMessage *message = (XMPPMessage *)notification.object;
+    self.messages = [[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]];
+    [JSMessageSoundEffect playMessageReceivedSound];
+    [self reloadToBottom];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     JIMCenter *imCenter = [JIMCenter sharedInstance];
-    imCenter.messageDelegate = self;
     self.messages = [imCenter fetchLatestMessage:[self hisJidStr]];
     [self reloadToBottom];
 }
@@ -118,20 +131,6 @@
     [super viewDidUnload];
 }
 
-# pragma mark - JMessageDelegate
-
-- (void)onReceivedMessage:(XMPPMessage *)message from:(id)user
-{
-    if ([message isMessageWithBody]) {
-        self.messages = [[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]];
-        [JSMessageSoundEffect playMessageReceivedSound];
-        [self reloadToBottom];
-    } else {
-        // active? pause? typing?
-        // http://wiki.jabbercn.org/XEP-0085#.E5.AE.9A.E4.B9.89
-    }
-    
-}
 
 - (void)reloadToBottom
 {
