@@ -36,6 +36,16 @@ static JIMCenter *sharedIMCenterInstance = nil;
     return sharedIMCenterInstance;
 }
 
+- (NSNotificationCenter *)notiCenter
+{
+    return [NSNotificationCenter defaultCenter];
+}
+
+
+
+
+
+
 - (id)initWithFriends
 {
     if (self = [super init]) {
@@ -45,6 +55,8 @@ static JIMCenter *sharedIMCenterInstance = nil;
     }
     return self;
 }
+
+
 
 - (BOOL)connect {
     self.xmppStream.myJID = [XMPPJID jidWithString:[[NSUserDefaults standardUserDefaults] stringForKey:@"UID"]];
@@ -120,6 +132,15 @@ static JIMCenter *sharedIMCenterInstance = nil;
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
+    if ([message isMessageWithBody]) {
+        NSNotification *notification = [NSNotification notificationWithName:@"Message Incomming"
+                                                                     object:[message body]
+                                                                   userInfo:[NSDictionary dictionary]];
+        [[self notiCenter] postNotification:notification];
+    }
+    
+    
+    // deprecated
     XMPPUserCoreDataStorageObject *user = [_xmppRosterStorage userForJID:[message from]
                                                               xmppStream:self.xmppStream
                                                     managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
