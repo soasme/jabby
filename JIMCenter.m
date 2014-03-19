@@ -132,21 +132,21 @@ static JIMCenter *sharedIMCenterInstance = nil;
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
-    if ([message isMessageWithBody]) {
-        NSNotification *notification = [NSNotification notificationWithName:@"Message Incomming"
-                                                                     object:[message body]
+    if ([message isChatMessageWithBody]) {
+        NSNotification *notification = [NSNotification notificationWithName:@"Chat Message Incoming"
+                                                                     object:message
                                                                    userInfo:[NSDictionary dictionary]];
         [[self notiCenter] postNotification:notification];
     }
     
     
     // deprecated
-    XMPPUserCoreDataStorageObject *user = [_xmppRosterStorage userForJID:[message from]
-                                                              xmppStream:self.xmppStream
-                                                    managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
-    if ([message isMessageWithBody]) {
-        [self.messageDelegate onReceivedMessage:message from:user];
-    }
+//    XMPPUserCoreDataStorageObject *user = [_xmppRosterStorage userForJID:[message from]
+//                                                              xmppStream:self.xmppStream
+//                                                    managedObjectContext:[self.xmppRosterStorage mainThreadManagedObjectContext]];
+//    if ([message isMessageWithBody]) {
+//        [self.messageDelegate onReceivedMessage:message from:user];
+//    }
     
 }
 
