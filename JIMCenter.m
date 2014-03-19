@@ -25,6 +25,16 @@
 @synthesize onlineFriends = _onlineFriends;
 @synthesize offlineFriends = _offlineFriends;
 
+static JIMCenter *sharedIMCenterInstance = nil;
++ (JIMCenter *)sharedInstance
+{
+    @synchronized(self) {
+        if (sharedIMCenterInstance == nil) {
+            sharedIMCenterInstance = [[self alloc] initWithFriends];
+        }
+    }
+    return sharedIMCenterInstance;
+}
 
 - (id)initWithFriends
 {

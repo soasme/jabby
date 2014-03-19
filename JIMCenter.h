@@ -42,6 +42,7 @@
 @property (strong, nonatomic) NSMutableArray *onlineFriends;
 @property (strong, nonatomic) NSMutableArray *offlineFriends;
 
++ (JIMCenter *)sharedInstance;
 - (void)auth;
 - (id)initWithFriends;
 - (BOOL)connect;
