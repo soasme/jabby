@@ -18,7 +18,7 @@
 
 
 @interface JMasterViewController : PBFlatGroupedTableViewController <NSFetchedResultsControllerDelegate,
-    JFriendListDelegate, JMessageDelegate, FUIAlertViewDelegate>
+    JFriendListDelegate, FUIAlertViewDelegate>
 
 @property (strong, nonatomic) JDetailViewController *detailViewController;
 

@@ -49,14 +49,22 @@
     NSMutableArray *offlineFriends = [NSMutableArray array];
     self.friendList = [NSMutableArray arrayWithObjects:onlineFriends,offlineFriends, nil];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-
+    [self reigsterNotificationObserver];
     
+}
+
+- (void)reigsterNotificationObserver
+{
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(didChatMessageIncomingOnFriendList:)
+     name:@"Chat Message Incoming"
+     object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     JIMCenter *imCenter = [JIMCenter sharedInstance];
     imCenter.friendListDelegate = self;
-    imCenter.messageDelegate = self;
     
     [self reloadFriendList];
     
@@ -199,20 +207,14 @@
     [self reloadFriendList];
 }
 
-
-#pragma mark - JMessageDelegate
-
--(void)onReceivedMessage:(XMPPMessage *)message from:(id)user
+-(void)didChatMessageIncomingOnFriendList:(NSNotification *)notification
 {
-    if ([message isMessageWithBody]) {
-        NSString *notificationBody = [NSString stringWithFormat:@"%@: %@",[user displayName],[message body]];
-        NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+    XMPPMessage *message = notification.object;
+    XMPPUserCoreDataStorageObject *user = [[JIMCenter sharedInstance] getUserObject:[message from]];
+    NSString *notificationBody = [NSString stringWithFormat:@"%@: %@",[user displayName],[message body]];
+    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
                               [user jidStr],@"jid",[user displayName],@"name", nil];
-        [[self appDelegate] sendNotification:notificationBody withUserInfo:info];
-    }
+    [[self appDelegate] sendNotification:notificationBody withUserInfo:info];
 }
-
-#pragma mark - FUIAlertViewDelegate
-
 
 @end
