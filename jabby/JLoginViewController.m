@@ -13,8 +13,6 @@
 
 @end
 
-
-
 @implementation JLoginViewController
 
 - (JAppDelegate *)appDelegate
@@ -47,6 +45,9 @@
     [UIBarButtonItem configureFlatButtonsWithColor:[UIColor peterRiverColor]
                                   highlightedColor:[UIColor belizeHoleColor]
                                       cornerRadius:3];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedSuccessOnLoginView:) name:@"Authendicate Success" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedFailedOnLoginView:) name:@"Authendicate Failed" object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -55,7 +56,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)didAuthenticatedSuccessOnLoginView: (NSNotification *)notification
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
+- (void)didAuthenticatedFailedOnLoginView: (NSNotification *)notification
+{
+    //TODO we need to notify user that he type wrong account and password.
+    //[[self appDelegate] alert:@"Your account and password are wrong!" andTitle:@"Warning"];
+}
 
 /*
 #pragma mark - Navigation
@@ -88,11 +98,8 @@
         [defaults synchronize];
         [[JIMCenter sharedInstance] connect];
         [[JIMCenter sharedInstance] auth];
-        
-        [self dismissViewControllerAnimated:YES completion:nil];
     }else {
         [[self appDelegate] alert:@"Please input your account and password" andTitle:@"Warning"];
     }
-    
 }
 @end

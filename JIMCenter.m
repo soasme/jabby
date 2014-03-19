@@ -123,11 +123,12 @@ static JIMCenter *sharedIMCenterInstance = nil;
 }
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
+    [[self notiCenter] postNotificationName:@"Authendicate Success" object:nil];
     [self goOnline];
 }
 
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error {
-    [self.friendListDelegate needLogin];
+    [[self notiCenter] postNotificationName:@"Authendicate Failed" object:error];
 }
 
 - (void)xmppStream:(XMPPStream *)sender didSendMessage:(XMPPMessage *)message
@@ -157,7 +158,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
     NSString *password = [[NSUserDefaults standardUserDefaults] stringForKey:@"PASS"];
     BOOL result = [self.xmppStream authenticateWithPassword:password error:&error];
     if (result == NO) {
-        [self.friendListDelegate needLogin];
+        [[self notiCenter] postNotificationName:@"Authendicate Failed" object:error];
     }
 }
 

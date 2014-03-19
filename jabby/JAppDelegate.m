@@ -57,8 +57,7 @@
     // Setup stream before all operations.
     [self setupIMCenter];
     self.localNotification = [[UILocalNotification alloc] init];
-    
-    
+
     return YES;
 }
 							
