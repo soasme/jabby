@@ -17,8 +17,7 @@
 #import "PBFlatGroupedTableViewController.h"
 
 
-@interface JMasterViewController : PBFlatGroupedTableViewController <NSFetchedResultsControllerDelegate,
-    JFriendListDelegate, FUIAlertViewDelegate>
+@interface JMasterViewController : PBFlatGroupedTableViewController <NSFetchedResultsControllerDelegate, FUIAlertViewDelegate>
 
 @property (strong, nonatomic) JDetailViewController *detailViewController;
 

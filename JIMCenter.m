@@ -172,42 +172,64 @@ static JIMCenter *sharedIMCenterInstance = nil;
     [self.xmppStream sendElement:mes];
 }
 
+- (void)markFriendOnline:(NSString *)jid
+{
+    NSDictionary *he = [NSDictionary dictionary];
+    for (NSDictionary *people in [NSArray arrayWithArray:self.offlineFriends]) {
+        if ([jid isEqualToString:[people valueForKey:@"jid"]]) {
+            he = [NSDictionary dictionaryWithDictionary:people];
+            [self.offlineFriends removeObject:people];
+        }
+    }
+    BOOL isInOnline = NO;
+    for (NSDictionary *people in self.onlineFriends) {
+        if ([jid isEqualToString:[people valueForKey:@"jid"]]) {
+            isInOnline = YES;
+            break;
+        }
+    }
+    if (!isInOnline) {
+        [self.onlineFriends addObject:he];
+    }
+}
+- (void)markFriendOffline:(NSString *)jid
+{
+    NSDictionary *he = [NSDictionary dictionary];
+    for (NSDictionary *people in [NSArray arrayWithArray:self.onlineFriends]) {
+        if ([jid isEqualToString:[people valueForKey:@"jid"]]) {
+            he = [NSDictionary dictionaryWithDictionary:people];
+            [self.onlineFriends removeObject:people];
+        }
+    }
+    BOOL isInOffline = NO;
+    for (NSDictionary *people in self.offlineFriends) {
+        if ([jid isEqualToString:[people valueForKey:@"jid"]]) {
+            isInOffline = YES;
+            return;
+        }
+    }
+    if (!isInOffline) {
+        [self.offlineFriends addObject:he];
+    }
+}
+
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
     NSString *presenceType = [presence type];
     NSString *userId = [[sender myJID] user];
     NSString *presenceFromUser = [[presence from] bare];
+    
     if (![presenceFromUser isEqualToString:userId]) {
+        
         if ([presenceType isEqualToString:@"available"]) {
+            [self markFriendOnline:presenceFromUser];
+            NSNotification *notification = [NSNotification notificationWithName:@"Presence" object:presence];
+            [[self notiCenter] postNotification:notification];
             
-            
-            NSArray *offline = [NSArray arrayWithArray:self.offlineFriends];
-            for (NSDictionary *people in offline) {
-                if ([[people valueForKey:@"jid"] isEqualToString:presenceFromUser]) {
-                    
-                        [self.offlineFriends removeObject:people];
-                    
-                    
-                        [self.onlineFriends addObject:people];
-                    
-                }
-            }
-            [self.friendListDelegate onPresence:presence];
         } else if ([presenceType isEqualToString:@"unavailable"]) {
-            
-            
-            NSArray *online = [NSArray arrayWithArray:self.onlineFriends];
-            for (NSDictionary *people in online) {
-                if ([[people valueForKey:@"jid"] isEqualToString:presenceFromUser]) {
-                    
-                        [self.onlineFriends removeObject:people];
-                    
-                    
-                        [self.offlineFriends addObject:people];
-                    
-                }
-            }
-            [self.friendListDelegate onAbsence:presence];
+            [self markFriendOffline:presenceFromUser];
+            NSNotification *notification = [NSNotification notificationWithName:@"Absence" object:presence];
+            [[self notiCenter] postNotification:notification];
         }
     }
 }

@@ -38,8 +38,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-
 
     self.title = @"Friends";
     self.detailViewController = (JDetailViewController *)[
@@ -60,12 +58,15 @@
      selector:@selector(didChatMessageIncomingOnFriendList:)
      name:@"Chat Message Incoming"
      object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self selector:@selector(didPresenceOnFriendList:) name:@"Presence" object:nil];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self selector:@selector(didAbsenceOnFriendList:) name:@"Absence" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     JIMCenter *imCenter = [JIMCenter sharedInstance];
-    imCenter.friendListDelegate = self;
-    
     [self reloadFriendList];
     
     if (![imCenter.xmppStream isConnected] &&
@@ -99,7 +100,7 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - Table View
+#pragma mark - UITableView
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -114,7 +115,12 @@
 - (void)configureCell:(PBFlatGroupedStyleCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *friend = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
     NSString *jidStr = [friend valueForKey:@"jid"];
-    // XMPPUserCoreDataStorageObject *user = [[self appDelegate].imCenter getUserObjectByJidStr:jidStr];
+    [cell.textLabel setText:[friend valueForKey:@"name"]];
+    [self configureCellIcon:cell forJid:jidStr];
+}
+
+- (void)configureCellIcon:(PBFlatGroupedStyleCell *)cell forJid:(NSString *)jidStr
+{
     NSData *avatarData = [[JIMCenter sharedInstance] getAvatar:jidStr];
     UIImage *avatar;
     if (avatarData) {
@@ -122,7 +128,6 @@
     } else {
         avatar = [UIImage imageNamed:@"default_avatar.png"];
     }
-    cell.textLabel.text = [friend valueForKey:@"name"];
     PBFlatRoundedImageView *avatarView = [PBFlatRoundedImageView contactImageViewWithImage:avatar];
     [cell setIconImageView:avatarView];
 }
@@ -142,18 +147,11 @@
     return 30.0f;
 }
 
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-//    XMPPPresence *presence = (XMPPPresence *)[self.friendList objectAtIndex:indexPath.row];
-//    self.detailViewController.detailItem = presence;
-//    [self performSegueWithIdentifier:@"chat" sender:self];
-}
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     return nil;
 }
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
@@ -174,14 +172,6 @@
     }
 }
 
-
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *friend = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
-    cell.textLabel.text = [friend valueForKey:@"name"];
-}
-
-
 # pragma mark - JFriendListDelegate
 
 - (void)needLogin {
@@ -193,11 +183,12 @@
     }
 }
 
--(void)onAbsence:(XMPPPresence *)presence {
+-(void)didAbsenceOnFriendList:(NSNotification *)notification
+{
     [self reloadFriendList];
 }
 
--(void)onPresence:(XMPPPresence *)presence
+-(void)didPresenceOnFriendList:(NSNotification *)notification
 {
     [self reloadFriendList];
 }
