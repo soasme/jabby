@@ -100,7 +100,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
     [self.xmppReconnect activate:self.xmppStream];
     [self.xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
     
-    self.messageStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+    self.messageStorage = (JMessageArchivingCoreDataStorage *)[XMPPMessageArchivingCoreDataStorage sharedInstance];
     XMPPMessageArchiving *messageArchiving = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:self.messageStorage];
     [messageArchiving setClientSideMessageArchivingOnly:YES];
     [messageArchiving activate:self.xmppStream];
@@ -130,12 +130,23 @@ static JIMCenter *sharedIMCenterInstance = nil;
     [self.friendListDelegate needLogin];
 }
 
+- (void)xmppStream:(XMPPStream *)sender didSendMessage:(XMPPMessage *)message
+{
+    if ([message isChatMessageWithBody]) {
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:@"outgoing",@"kind", nil];
+        NSNotification *notification = [NSNotification notificationWithName:@"Chat Message Outgoing"
+                                                                     object:message
+                                                                   userInfo:userInfo];
+        [[self notiCenter] postNotification:notification];
+    }
+}
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
     if ([message isChatMessageWithBody]) {
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:@"incoming",@"kind", nil];
         NSNotification *notification = [NSNotification notificationWithName:@"Chat Message Incoming"
                                                                      object:message
-                                                                   userInfo:[NSDictionary dictionary]];
+                                                                   userInfo:userInfo];
         [[self notiCenter] postNotification:notification];
     }
     
@@ -291,7 +302,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
     return [self.xmppvCardAvatarModule photoDataForJID:jid];
 }
 
-//#pragma mark - XMPPReconnectDelegate
+#pragma mark - XMPPReconnectDelegate
 - (void)xmppReconnect:(XMPPReconnect *)sender didDetectAccidentalDisconnect:(SCNetworkConnectionFlags)connectionFlags {
     NSLog(@"didDetectAccidentalDisconnect %@ %d", sender, connectionFlags);
 }
@@ -303,7 +314,6 @@ static JIMCenter *sharedIMCenterInstance = nil;
     NSLog(@"disconnect");
     [self.xmppReconnect manualStart];
 }
-
 
 
 

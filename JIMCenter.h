@@ -19,6 +19,7 @@
 
 #import "JFriendListDelegate.h"
 #import "JMessageDelegate.h"
+#import "JMessageArchivingCoreDataStorage.h"
 
 @interface JIMCenter : NSObject
 
@@ -37,7 +38,7 @@
 
 @property (strong, nonatomic) XMPPReconnect * xmppReconnect;
 
-@property (strong, nonatomic) XMPPMessageArchivingCoreDataStorage *messageStorage;
+@property (strong, nonatomic) JMessageArchivingCoreDataStorage *messageStorage;
 
 @property (strong, nonatomic) NSMutableArray *onlineFriends;
 @property (strong, nonatomic) NSMutableArray *offlineFriends;
