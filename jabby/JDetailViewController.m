@@ -106,8 +106,9 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self appDelegate].imCenter.messageDelegate = self;
-    self.messages = [[self appDelegate].imCenter fetchLatestMessage:[self hisJidStr]];
+    JIMCenter *imCenter = [JIMCenter sharedInstance];
+    imCenter.messageDelegate = self;
+    self.messages = [imCenter fetchLatestMessage:[self hisJidStr]];
     [self reloadToBottom];
 }
 
@@ -122,7 +123,7 @@
 - (void)onReceivedMessage:(XMPPMessage *)message from:(id)user
 {
     if ([message isMessageWithBody]) {
-        self.messages = [[self appDelegate].imCenter fetchLatestMessage:[self hisJidStr]];
+        self.messages = [[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]];
         [JSMessageSoundEffect playMessageReceivedSound];
         [self reloadToBottom];
     } else {
@@ -164,10 +165,10 @@
 #pragma mark - Messages view delegate
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
-    [[self appDelegate].imCenter sendMessage:text to:[self hisJidStr]];
+    [[JIMCenter sharedInstance] sendMessage:text to:[self hisJidStr]];
     [JSMessageSoundEffect playMessageSentSound];
     [self finishSend];
-    self.messages = [[self appDelegate].imCenter fetchLatestMessage:[self hisJidStr]];
+    self.messages = [[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]];
     [self.tableView reloadData];
 }
 
