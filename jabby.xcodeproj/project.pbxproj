@@ -67,6 +67,7 @@
 		1257409018CAC9EA000422AC /* UIColor+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1257405418CAC9EA000422AC /* UIColor+JSMessagesView.m */; };
 		1257409118CAC9EA000422AC /* UIImage+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1257405618CAC9EA000422AC /* UIImage+JSMessagesView.m */; };
 		1257409218CAC9EA000422AC /* UIView+AnimationOptionsForCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 1257405818CAC9EA000422AC /* UIView+AnimationOptionsForCurve.m */; };
+		12594C4118D9623500390D12 /* JMessageArchivingCoreDataStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 12594C4018D9623500390D12 /* JMessageArchivingCoreDataStorage.m */; };
 		125C1AF918C7F90E00E79006 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 125C1AF818C7F90E00E79006 /* Foundation.framework */; };
 		125C1AFB18C7F90E00E79006 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 125C1AFA18C7F90E00E79006 /* CoreGraphics.framework */; };
 		125C1AFD18C7F90E00E79006 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 125C1AFC18C7F90E00E79006 /* UIKit.framework */; };
@@ -176,6 +177,8 @@
 		1257405618CAC9EA000422AC /* UIImage+JSMessagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+JSMessagesView.m"; path = "jabby/UIImage+JSMessagesView.m"; sourceTree = "<group>"; };
 		1257405718CAC9EA000422AC /* UIView+AnimationOptionsForCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+AnimationOptionsForCurve.h"; path = "jabby/UIView+AnimationOptionsForCurve.h"; sourceTree = "<group>"; };
 		1257405818CAC9EA000422AC /* UIView+AnimationOptionsForCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+AnimationOptionsForCurve.m"; path = "jabby/UIView+AnimationOptionsForCurve.m"; sourceTree = "<group>"; };
+		12594C3F18D9623500390D12 /* JMessageArchivingCoreDataStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMessageArchivingCoreDataStorage.h; path = jabby/Model/JMessageArchivingCoreDataStorage.h; sourceTree = "<group>"; };
+		12594C4018D9623500390D12 /* JMessageArchivingCoreDataStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMessageArchivingCoreDataStorage.m; path = jabby/Model/JMessageArchivingCoreDataStorage.m; sourceTree = "<group>"; };
 		125C1AF518C7F90E00E79006 /* jabby.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jabby.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		125C1AF818C7F90E00E79006 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		125C1AFA18C7F90E00E79006 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -246,6 +249,8 @@
 			children = (
 				12432C4118CB439400EC5439 /* JIMCenter.h */,
 				12432C4218CB439400EC5439 /* JIMCenter.m */,
+				12594C3F18D9623500390D12 /* JMessageArchivingCoreDataStorage.h */,
+				12594C4018D9623500390D12 /* JMessageArchivingCoreDataStorage.m */,
 			);
 			name = Model;
 			path = ..;
@@ -667,6 +672,7 @@
 				125C1B1A18C7F90E00E79006 /* JDetailViewController.m in Sources */,
 				1257408218CAC9EA000422AC /* JSMessageInputView.m in Sources */,
 				1257407F18CAC9EA000422AC /* JSBubbleMessageCell.m in Sources */,
+				12594C4118D9623500390D12 /* JMessageArchivingCoreDataStorage.m in Sources */,
 				1257408318CAC9EA000422AC /* JSMessageSoundEffect.m in Sources */,
 				1257408118CAC9EA000422AC /* JSDismissiveTextView.m in Sources */,
 				12432C4318CB439400EC5439 /* JIMCenter.m in Sources */,
