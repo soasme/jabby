@@ -98,11 +98,23 @@
         [PBFlatBarButtonItems backBarButtonItemWithTarget:self
                               selector:@selector(showLeftMenu:)]];
     
+    [self reigsterNotificationObserver];
+    
+}
+
+- (void)reigsterNotificationObserver
+{
     [[NSNotificationCenter defaultCenter]
-        addObserver:self
-        selector:@selector(didChatMessageIncoming:)
-        name:@"Chat Message Incoming"
-        object:nil];
+     addObserver:self
+     selector:@selector(didChatMessageIncoming:)
+     name:@"Chat Message Incoming"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(didChatMessageOutgoing:)
+     name:@"Chat Message Outgoing"
+     object:nil];
 }
 
 -(void)showLeftMenu:(UIBarButtonItem *)sender
@@ -112,7 +124,13 @@
 
 -(void)didChatMessageIncoming:(NSNotification*)notification
 {
-//    XMPPMessage *message = (XMPPMessage *)notification.object;
+    self.messages = [[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]];
+    [JSMessageSoundEffect playMessageReceivedSound];
+    [self reloadToBottom];
+}
+-(void)didChatMessageOutgoing:(NSNotification*)notification
+{
+    NSLog(@"chat mesage outgoing: %@", notification.userInfo);
     self.messages = [[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]];
     [JSMessageSoundEffect playMessageReceivedSound];
     [self reloadToBottom];
