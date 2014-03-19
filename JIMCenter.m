@@ -123,12 +123,12 @@ static JIMCenter *sharedIMCenterInstance = nil;
 }
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
-    [[self notiCenter] postNotificationName:@"Authendicate Success" object:nil];
+    [[self notiCenter] postNotificationName:@"Authenticate Success" object:nil];
     [self goOnline];
 }
 
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error {
-    [[self notiCenter] postNotificationName:@"Authendicate Failed" object:error];
+    [[self notiCenter] postNotificationName:@"Authenticate Failed" object:error];
 }
 
 - (void)xmppStream:(XMPPStream *)sender didSendMessage:(XMPPMessage *)message

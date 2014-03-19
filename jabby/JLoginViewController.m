@@ -46,8 +46,8 @@
                                   highlightedColor:[UIColor belizeHoleColor]
                                       cornerRadius:3];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedSuccessOnLoginView:) name:@"Authendicate Success" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedFailedOnLoginView:) name:@"Authendicate Failed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedSuccessOnLoginView:) name:@"Authenticate Success" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedFailedOnLoginView:) name:@"Authenticate Failed" object:nil];
 }
 
 - (void)didReceiveMemoryWarning
