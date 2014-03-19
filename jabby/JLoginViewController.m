@@ -86,8 +86,8 @@
         [defaults setObject:_passwordInput.text forKey:@"PASS"];
         //保存
         [defaults synchronize];
-        [[self appDelegate].imCenter connect];
-        [[self appDelegate].imCenter auth];
+        [[JIMCenter sharedInstance] connect];
+        [[JIMCenter sharedInstance] auth];
         
         [self dismissViewControllerAnimated:YES completion:nil];
     }else {
