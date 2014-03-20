@@ -13,6 +13,7 @@
                     </navigationBar>
                     <connections>
                         <segue destination="pGg-6v-bdr" kind="relationship" relationship="rootViewController" id="RxB-wf-QIq"/>
+                        <segue destination="MlR-Jj-V7g" kind="modal" identifier="NavGoToLogin" id="clD-35-Ww7"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eq9-QA-ai8" sceneMemberID="firstResponder"/>
@@ -83,6 +84,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="OGO-Zm-CGX"/>
                     <connections>
                         <outlet property="accountInput" destination="Yes-6h-r5P" id="Bt7-ot-YXT"/>
                         <outlet property="loginButton" destination="JIA-kr-e4H" id="33n-mS-EtY"/>
@@ -131,9 +133,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="好友列表" id="tQt-TN-PWz"/>
-                    <connections>
-                        <segue destination="MlR-Jj-V7g" kind="modal" identifier="GoToLogin" id="6w0-JI-1GS"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Cn-md-YlS" sceneMemberID="firstResponder"/>
             </objects>
