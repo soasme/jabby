@@ -189,7 +189,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
             break;
         }
     }
-    if (!isInOnline) {
+    if (!isInOnline && [he valueForKey:@"name"]) {
         [self.onlineFriends addObject:he];
     }
 }
@@ -209,7 +209,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
             return;
         }
     }
-    if (!isInOffline) {
+    if (!isInOffline && [he valueForKey:@"name"]) {
         [self.offlineFriends addObject:he];
     }
 }
@@ -224,6 +224,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
         
         if ([presenceType isEqualToString:@"available"]) {
             [self markFriendOnline:presenceFromUser];
+            NSLog(@"Presence: %@", presenceFromUser);
             NSNotification *notification = [NSNotification notificationWithName:@"Presence" object:presence];
             [[self notiCenter] postNotification:notification];
             
