@@ -68,31 +68,12 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    JIMCenter *imCenter = [JIMCenter sharedInstance];
     [self reloadFriendList];
-    
-    if (![imCenter.xmppStream isConnected] &&
-        ![imCenter.xmppStream isConnecting] &&
-        [self missAccount]) {
-        [self pushGoToLoginView];
-    }
-    
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-}
-
-- (BOOL)missAccount
-{
-    return ![[JIMCenter sharedInstance].xmppStream isAuthenticated];
-}
-
-- (void)pushGoToLoginView
-{
-    
-    [self performSegueWithIdentifier:@"GoToLogin" sender:self];
 }
 
 - (void)reloadFriendList
@@ -119,6 +100,10 @@
     NSString *jidStr = [friend valueForKey:@"jid"];
     [cell.textLabel setText:[friend valueForKey:@"name"]];
     [self configureCellIcon:cell forJid:jidStr];
+}
+
+- (void)configureCell:(PBFlatGroupedStyleCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    // dummy
 }
 
 - (void)configureCellIcon:(PBFlatGroupedStyleCell *)cell forJid:(NSString *)jidStr
@@ -171,17 +156,6 @@
         
         NSDictionary *info = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
         [[segue destinationViewController] configureInfo:info];
-    }
-}
-
-# pragma mark - JFriendListDelegate
-
-- (void)needLogin {
-    if ([self missAccount]) {
-        FUIAlertView *alert = [[self appDelegate] alert:@"Authenticated Failed!" andTitle:@"Warning"];
-        [alert setOnDismissAction:^{
-            [self pushGoToLoginView];
-        }];
     }
 }
 
