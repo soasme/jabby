@@ -20,29 +20,29 @@
 @synthesize imCenter = _imCenter;
 @synthesize localNotification = _localNotification;
 @synthesize backgroundTask, backgroundTimer, didShowDisconnectionWarning;
+@synthesize navigationController = _navigationController;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    UINavigationController *navigationController;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-        navigationController = [splitViewController.viewControllers lastObject];
-        splitViewController.delegate = (id)navigationController.topViewController;
+        self.navigationController = [splitViewController.viewControllers lastObject];
+        splitViewController.delegate = (id)self.navigationController.topViewController;
         UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
         JMasterViewController *controller = (JMasterViewController *)masterNavigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
     } else {
-        navigationController = (UINavigationController *)self.window.rootViewController;
+        self.navigationController = (UINavigationController *)self.window.rootViewController;
         
-        JMasterViewController *controller = (JMasterViewController *)navigationController.topViewController;
+        JMasterViewController *controller = (JMasterViewController *)self.navigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
         
         
     }
-    [navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
-    [navigationController.navigationBar setTitleTextAttributes:
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
+    [self.navigationController.navigationBar setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
       [UIColor whiteColor], NSForegroundColorAttributeName,
       [UIFont fontWithName:@"ArialMT" size:20.0], NSFontAttributeName,nil]];
@@ -57,6 +57,8 @@
     // Setup stream before all operations.
     [self setupIMCenter];
     self.localNotification = [[UILocalNotification alloc] init];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedFailedOnApp:) name:@"Authenticate Failed" object:nil];
 
     return YES;
 }
@@ -333,5 +335,12 @@
     return isConnected;
 }
 
+- (void)didAuthenticatedFailedOnApp:(NSNotification *)notification
+{
+    [[JIMCenter sharedInstance].xmppReconnect stop];
+    NSLog(@"%@", self.navigationController);
+    [self.navigationController performSegueWithIdentifier:@"NavGoToLogin" sender:self];
+    
+}
 @end
 
