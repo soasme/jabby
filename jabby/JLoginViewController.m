@@ -58,13 +58,14 @@
 
 - (void)didAuthenticatedSuccessOnLoginView: (NSNotification *)notification
 {
+    [[JIMCenter sharedInstance].xmppReconnect manualStart];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didAuthenticatedFailedOnLoginView: (NSNotification *)notification
 {
     //TODO we need to notify user that he type wrong account and password.
-    //[[self appDelegate] alert:@"Your account and password are wrong!" andTitle:@"Warning"];
+    [[self appDelegate] alert:@"Your account and password are wrong!" andTitle:@"Warning"];
 }
 
 /*
