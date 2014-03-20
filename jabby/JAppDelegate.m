@@ -58,6 +58,8 @@
     [self setupIMCenter];
     self.localNotification = [[UILocalNotification alloc] init];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(log:) name:nil object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedFailedOnApp:) name:@"Authenticate Failed" object:nil];
 
     return YES;
@@ -341,6 +343,11 @@
     NSLog(@"%@", self.navigationController);
     [self.navigationController performSegueWithIdentifier:@"NavGoToLogin" sender:self];
     
+}
+
+- (void)log:(NSNotification *)notification
+{
+    //NSLog(@"Notification: %@", notification.name);
 }
 @end
 
