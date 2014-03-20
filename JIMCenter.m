@@ -325,7 +325,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
 }
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
     NSLog(@"disconnect");
-    [self.xmppReconnect manualStart];
+//    [self.xmppReconnect manualStart];
 }
 
 
