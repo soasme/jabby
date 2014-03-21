@@ -11,6 +11,15 @@
 
 @implementation JMessage
 
+-(id)initWithCoreData:(XMPPMessageArchiving_Message_CoreDataObject *)object
+{
+    if (self = [super init]) {
+        [self setText:[object body]];
+        [self setDate:[object timestamp]];
+        
+    }
+    return self;
+}
 
 /**
  *  @return The body text of the message.
@@ -35,7 +44,7 @@
  */
 - (NSDate *)date
 {
-    return nil;
+    return _date;
 }
 @end
 

@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "JSMessageData.h"
+#import "XMPPMessageArchiving_Message_CoreDataObject.h"
 
 @interface JMessage : NSObject <JSMessageData>
 
 @property NSString *text;
+@property NSDate *date;
 @end
