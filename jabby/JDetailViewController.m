@@ -87,6 +87,7 @@
     self.title = [self hisName];
     self.messageInputView.textView.placeHolder = @"Say something!";
     self.sender = @"soasme";
+    [[JSBubbleView appearance] setFont:[UIFont systemFontOfSize:14.0f]];
     
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
@@ -150,7 +151,16 @@
 - (void)reloadToBottom
 {
     [self.tableView reloadData];
-    [self scrollToBottomAnimated:YES];
+    [self scrollToBottomAnimated:NO];
+}
+
+- (UIColor *)getColorByMessageType:(JSBubbleMessageType)type
+{
+    if (type == JSBubbleMessageTypeOutgoing) {
+        return [UIColor turquoiseColor];
+    } else {
+        return [UIColor cloudsColor];
+    }
 }
 
 //#pragma mark - Split view
@@ -169,9 +179,12 @@
 //    self.masterPopoverController = nil;
 //}
 
+#pragma mark - JSMessagesViewDelegate
+
 - (void)didSendText:(NSString *)text fromSender:(NSString *)sender onDate:(NSDate *)date
 {
-    NSLog(@"did send text.");
+    [[JIMCenter sharedInstance] sendMessage:text to:[self hisJidStr]];
+    [self finishSend];
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -195,7 +208,7 @@
 - (UIImageView *)bubbleImageViewWithType:(JSBubbleMessageType)type
                        forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [JSBubbleImageViewFactory bubbleImageViewForType:type color:[UIColor turquoiseColor]];
+    return [JSBubbleImageViewFactory bubbleImageViewForType:type color:[self getColorByMessageType:type]];
 }
 
 /**
@@ -207,6 +220,15 @@
 - (JSMessageInputViewStyle)inputViewStyle
 {
     return JSMessageInputViewStyleFlat;
+}
+
+- (void)configureCell:(JSBubbleMessageCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell messageType] == JSBubbleMessageTypeOutgoing) {
+        
+        // Customize any UITextView properties
+        cell.bubbleView.textView.textColor = [UIColor whiteColor];
+    }
 }
 
 #pragma mark - JSMessagesViewDataSource
