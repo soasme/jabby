@@ -86,7 +86,7 @@
     //[[JSBubbleView appearance] setFont:/* your font for the message bubbles */];
     self.title = [self hisName];
     self.messageInputView.textView.placeHolder = @"Say something!";
-    self.sender = @"soasme";
+    self.sender = nil;
     [[JSBubbleView appearance] setFont:[UIFont systemFontOfSize:14.0f]];
     
     self.messages = [NSMutableArray array];

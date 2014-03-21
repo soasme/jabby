@@ -35,8 +35,7 @@
  */
 - (NSString *)sender
 {
-    //return @"Soasme";
-    return @"";
+    return nil;
 }
 
 /**
