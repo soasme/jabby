@@ -122,14 +122,13 @@
 
 -(void)didChatMessageIncoming:(NSNotification*)notification
 {
-    self.messages = [[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]];
+    [self.messages addObjectsFromArray:[[JIMCenter sharedInstance] fetchLastMessage:[self hisJidStr]]];
     [JSMessageSoundEffect playMessageReceivedSound];
     [self reloadToBottom];
 }
 -(void)didChatMessageOutgoing:(NSNotification*)notification
 {
-    NSLog(@"chat mesage outgoing: %@", notification.userInfo);
-    self.messages = [[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]];
+    [self.messages addObjectsFromArray:[[JIMCenter sharedInstance] fetchLastMessage:[self hisJidStr]]];
     [JSMessageSoundEffect playMessageReceivedSound];
     [self reloadToBottom];
 }

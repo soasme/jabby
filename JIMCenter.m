@@ -271,6 +271,17 @@ static JIMCenter *sharedIMCenterInstance = nil;
 
 - (NSMutableArray *)fetchLatestMessage:(NSString *)jidStr
 {
+    return [self fetchMessage:jidStr recordNumber:20];
+}
+
+- (NSMutableArray *)fetchLastMessage:(NSString *)jidStr
+{
+    return [self fetchMessage:jidStr recordNumber:1];
+}
+
+
+- (NSMutableArray *)fetchMessage:(NSString *)jidStr recordNumber:(int)count
+{
     NSManagedObjectContext *moc = [self.messageStorage mainThreadManagedObjectContext];
     NSEntityDescription *messageEntity = [self.messageStorage messageEntity:moc];
 	
@@ -281,7 +292,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
     
     fetchRequest.entity = messageEntity;
     fetchRequest.fetchBatchSize = 20;
-    fetchRequest.fetchLimit = 20;
+    fetchRequest.fetchLimit = count;
     [fetchRequest setSortDescriptors:sortDescriptors];
     [fetchRequest setPredicate:predicate];
     

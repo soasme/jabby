@@ -43,7 +43,7 @@
  */
 - (NSDate *)date
 {
-    return _date;
+    return nil;
 }
 @end
 
