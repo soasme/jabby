@@ -11,6 +11,7 @@
 #import "JAppDelegate.h"
 #import "JSMessagesViewController.h"
 #import "PBFlatBarButtonItems.h"
+#import "Model/JMessage.h"
 
 @interface JDetailViewController : JSMessagesViewController ;
 

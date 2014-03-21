@@ -12,10 +12,7 @@
 #import "JDetailViewController.h"
 
 @interface JDetailViewController () <
-    JSMessagesViewDelegate,
-    JSMessagesViewDataSource,
-    UIImagePickerControllerDelegate,
-    UINavigationControllerDelegate
+    JSMessagesViewDelegate, JSMessagesViewDataSource
 >
 
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -81,15 +78,15 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    [self configureView];
-    
     self.delegate = self;
     self.dataSource = self;
+    [super viewDidLoad];
+    [self configureView];
     
-
+    //[[JSBubbleView appearance] setFont:/* your font for the message bubbles */];
     self.title = [self hisName];
+    self.messageInputView.textView.placeHolder = @"Say something!";
+    self.sender = @"soasme";
     
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
@@ -172,29 +169,9 @@
 //    self.masterPopoverController = nil;
 //}
 
-
-#pragma mark - Table view data source
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (void)didSendText:(NSString *)text fromSender:(NSString *)sender onDate:(NSDate *)date
 {
-    return self.messages.count;
-}
-
-#pragma mark - Messages view delegate
-- (void)sendPressed:(UIButton *)sender withText:(NSString *)text
-{
-    [[JIMCenter sharedInstance] sendMessage:text to:[self hisJidStr]];
-    [JSMessageSoundEffect playMessageSentSound];
-    [self finishSend];
-    self.messages = [[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]];
-    [self.tableView reloadData];
-}
-
-- (void)cameraPressed:(id)sender{
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.allowsEditing = YES;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    [self presentViewController:picker animated:YES completion:NULL];
+    NSLog(@"did send text.");
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -206,132 +183,65 @@
     }
 }
 
-- (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+/**
+ *  Asks the delegate for the bubble image view for the row at the specified index path with the specified type.
+ *
+ *  @param type      The type of message for the row located at indexPath.
+ *  @param indexPath The index path of the row to be displayed.
+ *
+ *  @return A `UIImageView` with both `image` and `highlightedImage` properties set.
+ *  @see JSBubbleImageViewFactory.
+ */
+- (UIImageView *)bubbleImageViewWithType:(JSBubbleMessageType)type
+                       forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return JSBubbleMessageStyleFlat;
+    return [JSBubbleImageViewFactory bubbleImageViewForType:type color:[UIColor turquoiseColor]];
 }
 
-- (JSBubbleMediaType)messageMediaTypeForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if([[self.messages objectAtIndex:indexPath.row] body]){
-        return JSBubbleMediaTypeText;
-    } else {
-        return JSBubbleMediaTypeImage;
-    }
-    
-    return -1;
+/**
+ *  Asks the delegate for the input view style.
+ *
+ *  @return A constant describing the input view style.
+ *  @see JSMessageInputViewStyle.
+ */
+- (JSMessageInputViewStyle)inputViewStyle
+{
+    return JSMessageInputViewStyleFlat;
 }
 
-- (UIButton *)sendButton
+#pragma mark - JSMessagesViewDataSource
+
+- (id<JSMessageData>)messageForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [UIButton defaultSendButton];
+    XMPPMessageArchiving_Message_CoreDataObject *messageCoreData = [self getMessage:indexPath];
+    JMessage *message = [[JMessage alloc] init];
+    [message setText:[messageCoreData body]];
+
+    return message;
 }
 
-- (JSMessagesViewTimestampPolicy)timestampPolicy
+- (UIImageView *)avatarImageViewForRowAtIndexPath:(NSIndexPath *)indexPath sender:(NSString *)sender
 {
-    /*
-     JSMessagesViewTimestampPolicyAll = 0,
-     JSMessagesViewTimestampPolicyAlternating,
-     JSMessagesViewTimestampPolicyEveryThree,
-     JSMessagesViewTimestampPolicyEveryFive,
-     JSMessagesViewTimestampPolicyCustom
-     */
-    return JSMessagesViewTimestampPolicyCustom;
-}
-
-
-
-- (JSMessagesViewAvatarPolicy)avatarPolicy
-{
-    /*
-     JSMessagesViewAvatarPolicyIncomingOnly = 0,
-     JSMessagesViewAvatarPolicyBoth,
-     JSMessagesViewAvatarPolicyNone
-     */
-    return JSMessagesViewAvatarPolicyNone;
-}
-
-- (JSAvatarStyle)avatarStyle
-{
-    /*
-     JSAvatarStyleCircle = 0,
-     JSAvatarStyleSquare,
-     JSAvatarStyleNone
-     */
-    return JSAvatarStyleNone;
-}
-
-- (JSInputBarStyle)inputBarStyle
-{
-    /*
-     JSInputBarStyleDefault,
-     JSInputBarStyleFlat
-     
-     */
-    return JSInputBarStyleFlat;
-}
-
-//  Optional delegate method
-//  Required if using `JSMessagesViewTimestampPolicyCustom`
-//
-//  - (BOOL)hasTimestampForRowAtIndexPath:(NSIndexPath *)indexPath
-//
-
-#pragma mark - Messages view data source
-- (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([[self.messages objectAtIndex:indexPath.row] body]){
-        return [[self.messages objectAtIndex:indexPath.row] body];
-    }
+//    NSString *jidStr = [[self getMessage:indexPath] bareJidStr];
+//    NSData *data = [[JIMCenter sharedInstance] getAvatar:jidStr];
+//    return [PBFlatRoundedImageView contactImageViewWithImage:[UIImage imageWithData:data]];
     return nil;
 }
 
-- (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath
+
+#pragma mark - UITableViewDataSource
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return [self.timestamps objectAtIndex:indexPath.row];
-    return nil;
+    return self.messages.count;
 }
 
-- (UIImage *)avatarImageForIncomingMessage
+#pragma These are private methods.
+
+-(XMPPMessageArchiving_Message_CoreDataObject *)getMessage:(NSIndexPath *)indexPath
 {
-    return [UIImage imageNamed:@"demo-avatar-jobs"];
+    return [self.messages objectAtIndex:indexPath.row];
 }
 
-- (UIImage *)avatarImageForOutgoingMessage
-{
-    return [UIImage imageNamed:@"demo-avatar-woz"];
-}
-
-- (id)dataForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    if([[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"]){
-//        return [[self.messages objectAtIndex:indexPath.row] objectForKey:@"Image"];
-//    }
-    return nil;
-    
-}
-
-#pragma UIImagePicker Delegate
-
-#pragma mark - Image picker delegate
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)information
-{
-	NSLog(@"Chose image!  Details:  %@", information);
-    
-    self.willSendImage = [information objectForKey:UIImagePickerControllerEditedImage];
-    NSDictionary *message = [NSDictionary dictionaryWithObjectsAndKeys:self.willSendImage,@"Image",@"self",@"Sender", nil];
-    [self.messages addObject:message];
-    [self.timestamps addObject:[NSDate date]];
-    [self.tableView reloadData];
-    [self scrollToBottomAnimated:YES];
-    
-	
-    [self dismissViewControllerAnimated:YES completion:NULL];
-    
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
-    
-}
 
 @end
