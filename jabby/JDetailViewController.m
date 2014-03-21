@@ -236,7 +236,7 @@
 {
     XMPPMessageArchiving_Message_CoreDataObject *messageCoreData = [self getMessage:indexPath];
     JMessage *message = [[JMessage alloc] init];
-    [message setText:[messageCoreData body]];
+    [message setContent:[messageCoreData body]];
 
     return message;
 }

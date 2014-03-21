@@ -11,11 +11,14 @@
 
 @implementation JMessage
 
+@synthesize content;
+@synthesize timestamp;
+
 -(id)initWithCoreData:(XMPPMessageArchiving_Message_CoreDataObject *)object
 {
     if (self = [super init]) {
-        [self setText:[object body]];
-        [self setDate:[object timestamp]];
+        [self setContent:[object body]];
+        [self setTimestamp:[object timestamp]];
         
     }
     return self;
@@ -27,7 +30,7 @@
  */
 - (NSString *)text
 {
-    return _text;
+    return self.content;
 }
 
 /**

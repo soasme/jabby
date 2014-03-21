@@ -12,6 +12,7 @@
 
 @interface JMessage : NSObject <JSMessageData>
 
-@property NSString *text;
-@property NSDate *date;
+@property (atomic, readwrite) NSString *content;
+@property (atomic, readwrite) NSDate *timestamp;
+
 @end
