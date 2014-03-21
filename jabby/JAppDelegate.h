@@ -16,6 +16,7 @@
 #import "FUIAlertView.h"
 #import "UINavigationBar+FlatUI.h"
 #import "UIColor+FlatUI.h"
+#import "PBFlatRoundedImageView.h"
 
 
 @interface JAppDelegate : UIResponder <UIApplicationDelegate, JMessageDelegate> {
