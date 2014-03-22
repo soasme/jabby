@@ -224,7 +224,6 @@ static JIMCenter *sharedIMCenterInstance = nil;
         
         if ([presenceType isEqualToString:@"available"]) {
             [self markFriendOnline:presenceFromUser];
-            NSLog(@"Presence: %@", presenceFromUser);
             NSNotification *notification = [NSNotification notificationWithName:@"Presence" object:presence];
             [[self notiCenter] postNotification:notification];
             

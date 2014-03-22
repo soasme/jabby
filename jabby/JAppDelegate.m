@@ -343,7 +343,6 @@
 - (void)didAuthenticatedFailedOnApp:(NSNotification *)notification
 {
     [[JIMCenter sharedInstance].xmppReconnect stop];
-    NSLog(@"%@", self.navigationController);
     [self.navigationController performSegueWithIdentifier:@"NavGoToLogin" sender:self];
     
 }
