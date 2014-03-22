@@ -26,6 +26,19 @@
     return self;
 }
 
+-(id)initWithXMPPMessage:(XMPPMessage *)element kind:(NSString *)kind
+{
+    if (self = [super init]) {
+        [self setContent:[element body]];
+        [self setTimestamp:nil];
+        if ([kind isEqualToString:@"incoming"]) {
+            [self setDirection:0];
+        } else {
+            [self setDirection:1];
+        }
+    }
+    return self;
+}
 
 - (NSString *)text
 {

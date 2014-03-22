@@ -18,7 +18,7 @@
 @property (atomic, readwrite) NSUInteger *direction;
 
 -(id)initWithCoreData:(XMPPMessageArchiving_Message_CoreDataObject *)object;
--(id)initWithXMPPMessage:(XMPPElement *)message;
+-(id)initWithXMPPMessage:(XMPPMessage *)message kind:(NSString *)kind;
 
 -(BOOL)isOutgoing;
 @end
