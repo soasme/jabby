@@ -91,10 +91,10 @@
     
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
-    
     [self.navigationItem setLeftBarButtonItem:
-        [PBFlatBarButtonItems backBarButtonItemWithTarget:self
-                              selector:@selector(showLeftMenu:)]];
+     [PBFlatBarButtonItems backBarButtonItemWithTarget:self
+                                              selector:@selector(showLeftMenu:)]];
+    
     
     [self reigsterNotificationObserver];
     
@@ -139,6 +139,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    
     JIMCenter *imCenter = [JIMCenter sharedInstance];
     self.messages = [imCenter fetchLatestMessage:[self hisJidStr]];
     [self reloadToBottom];
@@ -146,6 +147,7 @@
 
 - (void)viewDidUnload
 {
+    [self.navigationItem setLeftBarButtonItem:nil];
     [self setView:nil];
     [super viewDidUnload];
 }
