@@ -287,6 +287,7 @@
     self.imCenter = [JIMCenter sharedInstance];
     self.imCenter.messageDelegate = self;
     isConnected = [self.imCenter connect];
+    [self.imCenter loadCachedFriendList];
     return YES;
 }
 
