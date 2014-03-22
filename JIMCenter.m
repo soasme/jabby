@@ -24,7 +24,7 @@
 
 @synthesize onlineFriends = _onlineFriends;
 @synthesize offlineFriends = _offlineFriends;
-@synthesize currentChattingWith = _currentChattingWith;
+@synthesize sessions = _sessions;
 
 static JIMCenter *sharedIMCenterInstance = nil;
 + (JIMCenter *)sharedInstance
@@ -53,7 +53,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
         [self setupStream];
         self.onlineFriends = [NSMutableArray array];
         self.offlineFriends = [NSMutableArray array];
-        self.currentChattingWith = [NSMutableOrderedSet orderedSet];
+        self.sessions = [NSMutableOrderedSet orderedSet];
     }
     return self;
 }
@@ -173,7 +173,6 @@ static JIMCenter *sharedIMCenterInstance = nil;
     [body setStringValue:text];
     [mes addChild:body];
     [self.xmppStream sendElement:mes];
-    [self.currentChattingWith insertObject:bareJid atIndex:0];
 }
 
 - (void)markFriendOnline:(NSString *)jid
@@ -387,6 +386,11 @@ static JIMCenter *sharedIMCenterInstance = nil;
     NSMutableArray *friendList = [NSMutableArray arrayWithContentsOfFile:[self friendCachedPath]];
     self.onlineFriends = friendList[0];
     self.offlineFriends = friendList[1];
+}
+
+- (void)activeSession:(NSString *)jidStr
+{
+    [self.sessions setObject:jidStr atIndex:0];
 }
 
 @end

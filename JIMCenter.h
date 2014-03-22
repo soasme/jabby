@@ -43,7 +43,7 @@
 
 @property (strong, nonatomic) NSMutableArray *onlineFriends;
 @property (strong, nonatomic) NSMutableArray *offlineFriends;
-@property (strong, nonatomic) NSMutableOrderedSet *currentChattingWith;
+@property (strong, nonatomic) NSMutableOrderedSet *sessions;
 
 + (JIMCenter *)sharedInstance;
 - (void)auth;
@@ -64,5 +64,6 @@
 - (BOOL)connectedToNetwork:(SCNetworkConnectionFlags)connectionFlags;
 - (void)cacheFriendList;
 - (void)loadCachedFriendList;
+- (void)activeSession:(NSString *)jidStr;
 
 @end
