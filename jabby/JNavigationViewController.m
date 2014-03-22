@@ -80,6 +80,8 @@
     }
     
     [cell setBackgroundColor:[UIColor midnightBlueColor]];
+    [cell.imageView setImage:[UIImage imageNamed:@"default_avatar.png"]];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     return cell;
 }
