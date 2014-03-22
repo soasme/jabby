@@ -38,7 +38,7 @@
                              leftDrawerViewController:leftBar];
     [self.drawerController setShowsShadow:YES];
     [self.drawerController setRestorationIdentifier:@"MMDrawer"];
-    [self.drawerController setMaximumLeftDrawerWidth:180.0];
+    [self.drawerController setMaximumLeftDrawerWidth:70.0];
     [self.drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
     [self.drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
     [self.window setRootViewController:self.drawerController];
