@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PBFlatSettings.h"
+#import "UINavigationBar+FlatUI.h"
+#import "UIColor+FlatUI.h"
+
 
 @interface JNavigationViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 
 @end

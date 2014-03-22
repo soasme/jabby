@@ -27,6 +27,13 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
+    [self.navigationBar setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      [UIColor whiteColor], NSForegroundColorAttributeName,
+      [UIFont fontWithName:@"ArialMT" size:20.0], NSFontAttributeName,nil]];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
 - (void)didReceiveMemoryWarning
