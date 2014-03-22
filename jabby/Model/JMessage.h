@@ -10,9 +10,15 @@
 #import "JSMessageData.h"
 #import "XMPPMessageArchiving_Message_CoreDataObject.h"
 
-@interface JMessage : NSObject <JSMessageData>
+
+@interface JMessage : XMPPMessage <JSMessageData>
 
 @property (atomic, readwrite) NSString *content;
 @property (atomic, readwrite) NSDate *timestamp;
+@property (atomic, readwrite) NSUInteger *direction;
 
+-(id)initWithCoreData:(XMPPMessageArchiving_Message_CoreDataObject *)object;
+-(id)initWithXMPPMessage:(XMPPElement *)message;
+
+-(BOOL)isOutgoing;
 @end

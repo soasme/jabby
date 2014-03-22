@@ -13,21 +13,20 @@
 
 @synthesize content;
 @synthesize timestamp;
+@synthesize direction;
 
 -(id)initWithCoreData:(XMPPMessageArchiving_Message_CoreDataObject *)object
 {
     if (self = [super init]) {
         [self setContent:[object body]];
         [self setTimestamp:[object timestamp]];
+        [self setDirection:(NSUInteger *)[object isOutgoing]];
         
     }
     return self;
 }
 
-/**
- *  @return The body text of the message.
- *  @warning This value must not be `nil`.
- */
+
 - (NSString *)text
 {
     return self.content;
@@ -41,12 +40,15 @@
     return nil;
 }
 
-/**
- *  @return The date that the message was sent.
- */
+
 - (NSDate *)date
 {
     return nil;
+}
+
+-(BOOL)isOutgoing
+{
+    return (BOOL)[self direction];
 }
 @end
 
