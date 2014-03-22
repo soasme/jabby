@@ -142,6 +142,8 @@
     
     JIMCenter *imCenter = [JIMCenter sharedInstance];
     self.messages = [imCenter fetchLatestMessage:[self hisJidStr]];
+    NSLog(@"active hisJidStr:%@", [self hisJidStr]);
+    [imCenter activeSession:[self hisJidStr]];
     [self reloadToBottom];
 }
 
