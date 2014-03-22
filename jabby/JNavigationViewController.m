@@ -66,8 +66,7 @@
 #pragma  mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
-    return [[JIMCenter sharedInstance].currentChattingWith count];
+    return [[JIMCenter sharedInstance].sessions count];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -79,8 +78,8 @@
 {
     static NSString *simpleTableIdentifier = @"CurrentChattingCell";
     
-//    NSString *jidStr = [[JIMCenter sharedInstance].currentChattingWith objectAtIndex:indexPath.row];
-    NSString *jidStr = @"ainesmile@gmail.com";
+    NSString *jidStr = [[JIMCenter sharedInstance].sessions objectAtIndex:indexPath.row];
+//    NSString *jidStr = @"ainesmile@gmail.com";
     UIImage *avatar = [[JIMCenter sharedInstance] getAvatarImage:jidStr];
     PBFlatRoundedImageView *avatarView = [PBFlatRoundedImageView contactImageViewWithImage:avatar];
     [avatarView setFrame:CGRectMake(12, 0, 44, 44)]; // (70 - 44) / 2
