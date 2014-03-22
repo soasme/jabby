@@ -43,9 +43,7 @@
     self.detailViewController = (JDetailViewController *)[
         [self.splitViewController.viewControllers lastObject] topViewController];
     
-    NSMutableArray *onlineFriends = [NSMutableArray array];
-    NSMutableArray *offlineFriends = [NSMutableArray array];
-    self.friendList = [NSMutableArray arrayWithObjects:onlineFriends,offlineFriends, nil];
+    
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self reigsterNotificationObserver];
     
@@ -78,8 +76,10 @@
 
 - (void)reloadFriendList
 {
-    self.friendList[0] = [JIMCenter sharedInstance].onlineFriends;
-    self.friendList[1] = [JIMCenter sharedInstance].offlineFriends;
+    NSMutableArray *onlineFriends = [JIMCenter sharedInstance].onlineFriends;
+    NSMutableArray *offlineFriends = [JIMCenter sharedInstance].offlineFriends;
+    self.friendList = [NSMutableArray arrayWithObjects:onlineFriends,offlineFriends, nil];
+    [[JIMCenter sharedInstance] cacheFriendList];
     [self.tableView reloadData];
 }
 
