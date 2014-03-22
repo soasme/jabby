@@ -12,6 +12,7 @@
 #import "JLoginViewController.h"
 #import "PBFlatSettings.h"
 
+
 @implementation JAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -23,24 +24,14 @@
 @synthesize navigationController = _navigationController;
 
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-        self.navigationController = [splitViewController.viewControllers lastObject];
-        splitViewController.delegate = (id)self.navigationController.topViewController;
-        UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
-        JMasterViewController *controller = (JMasterViewController *)masterNavigationController.topViewController;
-        controller.managedObjectContext = self.managedObjectContext;
-    } else {
-        self.navigationController = (UINavigationController *)self.window.rootViewController;
+    self.navigationController = (UINavigationController *)self.window.rootViewController;
         
-        JMasterViewController *controller = (JMasterViewController *)self.navigationController.topViewController;
-        controller.managedObjectContext = self.managedObjectContext;
-        
-        
-    }
+    JMasterViewController *controller = (JMasterViewController *)self.navigationController.topViewController;
+    controller.managedObjectContext = self.managedObjectContext;
+
     [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
     [self.navigationController.navigationBar setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
