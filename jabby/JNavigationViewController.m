@@ -34,6 +34,9 @@
       [UIColor whiteColor], NSForegroundColorAttributeName,
       [UIFont fontWithName:@"ArialMT" size:20.0], NSFontAttributeName,nil]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -52,5 +55,30 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma  mark - UITableViewDataSource
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *simpleTableIdentifier = @"SimpleTableCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+    }
+    
+    cell.textLabel.text = @"Friends";
+    return cell;
+}
 
 @end

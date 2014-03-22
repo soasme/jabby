@@ -12,7 +12,8 @@
 #import "UIColor+FlatUI.h"
 
 
-@interface JNavigationViewController : UIViewController
+@interface JNavigationViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
