@@ -34,6 +34,8 @@
       [UIColor whiteColor], NSForegroundColorAttributeName,
       [UIFont fontWithName:@"ArialMT" size:20.0], NSFontAttributeName,nil]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    [self.view setBackgroundColor:[UIColor midnightBlueColor]];
+    [self.tableView setBackgroundColor:[UIColor midnightBlueColor]];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
