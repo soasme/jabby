@@ -234,18 +234,11 @@
 
 - (id<JSMessageData>)messageForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    XMPPMessageArchiving_Message_CoreDataObject *messageCoreData = [self getMessage:indexPath];
-    JMessage *message = [[JMessage alloc] init];
-    [message setContent:[messageCoreData body]];
-
-    return message;
+    return [self getMessage:indexPath];
 }
 
 - (UIImageView *)avatarImageViewForRowAtIndexPath:(NSIndexPath *)indexPath sender:(NSString *)sender
 {
-//    NSString *jidStr = [[self getMessage:indexPath] bareJidStr];
-//    NSData *data = [[JIMCenter sharedInstance] getAvatar:jidStr];
-//    return [PBFlatRoundedImageView contactImageViewWithImage:[UIImage imageWithData:data]];
     return nil;
 }
 
@@ -259,7 +252,7 @@
 
 #pragma These are private methods.
 
--(XMPPMessageArchiving_Message_CoreDataObject *)getMessage:(NSIndexPath *)indexPath
+-(JMessage *)getMessage:(NSIndexPath *)indexPath
 {
     return [self.messages objectAtIndex:indexPath.row];
 }
