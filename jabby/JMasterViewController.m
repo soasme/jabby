@@ -129,13 +129,7 @@
 
 - (void)configureCellIcon:(PBFlatGroupedStyleCell *)cell forJid:(NSString *)jidStr
 {
-    NSData *avatarData = [[JIMCenter sharedInstance] getAvatar:jidStr];
-    UIImage *avatar;
-    if (avatarData) {
-        avatar = [UIImage imageWithData:avatarData];
-    } else {
-        avatar = [UIImage imageNamed:@"default_avatar.png"];
-    }
+    UIImage *avatar = [[JIMCenter sharedInstance] getAvatarImage:jidStr];
     PBFlatRoundedImageView *avatarView = [PBFlatRoundedImageView contactImageViewWithImage:avatar];
     [cell setIconImageView:avatarView];
 }

@@ -43,6 +43,7 @@
 
 @property (strong, nonatomic) NSMutableArray *onlineFriends;
 @property (strong, nonatomic) NSMutableArray *offlineFriends;
+@property (strong, nonatomic) NSMutableOrderedSet *currentChattingWith;
 
 + (JIMCenter *)sharedInstance;
 - (void)auth;
@@ -59,6 +60,7 @@
 - (XMPPUserCoreDataStorageObject *)getUserObjectByJidStr:(NSString *)jidStr;
 - (BOOL)isFriendOnline:(NSString *)jidStr;
 - (NSData *)getAvatar:(NSString *)jidStr;
+- (UIImage *)getAvatarImage:(NSString *)jidStr;
 - (BOOL)connectedToNetwork:(SCNetworkConnectionFlags)connectionFlags;
 - (void)cacheFriendList;
 - (void)loadCachedFriendList;

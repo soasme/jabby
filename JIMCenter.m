@@ -24,6 +24,7 @@
 
 @synthesize onlineFriends = _onlineFriends;
 @synthesize offlineFriends = _offlineFriends;
+@synthesize currentChattingWith = _currentChattingWith;
 
 static JIMCenter *sharedIMCenterInstance = nil;
 + (JIMCenter *)sharedInstance
@@ -52,6 +53,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
         [self setupStream];
         self.onlineFriends = [NSMutableArray array];
         self.offlineFriends = [NSMutableArray array];
+        self.currentChattingWith = [NSMutableOrderedSet orderedSet];
     }
     return self;
 }
@@ -171,6 +173,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
     [body setStringValue:text];
     [mes addChild:body];
     [self.xmppStream sendElement:mes];
+    [self.currentChattingWith insertObject:bareJid atIndex:0];
 }
 
 - (void)markFriendOnline:(NSString *)jid
@@ -330,6 +333,18 @@ static JIMCenter *sharedIMCenterInstance = nil;
 {
     XMPPJID *jid = [XMPPJID jidWithString:jidStr];
     return [self.xmppvCardAvatarModule photoDataForJID:jid];
+}
+
+- (UIImage *)getAvatarImage:(NSString *)jidStr
+{
+    NSData *avatarData = [self getAvatar:jidStr];
+    UIImage *avatar;
+    if (avatarData) {
+        avatar = [UIImage imageWithData:avatarData];
+    } else {
+        avatar = [UIImage imageNamed:@"default_avatar.png"];
+    }
+    return avatar;
 }
 
 #pragma mark - XMPPReconnectDelegate
