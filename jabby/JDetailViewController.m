@@ -122,13 +122,17 @@
 
 -(void)didChatMessageIncoming:(NSNotification*)notification
 {
-    [self.messages addObjectsFromArray:[[JIMCenter sharedInstance] fetchLastMessage:[self hisJidStr]]];
+    NSString *kind = [notification.userInfo valueForKey:@"kind"];
+    JMessage *xmppMessage = notification.object;
+    [self.messages addObject:[[JMessage alloc] initWithXMPPMessage:xmppMessage kind:kind]];
     [JSMessageSoundEffect playMessageReceivedSound];
     [self reloadToBottom];
 }
 -(void)didChatMessageOutgoing:(NSNotification*)notification
 {
-    [self.messages addObjectsFromArray:[[JIMCenter sharedInstance] fetchLastMessage:[self hisJidStr]]];
+    NSString *kind = [notification.userInfo valueForKey:@"kind"];
+    JMessage *xmppMessage = notification.object;
+    [self.messages addObject:[[JMessage alloc] initWithXMPPMessage:xmppMessage kind:kind]];
     [JSMessageSoundEffect playMessageReceivedSound];
     [self reloadToBottom];
 }
