@@ -41,7 +41,7 @@
     self.tableView.delegate = self;
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
     [self.tableView reloadData];
 }
