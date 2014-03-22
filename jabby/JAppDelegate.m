@@ -164,11 +164,13 @@
     }
     
     application.applicationIconBadgeNumber = 0;
+    [[JIMCenter sharedInstance] loadCachedFriendList];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Saves changes in the application's managed object context before the application terminates.
+    [[JIMCenter sharedInstance] cacheFriendList];
     [self saveContext];
 }
 
