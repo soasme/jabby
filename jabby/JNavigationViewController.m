@@ -41,6 +41,11 @@
     self.tableView.delegate = self;
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self.tableView reloadData];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -62,6 +67,7 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 1;
+    return [[JIMCenter sharedInstance].currentChattingWith count];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -73,6 +79,12 @@
 {
     static NSString *simpleTableIdentifier = @"CurrentChattingCell";
     
+//    NSString *jidStr = [[JIMCenter sharedInstance].currentChattingWith objectAtIndex:indexPath.row];
+    NSString *jidStr = @"ainesmile@gmail.com";
+    UIImage *avatar = [[JIMCenter sharedInstance] getAvatarImage:jidStr];
+    PBFlatRoundedImageView *avatarView = [PBFlatRoundedImageView contactImageViewWithImage:avatar];
+    [avatarView setFrame:CGRectMake(12, 0, 44, 44)]; // (70 - 44) / 2
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
@@ -80,7 +92,7 @@
     }
     
     [cell setBackgroundColor:[UIColor midnightBlueColor]];
-    [cell.imageView setImage:[UIImage imageNamed:@"default_avatar.png"]];
+    [cell.contentView insertSubview:avatarView atIndex:0];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     return cell;

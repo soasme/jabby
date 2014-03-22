@@ -10,6 +10,8 @@
 #import "PBFlatSettings.h"
 #import "UINavigationBar+FlatUI.h"
 #import "UIColor+FlatUI.h"
+#import "JIMCenter.h"
+#import "PBFlatRoundedImageView.h"
 
 
 @interface JNavigationViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
