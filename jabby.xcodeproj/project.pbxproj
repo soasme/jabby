@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		123D2E4418D74BB9003345D7 /* default_avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 123D2E4318D74BB9003345D7 /* default_avatar.png */; };
 		12432C4318CB439400EC5439 /* JIMCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 12432C4218CB439400EC5439 /* JIMCenter.m */; };
+		1243825118DD3925007BB22E /* JNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1243825018DD3925007BB22E /* JNavigationViewController.m */; };
 		12594C4118D9623500390D12 /* JMessageArchivingCoreDataStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 12594C4018D9623500390D12 /* JMessageArchivingCoreDataStorage.m */; };
 		125C1AF918C7F90E00E79006 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 125C1AF818C7F90E00E79006 /* Foundation.framework */; };
 		125C1AFB18C7F90E00E79006 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 125C1AFA18C7F90E00E79006 /* CoreGraphics.framework */; };
@@ -48,6 +49,8 @@
 		123D2E4318D74BB9003345D7 /* default_avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_avatar.png; sourceTree = "<group>"; };
 		12432C4118CB439400EC5439 /* JIMCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JIMCenter.h; sourceTree = "<group>"; };
 		12432C4218CB439400EC5439 /* JIMCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JIMCenter.m; sourceTree = "<group>"; };
+		1243824F18DD3925007BB22E /* JNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNavigationViewController.h; sourceTree = "<group>"; };
+		1243825018DD3925007BB22E /* JNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNavigationViewController.m; sourceTree = "<group>"; };
 		1257403718CAC9EA000422AC /* JFriendListDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFriendListDelegate.h; sourceTree = "<group>"; };
 		1257403818CAC9EA000422AC /* JMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMessageDelegate.h; sourceTree = "<group>"; };
 		12594C3F18D9623500390D12 /* JMessageArchivingCoreDataStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMessageArchivingCoreDataStorage.h; path = jabby/Model/JMessageArchivingCoreDataStorage.h; sourceTree = "<group>"; };
@@ -222,6 +225,8 @@
 				125C1B1918C7F90E00E79006 /* JDetailViewController.m */,
 				12626D1E18D28859003BD753 /* JLoginViewController.h */,
 				12626D1F18D28859003BD753 /* JLoginViewController.m */,
+				1243824F18DD3925007BB22E /* JNavigationViewController.h */,
+				1243825018DD3925007BB22E /* JNavigationViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -398,6 +403,7 @@
 				12A54F6A18DBDACA00C4EEF9 /* JMessage.m in Sources */,
 				125C1B1718C7F90E00E79006 /* JMasterViewController.m in Sources */,
 				12626D2018D28859003BD753 /* JLoginViewController.m in Sources */,
+				1243825118DD3925007BB22E /* JNavigationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
