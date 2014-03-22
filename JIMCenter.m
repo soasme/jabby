@@ -391,7 +391,6 @@ static JIMCenter *sharedIMCenterInstance = nil;
 - (void)activeSession:(NSString *)jidStr
 {
     [self.sessions addObject:jidStr];
-
 }
 
 @end

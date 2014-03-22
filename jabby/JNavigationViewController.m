@@ -82,7 +82,7 @@
 //    NSString *jidStr = @"ainesmile@gmail.com";
     UIImage *avatar = [[JIMCenter sharedInstance] getAvatarImage:jidStr];
     PBFlatRoundedImageView *avatarView = [PBFlatRoundedImageView contactImageViewWithImage:avatar];
-    [avatarView setFrame:CGRectMake(12, 0, 44, 44)]; // (70 - 44) / 2
+    [avatarView setFrame:CGRectMake(17, 4, 36, 36)]; // (70 - 44) / 2
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
