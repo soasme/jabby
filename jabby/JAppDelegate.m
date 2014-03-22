@@ -28,10 +28,20 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.navigationController = (UINavigationController *)self.window.rootViewController;
-        
     JMasterViewController *controller = (JMasterViewController *)self.navigationController.topViewController;
+    JLeftSideBarViewController *leftBar = [[JLeftSideBarViewController alloc] init];
     controller.managedObjectContext = self.managedObjectContext;
 
+    self.drawerController = [[MMDrawerController alloc]
+                             initWithCenterViewController:self.navigationController
+                             leftDrawerViewController:leftBar];
+    [self.drawerController setShowsShadow:YES];
+    [self.drawerController setRestorationIdentifier:@"MMDrawer"];
+    [self.drawerController setMaximumLeftDrawerWidth:180.0];
+    [self.drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [self.drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+    [self.window setRootViewController:self.drawerController];
+    
     [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
     [self.navigationController.navigationBar setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:

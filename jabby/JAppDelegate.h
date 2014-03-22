@@ -17,6 +17,8 @@
 #import "UINavigationBar+FlatUI.h"
 #import "UIColor+FlatUI.h"
 #import "PBFlatRoundedImageView.h"
+#import "MMDrawerController.h"
+#import "JLeftSideBarViewController.h"
 
 
 @interface JAppDelegate : UIResponder <UIApplicationDelegate, JMessageDelegate> {
@@ -37,6 +39,8 @@
 @property (nonatomic, retain) NSTimer *backgroundTimer;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 @property (nonatomic) BOOL didShowDisconnectionWarning;
+
+@property (nonatomic,strong) MMDrawerController * drawerController;
 
 
 - (void)saveContext;
