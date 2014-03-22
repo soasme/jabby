@@ -20,6 +20,7 @@
 #import "JFriendListDelegate.h"
 #import "JMessageDelegate.h"
 #import "JMessageArchivingCoreDataStorage.h"
+#import "JMessage.h"
 
 @interface JIMCenter : NSObject
 

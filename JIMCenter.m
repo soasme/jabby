@@ -299,7 +299,13 @@ static JIMCenter *sharedIMCenterInstance = nil;
     NSError *error = nil;
     NSArray *meses = [moc executeFetchRequest:fetchRequest error:&error];
     
-    return [NSMutableArray arrayWithArray:[[meses reverseObjectEnumerator] allObjects]];
+    NSMutableArray *messages = [NSMutableArray array];
+    for (id message in [[meses reverseObjectEnumerator] allObjects]) {
+        JMessage *jMessage = [[JMessage alloc] initWithCoreData:message];
+        [messages addObject:jMessage];
+    }
+    
+    return messages;
 }
 
 - (XMPPUserCoreDataStorageObject *)getUserObject:(XMPPJID *)jid
