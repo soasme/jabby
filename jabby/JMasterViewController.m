@@ -11,6 +11,7 @@
 #import "JDetailViewController.h"
 
 #import "JLoginViewController.h"
+#import "MMDrawerBarButtonItem.h"
 
 @interface JMasterViewController ()
 
@@ -67,6 +68,26 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [self reloadFriendList];
+
+    UIBarButtonItem *leftDrawerButton = [PBFlatBarButtonItems menuBarButtonItemWithTarget:self
+                                             selector:@selector(leftDrawerButtonPress:)];
+    [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
+}
+
+- (void)leftDrawerButtonPress:(UIBarButtonItem *)sender
+{
+    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
+}
+
+-(MMDrawerController*)mm_drawerController{
+    UIViewController *parentViewController = self.parentViewController;
+    while (parentViewController != nil) {
+        if([parentViewController isKindOfClass:[MMDrawerController class]]){
+            return (MMDrawerController *)parentViewController;
+        }
+        parentViewController = parentViewController.parentViewController;
+    }
+    return nil;
 }
 
 - (void)didReceiveMemoryWarning
