@@ -354,4 +354,25 @@ static JIMCenter *sharedIMCenterInstance = nil;
     return (isReachable && !needsConnection) ? YES : NO;
 }
 
+- (NSString *)friendCachedPath {
+    NSArray *paths =NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    return [documentsDirectory stringByAppendingPathComponent:@"friend_cached.plist"];
+}
+
+- (void)cacheFriendList
+{
+    NSMutableArray *friendList = [NSMutableArray array];
+    friendList[0] = [NSMutableArray arrayWithArray:self.onlineFriends];
+    friendList[1] = [NSMutableArray arrayWithArray:self.offlineFriends];
+    [friendList writeToFile:[self friendCachedPath] atomically:YES];
+}
+
+- (void)loadCachedFriendList
+{
+    NSMutableArray *friendList = [NSMutableArray arrayWithContentsOfFile:[self friendCachedPath]];
+    self.onlineFriends = friendList[0];
+    self.offlineFriends = friendList[1];
+}
+
 @end
