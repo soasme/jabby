@@ -27,9 +27,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     self.navigationController = (UINavigationController *)self.window.rootViewController;
     JMasterViewController *controller = (JMasterViewController *)self.navigationController.topViewController;
-    JLeftSideBarViewController *leftBar = [[JLeftSideBarViewController alloc] init];
+    JLeftSideBarViewController *leftBar = [storyboard instantiateViewControllerWithIdentifier:@"Navigation Drawer"];
     controller.managedObjectContext = self.managedObjectContext;
 
     self.drawerController = [[MMDrawerController alloc]

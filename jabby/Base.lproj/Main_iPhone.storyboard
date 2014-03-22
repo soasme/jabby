@@ -138,6 +138,38 @@
             </objects>
             <point key="canvasLocation" x="685" y="64"/>
         </scene>
+        <!--Navigation View Controller-->
+        <scene sceneID="dxO-0O-0Qy">
+            <objects>
+                <viewController storyboardIdentifier="Navigation Drawer" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3fg-5h-Ehg" customClass="JNavigationViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hYv-D3-fvg"/>
+                        <viewControllerLayoutGuide type="bottom" id="QhW-q1-PQE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="trV-RR-eVY">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lyz-Ml-gYY">
+                                <rect key="frame" x="0.0" y="9" width="180" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="Title" id="Cbh-TU-yVk"/>
+                                </items>
+                            </navigationBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="gby-K7-Fu8">
+                                <rect key="frame" x="0.0" y="53" width="180" height="515"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UJX-lf-XrD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="680" y="758"/>
+        </scene>
         <!--Detail View Controller - chat-->
         <scene sceneID="Cn3-H9-jdl">
             <objects>
