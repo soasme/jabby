@@ -126,5 +126,13 @@
     NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:jidStr,@"jid",name,@"name", nil];
     return info;
 }
+- (IBAction)didLogoutButtonTouchDown:(id)sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"UID"];
+    [defaults removeObjectForKey:@"PASS"];
+    [defaults synchronize];
+    [[JIMCenter sharedInstance] disconnect];
+    [[self appDelegate].navigationController performSegueWithIdentifier:@"NavGoToLogin" sender:self];
+}
 
 @end
