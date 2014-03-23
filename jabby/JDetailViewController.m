@@ -84,7 +84,7 @@
     [self configureView];
     
     //[[JSBubbleView appearance] setFont:/* your font for the message bubbles */];
-    self.title = [self hisName];
+    
     self.messageInputView.textView.placeHolder = @"Say something!";
     self.sender = nil;
     [[JSBubbleView appearance] setFont:[UIFont systemFontOfSize:14.0f]];
@@ -139,7 +139,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    
+    self.title = [self hisName];
     JIMCenter *imCenter = [JIMCenter sharedInstance];
     self.messages = [imCenter fetchLatestMessage:[self hisJidStr]];
     NSLog(@"active hisJidStr:%@", [self hisJidStr]);

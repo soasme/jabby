@@ -110,6 +110,10 @@
         UINavigationController *controller = [self appDelegate].navigationController;
         if ([controller.topViewController isMemberOfClass:[JMasterViewController class]]) {
             [controller.topViewController performSegueWithIdentifier:@"chat" sender:self];
+        } else if ([controller.topViewController isMemberOfClass:[JDetailViewController class]]) {
+            JDetailViewController *detail = (JDetailViewController *)controller.topViewController;
+            [detail configureInfo:[self chatTo]];
+            [detail viewDidAppear:YES];
         }
     }];
 }
