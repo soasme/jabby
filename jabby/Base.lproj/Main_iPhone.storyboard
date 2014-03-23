@@ -198,7 +198,7 @@
         <scene sceneID="Cn3-H9-jdl">
             <objects>
                 <viewController storyboardIdentifier="Chat View" title="chat" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ah7-4n-0Wa" customClass="JDetailViewController" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" title="Title" id="lWE-Ou-cNQ"/>
+                    <navigationItem key="navigationItem" id="lWE-Ou-cNQ"/>
                     <connections>
                         <outlet property="navigationItem" destination="lWE-Ou-cNQ" id="AQe-pR-upF"/>
                     </connections>
