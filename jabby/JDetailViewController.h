@@ -12,12 +12,13 @@
 #import "JSMessagesViewController.h"
 #import "PBFlatBarButtonItems.h"
 #import "Model/JMessage.h"
+#import "EGORefreshTableHeaderView.h"
 
 @interface JDetailViewController : JSMessagesViewController ;
 
 @property (retain, nonatomic) IBOutlet UITableView *table;
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationItem;
-
+@property (strong, nonatomic) EGORefreshTableHeaderView *pullRefreshView;
 
 @property (strong, nonatomic) NSDictionary* info;
 

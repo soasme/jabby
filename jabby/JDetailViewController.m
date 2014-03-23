@@ -12,7 +12,7 @@
 #import "JDetailViewController.h"
 
 @interface JDetailViewController () <
-    JSMessagesViewDelegate, JSMessagesViewDataSource
+    JSMessagesViewDelegate, JSMessagesViewDataSource, EGORefreshTableHeaderDelegate
 >
 
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -35,6 +35,7 @@
 @synthesize timestamps;
 @synthesize info;
 @synthesize navigationItem;
+@synthesize pullRefreshView;
 
 - (JAppDelegate *)appDelegate
 {
@@ -88,6 +89,15 @@
     self.messageInputView.textView.placeHolder = @"Say something!";
     self.sender = nil;
     [[JSBubbleView appearance] setFont:[UIFont systemFontOfSize:14.0f]];
+    
+    self.pullRefreshView = [[EGORefreshTableHeaderView alloc]
+                                              initWithFrame:
+                                              CGRectMake(0.0f,
+                                                         0.0f - self.tableView.bounds.size.height,
+                                                         self.view.frame.size.width,
+                                                         self.tableView.bounds.size.height)];
+    self.pullRefreshView.delegate = self;
+    [self.tableView addSubview:self.pullRefreshView];
     
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
@@ -150,8 +160,9 @@
 - (void)viewDidUnload
 {
     [self.navigationItem setLeftBarButtonItem:nil];
-    [self setView:nil];
+//    [self setView:nil];
     [super viewDidUnload];
+    
 }
 
 
@@ -256,6 +267,42 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.messages.count;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+#pragma mark UIScrollViewDelegate Methods
+//滚动控件的委托方法
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    [self.pullRefreshView egoRefreshScrollViewDidScroll:scrollView];
+//}
+//
+//-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+//{
+//    [self.pullRefreshView egoRefreshScrollViewDidEndDragging:scrollView];
+//}
+
+#pragma mark - EGORefreshTableHeaderView
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view
+{
+    NSUInteger count = [self.messages count];
+    NSUInteger page = count / 20 + 1;
+    NSMutableArray *moreMessages = [[JIMCenter sharedInstance] fetchMuchMoreMessage:[self hisJidStr] page:page];
+    [moreMessages addObjectsFromArray:self.messages];
+    self.messages = [NSMutableArray arrayWithArray:moreMessages];
+    [self.tableView reloadData];
+
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view
+{
+    return NO;
 }
 
 #pragma These are private methods.
