@@ -184,6 +184,7 @@
                                 <rect key="frame" x="11" y="419" width="49" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Logout">
+                                    <color key="titleColor" red="0.11372549831867218" green="0.73725491762161255" blue="0.61176472902297974" alpha="1" colorSpace="deviceRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
