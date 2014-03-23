@@ -7,12 +7,20 @@
 //
 
 #import "JNavigationViewController.h"
+#import "JAppDelegate.h"
+#import "JMasterViewController.h"
+#import "JDetailViewController.h"
 
 @interface JNavigationViewController ()
 
 @end
 
 @implementation JNavigationViewController
+
+- (JAppDelegate *)appDelegate
+{
+    return (JAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -79,7 +87,6 @@
     static NSString *simpleTableIdentifier = @"CurrentChattingCell";
     
     NSString *jidStr = [[JIMCenter sharedInstance].sessions objectAtIndex:indexPath.row];
-//    NSString *jidStr = @"ainesmile@gmail.com";
     UIImage *avatar = [[JIMCenter sharedInstance] getAvatarImage:jidStr];
     PBFlatRoundedImageView *avatarView = [PBFlatRoundedImageView contactImageViewWithImage:avatar];
     [avatarView setFrame:CGRectMake(17, 4, 36, 36)]; // (70 - 44) / 2
@@ -95,6 +102,25 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    [[self appDelegate].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
+        UINavigationController *controller = [self appDelegate].navigationController;
+        if ([controller.topViewController isMemberOfClass:[JMasterViewController class]]) {
+            [controller.topViewController performSegueWithIdentifier:@"chat" sender:self];
+        }
+    }];
+}
+
+- (NSDictionary *)chatTo
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    NSString *jidStr = [[JIMCenter sharedInstance].sessions objectAtIndex:indexPath.row];
+    NSString *name = [[JIMCenter sharedInstance] getDisplayName:jidStr];
+    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:jidStr,@"jid",name,@"name", nil];
+    return info;
 }
 
 @end

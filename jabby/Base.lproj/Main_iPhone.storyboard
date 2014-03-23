@@ -14,6 +14,7 @@
                     <connections>
                         <segue destination="pGg-6v-bdr" kind="relationship" relationship="rootViewController" id="RxB-wf-QIq"/>
                         <segue destination="MlR-Jj-V7g" kind="modal" identifier="NavGoToLogin" id="clD-35-Ww7"/>
+                        <segue destination="Ah7-4n-0Wa" kind="push" identifier="NavGoToChat" id="FVU-dH-vvW"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eq9-QA-ai8" sceneMemberID="firstResponder"/>
@@ -93,7 +94,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jZ0-kK-Qhh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="685" y="-669"/>
+            <point key="canvasLocation" x="685" y="-487"/>
         </scene>
         <!--Master View Controller - Master-->
         <scene sceneID="VgW-fR-Quf">
@@ -136,7 +137,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Cn-md-YlS" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="685" y="64"/>
+            <point key="canvasLocation" x="685" y="538"/>
         </scene>
         <!--Navigation View Controller-->
         <scene sceneID="dxO-0O-0Qy">
@@ -191,12 +192,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UJX-lf-XrD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="680" y="758"/>
+            <point key="canvasLocation" x="42" y="808"/>
         </scene>
         <!--Detail View Controller - chat-->
         <scene sceneID="Cn3-H9-jdl">
             <objects>
-                <viewController title="chat" id="Ah7-4n-0Wa" customClass="JDetailViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Chat View" title="chat" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ah7-4n-0Wa" customClass="JDetailViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" title="Title" id="lWE-Ou-cNQ"/>
                     <connections>
                         <outlet property="navigationItem" destination="lWE-Ou-cNQ" id="AQe-pR-upF"/>
@@ -212,4 +213,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="jUr-3t-vfg"/>
+    </inferredMetricsTieBreakers>
 </document>

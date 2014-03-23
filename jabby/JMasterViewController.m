@@ -167,11 +167,20 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"chat"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        if ([sender respondsToSelector:@selector(chatTo)]) {
+            [[segue destinationViewController] configureInfo:[sender chatTo]];
+        } else {
+            [[segue destinationViewController] configureInfo:[self chatTo]];
+        }
         
-        NSDictionary *info = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
-        [[segue destinationViewController] configureInfo:info];
     }
+}
+
+-(NSDictionary *)chatTo
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    NSDictionary *info = (NSDictionary *)[self.friendList[indexPath.section] objectAtIndex:indexPath.row];
+    return info;
 }
 
 -(void)didAbsenceOnFriendList:(NSNotification *)notification
