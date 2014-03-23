@@ -56,7 +56,7 @@
 - (void)sendMessage:(NSString *)text to:(NSString *)bareJid;
 - (NSMutableArray *)fetchLatestMessage:(NSString *)jidStr;
 - (NSMutableArray *)fetchLastMessage:(NSString *)jidStr;
-- (NSMutableArray *)fetchMuchMoreMessage:(NSString *)jidStr page:(int)page;
+- (NSMutableArray *)fetchMuchMoreMessage:(NSString *)jidStr page:(NSUInteger)page;
 - (XMPPUserCoreDataStorageObject *)getUserObject:(XMPPJID *)jid;
 - (XMPPUserCoreDataStorageObject *)getUserObjectByJidStr:(NSString *)jidStr;
 - (BOOL)isFriendOnline:(NSString *)jidStr;

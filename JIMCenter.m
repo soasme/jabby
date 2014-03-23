@@ -280,7 +280,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
     return [self fetchMessage:jidStr recordNumber:1 page:0];
 }
 
-- (NSMutableArray *)fetchMuchMoreMessage:(NSString *)jidStr page:(int)page
+- (NSMutableArray *)fetchMuchMoreMessage:(NSString *)jidStr page:(NSUInteger)page
 {
     return [self fetchMessage:jidStr recordNumber:20 page:page];
 }
