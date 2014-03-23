@@ -14,11 +14,14 @@
 #import "Model/JMessage.h"
 #import "EGORefreshTableHeaderView.h"
 
-@interface JDetailViewController : JSMessagesViewController ;
+@interface JDetailViewController : JSMessagesViewController
+{
+    EGORefreshTableHeaderView *_refreshHeaderView;
+	BOOL _reloading;
+};
 
 @property (retain, nonatomic) IBOutlet UITableView *table;
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationItem;
-@property (strong, nonatomic) EGORefreshTableHeaderView *pullRefreshView;
 
 @property (strong, nonatomic) NSDictionary* info;
 

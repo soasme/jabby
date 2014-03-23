@@ -35,7 +35,7 @@
 @synthesize timestamps;
 @synthesize info;
 @synthesize navigationItem;
-@synthesize pullRefreshView;
+
 
 - (JAppDelegate *)appDelegate
 {
@@ -90,14 +90,13 @@
     self.sender = nil;
     [[JSBubbleView appearance] setFont:[UIFont systemFontOfSize:14.0f]];
     
-    self.pullRefreshView = [[EGORefreshTableHeaderView alloc]
-                                              initWithFrame:
-                                              CGRectMake(0.0f,
-                                                         0.0f - self.tableView.bounds.size.height,
-                                                         self.view.frame.size.width,
-                                                         self.tableView.bounds.size.height)];
-    self.pullRefreshView.delegate = self;
-    [self.tableView addSubview:self.pullRefreshView];
+    
+	if (_refreshHeaderView == nil) {
+		_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, self.view.frame.size.width, self.tableView.bounds.size.height)];
+		_refreshHeaderView.delegate = self;
+		[self.tableView addSubview:_refreshHeaderView];
+	}
+    [_refreshHeaderView refreshLastUpdatedDate];
     
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
@@ -160,11 +159,10 @@
 - (void)viewDidUnload
 {
     [self.navigationItem setLeftBarButtonItem:nil];
-//    [self setView:nil];
+    _refreshHeaderView=nil;
     [super viewDidUnload];
     
 }
-
 
 - (void)reloadToBottom
 {
@@ -276,40 +274,69 @@
 }
 
 #pragma mark UIScrollViewDelegate Methods
-//滚动控件的委托方法
-//-(void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//    [self.pullRefreshView egoRefreshScrollViewDidScroll:scrollView];
-//}
-//
-//-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-//{
-//    [self.pullRefreshView egoRefreshScrollViewDidEndDragging:scrollView];
-//}
+#pragma mark UIScrollViewDelegate Methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+	
+	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+	
+	[_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+	
+}
 
 #pragma mark - EGORefreshTableHeaderView
 
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view
-{
-    NSUInteger count = [self.messages count];
-    NSUInteger page = count / 20 + 1;
-    NSMutableArray *moreMessages = [[JIMCenter sharedInstance] fetchMuchMoreMessage:[self hisJidStr] page:page];
-    [moreMessages addObjectsFromArray:self.messages];
-    self.messages = [NSMutableArray arrayWithArray:moreMessages];
-    [self.tableView reloadData];
-
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
+	
+	[self reloadTableViewDataSource];
+	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:1.0];
+	
 }
 
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view
-{
-    return NO;
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
+	
+	return _reloading; // should return if data source model is reloading
+	
 }
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
+	
+	return [NSDate date]; // should return date data source was last changed
+	
+}
+
+
 
 #pragma These are private methods.
 
 -(JMessage *)getMessage:(NSIndexPath *)indexPath
 {
     return [self.messages objectAtIndex:indexPath.row];
+}
+
+- (void)reloadTableViewDataSource{
+	
+	//  should be calling your tableviews data source model to reload
+	//  put here just for demo
+	_reloading = YES;
+    NSUInteger count = [self.messages count];
+    NSUInteger page = count / 20 + 1;
+    NSMutableArray *moreMessages = [[JIMCenter sharedInstance] fetchMuchMoreMessage:[self hisJidStr] page:page];
+    [moreMessages addObjectsFromArray:self.messages];
+    self.messages = [NSMutableArray arrayWithArray:moreMessages];
+    [self.tableView reloadData];
+}
+
+- (void)doneLoadingTableViewData{
+	
+	//  model should call this when its done loading
+	_reloading = NO;
+	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
+	
 }
 
 
