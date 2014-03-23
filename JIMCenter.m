@@ -346,6 +346,31 @@ static JIMCenter *sharedIMCenterInstance = nil;
     return avatar;
 }
 
+- (NSString *)getDisplayName:(NSString *)jidStr
+{
+    XMPPUserCoreDataStorageObject *u =[self getUserObjectByJidStr:jidStr];
+    NSString *name = [u nickname];
+    if (name) {
+        return name;
+    }
+    name = [u displayName];
+    if (name) {
+        return name;
+    }
+
+    for (NSDictionary *people in self.onlineFriends) {
+        if ([[people valueForKey:@"jid"] isEqualToString:jidStr]) {
+            return [people valueForKey:@"name"];
+        }
+    }
+    for (NSDictionary *people in self.offlineFriends) {
+        if ([[people valueForKey:@"jid"] isEqualToString:jidStr]) {
+            return [people valueForKey:@"name"];
+        }
+    }
+    return @"";
+}
+
 #pragma mark - XMPPReconnectDelegate
 - (void)xmppReconnect:(XMPPReconnect *)sender didDetectAccidentalDisconnect:(SCNetworkConnectionFlags)connectionFlags {
     NSLog(@"didDetectAccidentalDisconnect %@ %d", sender, connectionFlags);

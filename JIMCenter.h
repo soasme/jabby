@@ -61,6 +61,7 @@
 - (BOOL)isFriendOnline:(NSString *)jidStr;
 - (NSData *)getAvatar:(NSString *)jidStr;
 - (UIImage *)getAvatarImage:(NSString *)jidStr;
+- (NSString *)getDisplayName:(NSString *)jidStr;
 - (BOOL)connectedToNetwork:(SCNetworkConnectionFlags)connectionFlags;
 - (void)cacheFriendList;
 - (void)loadCachedFriendList;
