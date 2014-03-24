@@ -64,50 +64,37 @@
 
 - (void)configureView
 {
-
-}
-
-- (NSManagedObjectContext *)managedObjectContext
-{
-    NSManagedObjectContext *context = nil;
-    id delegate = [[UIApplication sharedApplication] delegate];
-    if ([delegate performSelector:@selector(managedObjectContext)]) {
-        context = [delegate managedObjectContext];
-    }
-    return context;
-}
-
-- (void)viewDidLoad
-{
-    self.delegate = self;
-    self.dataSource = self;
-    [super viewDidLoad];
-    [self configureView];
-    
-    //[[JSBubbleView appearance] setFont:/* your font for the message bubbles */];
+    [self setEdgesForExtendedLayout:UIRectEdgeNone];
     
     self.messageInputView.textView.placeHolder = @"Say something!";
+    
     self.sender = nil;
+    
     [[JSBubbleView appearance] setFont:[UIFont systemFontOfSize:14.0f]];
     
-    
-	if (_refreshHeaderView == nil) {
+    if (_refreshHeaderView == nil) {
 		_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, self.view.frame.size.width, self.tableView.bounds.size.height)];
 		_refreshHeaderView.delegate = self;
 		[self.tableView addSubview:_refreshHeaderView];
 	}
     [_refreshHeaderView refreshLastUpdatedDate];
     
-    self.messages = [NSMutableArray array];
-    self.timestamps = [NSMutableArray array];
     [self.navigationItem setLeftBarButtonItem:
      [PBFlatBarButtonItems backBarButtonItemWithTarget:self
                                               selector:@selector(showLeftMenu:)]];
-    
+}
+
+- (void)viewDidLoad
+{
+    [self setDelegate:self];
+    [self setDataSource:self];
+    [super viewDidLoad];
+    [self configureView];
+
+    self.messages = [NSMutableArray array];
+    self.timestamps = [NSMutableArray array];
     
     [self reigsterNotificationObserver];
-    [self setEdgesForExtendedLayout:UIRectEdgeNone];
-    
 }
 
 - (void)reigsterNotificationObserver
@@ -136,7 +123,7 @@
     JMessage *xmppMessage = notification.object;
     [self.messages addObject:[[JMessage alloc] initWithXMPPMessage:xmppMessage kind:kind]];
     [JSMessageSoundEffect playMessageReceivedSound];
-    [self reloadToBottom];
+    [self reloadToBottom:YES];
 }
 -(void)didChatMessageOutgoing:(NSNotification*)notification
 {
@@ -144,17 +131,15 @@
     JMessage *xmppMessage = notification.object;
     [self.messages addObject:[[JMessage alloc] initWithXMPPMessage:xmppMessage kind:kind]];
     [JSMessageSoundEffect playMessageReceivedSound];
-    [self reloadToBottom];
+    [self reloadToBottom:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    self.title = [self hisName];
-    JIMCenter *imCenter = [JIMCenter sharedInstance];
-    self.messages = [imCenter fetchLatestMessage:[self hisJidStr]];
-    NSLog(@"active hisJidStr:%@", [self hisJidStr]);
-    [imCenter activeSession:[self hisJidStr]];
-    [self reloadToBottom];
+    [self setTitle:[self hisName]];
+    [self setMessages:[[JIMCenter sharedInstance] fetchLatestMessage:[self hisJidStr]]];
+    [[JIMCenter sharedInstance] activeSession:[self hisJidStr]];
+    [self reloadToBottom:NO];
 }
 
 - (void)viewDidUnload
@@ -163,21 +148,6 @@
     _refreshHeaderView=nil;
     [super viewDidUnload];
     
-}
-
-- (void)reloadToBottom
-{
-    [self.tableView reloadData];
-    [self scrollToBottomAnimated:NO];
-}
-
-- (UIColor *)getColorByMessageType:(JSBubbleMessageType)type
-{
-    if (type == JSBubbleMessageTypeOutgoing) {
-        return [UIColor turquoiseColor];
-    } else {
-        return [UIColor cloudsColor];
-    }
 }
 
 //#pragma mark - Split view
@@ -213,27 +183,12 @@
     }
 }
 
-/**
- *  Asks the delegate for the bubble image view for the row at the specified index path with the specified type.
- *
- *  @param type      The type of message for the row located at indexPath.
- *  @param indexPath The index path of the row to be displayed.
- *
- *  @return A `UIImageView` with both `image` and `highlightedImage` properties set.
- *  @see JSBubbleImageViewFactory.
- */
 - (UIImageView *)bubbleImageViewWithType:(JSBubbleMessageType)type
                        forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return [JSBubbleImageViewFactory bubbleImageViewForType:type color:[self getColorByMessageType:type]];
 }
 
-/**
- *  Asks the delegate for the input view style.
- *
- *  @return A constant describing the input view style.
- *  @see JSMessageInputViewStyle.
- */
 - (JSMessageInputViewStyle)inputViewStyle
 {
     return JSMessageInputViewStyleFlat;
@@ -242,8 +197,6 @@
 - (void)configureCell:(JSBubbleMessageCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     if ([cell messageType] == JSBubbleMessageTypeOutgoing) {
-        
-        // Customize any UITextView properties
         cell.bubbleView.textView.textColor = [UIColor whiteColor];
     }
 }
@@ -265,22 +218,10 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.messages.count;
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+    return [self.messages count];
 }
 
 #pragma mark UIScrollViewDelegate Methods
-#pragma mark UIScrollViewDelegate Methods
-
-// http://stackoverflow.com/questions/18778691/crash-on-exc-breakpoint-scroll-view
-//- (void)dealloc {
-//    [self.tableView setDelegate:nil];
-//}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 	
@@ -296,22 +237,16 @@
 #pragma mark - EGORefreshTableHeaderView
 
 - (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
-	
 	[self reloadTableViewDataSource];
-	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:1.0];
-	
+	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.5f];
 }
 
 - (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
-	
-	return _reloading; // should return if data source model is reloading
-	
+	return _reloading;
 }
 
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
-	
-	return [NSDate date]; // should return date data source was last changed
-	
+	return [NSDate date];
 }
 
 
@@ -323,10 +258,8 @@
     return [self.messages objectAtIndex:indexPath.row];
 }
 
-- (void)reloadTableViewDataSource{
-	
-	//  should be calling your tableviews data source model to reload
-	//  put here just for demo
+- (void)reloadTableViewDataSource
+{
 	_reloading = YES;
     
     NSUInteger count = [self.messages count];
@@ -334,17 +267,28 @@
     NSMutableArray *moreMessages = [[JIMCenter sharedInstance] fetchMuchMoreMessage:[self hisJidStr] page:page];
     [moreMessages addObjectsFromArray:self.messages];
     self.messages = [NSMutableArray arrayWithArray:moreMessages];
-    
 }
 
 - (void)doneLoadingTableViewData{
-	
-	//  model should call this when its done loading
 	_reloading = NO;
+    
 	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
     [self.tableView reloadData];
-//    [self.tableView setContentInset:UIEdgeInsetsMake(31.0f, 0.0f, 0.0f, 0.0f)];
-	
+}
+
+- (void)reloadToBottom:(BOOL)animate
+{
+    [self.tableView reloadData];
+    [self scrollToBottomAnimated:animate];
+}
+
+- (UIColor *)getColorByMessageType:(JSBubbleMessageType)type
+{
+    if (type == JSBubbleMessageTypeOutgoing) {
+        return [UIColor turquoiseColor];
+    } else {
+        return [UIColor cloudsColor];
+    }
 }
 
 
