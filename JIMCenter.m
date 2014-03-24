@@ -292,7 +292,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
     NSEntityDescription *messageEntity = [self.messageStorage messageEntity:moc];
 	
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bareJidStr == %@", jidStr];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bareJidStr == %@ && body != nil", jidStr];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
     NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
     
