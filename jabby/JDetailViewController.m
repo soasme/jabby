@@ -106,6 +106,7 @@
     
     
     [self reigsterNotificationObserver];
+    [self setEdgesForExtendedLayout:UIRectEdgeNone];
     
 }
 
@@ -276,11 +277,15 @@
 #pragma mark UIScrollViewDelegate Methods
 #pragma mark UIScrollViewDelegate Methods
 
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-//	
-//	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
-//    
+// http://stackoverflow.com/questions/18778691/crash-on-exc-breakpoint-scroll-view
+//- (void)dealloc {
+//    [self.tableView setDelegate:nil];
 //}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+	
+	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+}
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
 	
@@ -323,19 +328,22 @@
 	//  should be calling your tableviews data source model to reload
 	//  put here just for demo
 	_reloading = YES;
+    
     NSUInteger count = [self.messages count];
     NSUInteger page = count / 20 + 1;
     NSMutableArray *moreMessages = [[JIMCenter sharedInstance] fetchMuchMoreMessage:[self hisJidStr] page:page];
     [moreMessages addObjectsFromArray:self.messages];
     self.messages = [NSMutableArray arrayWithArray:moreMessages];
-    [self.tableView reloadData];
+    
 }
 
 - (void)doneLoadingTableViewData{
 	
 	//  model should call this when its done loading
 	_reloading = NO;
-//	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
+	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
+    [self.tableView reloadData];
+//    [self.tableView setContentInset:UIEdgeInsetsMake(31.0f, 0.0f, 0.0f, 0.0f)];
 	
 }
 
