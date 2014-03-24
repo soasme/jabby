@@ -276,11 +276,11 @@
 #pragma mark UIScrollViewDelegate Methods
 #pragma mark UIScrollViewDelegate Methods
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-	
-	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
-    
-}
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//	
+//	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+//    
+//}
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
 	
@@ -335,7 +335,7 @@
 	
 	//  model should call this when its done loading
 	_reloading = NO;
-	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
+//	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
 	
 }
 
