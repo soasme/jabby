@@ -63,6 +63,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(log:) name:nil object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedFailedOnApp:) name:@"Authenticate Failed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLostConnectionOnApp:) name:@"Lost Connection" object:nil];
 
     return YES;
 }
@@ -347,6 +348,14 @@
     [[JIMCenter sharedInstance].xmppReconnect stop];
     [self.navigationController performSegueWithIdentifier:@"NavGoToLogin" sender:self];
     
+}
+
+- (void)didLostConnectionOnApp:(NSNotification *)notification
+{
+    EKNotifView *note = [[EKNotifView alloc] initWithNotifViewType:EKNotifViewTypeFailure notifPosition:EKNotifViewPositionBottom notifTextStyle:EKNotifViewTextStyleTitle andParentView:self.navigationController.topViewController.view];
+    [note changeBackgroundColorToColor:[UIColor turquoiseColor] forViewType:EKNotifViewTypeFailure];
+    [note changeTitleOfLabel:EKNotifViewLabelTypeTitle to:@"Oops, Lost connection ;("];
+    [note show];
 }
 
 - (void)log:(NSNotification *)notification

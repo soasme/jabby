@@ -19,6 +19,7 @@
 #import "PBFlatRoundedImageView.h"
 #import "MMDrawerController.h"
 #import "JLeftSideBarViewController.h"
+#import "EKNotifView.h"
 
 
 @interface JAppDelegate : UIResponder <UIApplicationDelegate, JMessageDelegate> {
