@@ -61,6 +61,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
 
 
 - (BOOL)connect {
+    [[self notiCenter] postNotificationName:@"Ready to connect" object:nil];
     self.xmppStream.myJID = [XMPPJID jidWithString:[[NSUserDefaults standardUserDefaults] stringForKey:@"UID"]];
     NSError *error = nil;
     if (![self.xmppStream connectWithTimeout: 2 error:&error]) {
@@ -387,7 +388,7 @@ static JIMCenter *sharedIMCenterInstance = nil;
 }
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
     [[self notiCenter] postNotificationName:@"Lost Connection" object:nil];
-//    [self.xmppReconnect manualStart];
+    [self.xmppReconnect manualStart];
 }
 
 
