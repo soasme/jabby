@@ -63,6 +63,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(log:) name:nil object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedFailedOnApp:) name:@"Authenticate Failed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedSuccessOnApp:) name:@"Authenticate Success" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLostConnectionOnApp:) name:@"Lost Connection" object:nil];
 
     return YES;
@@ -350,13 +351,23 @@
     
 }
 
+- (void)didAuthenticatedSuccessOnApp:(NSNotification *)notification
+{
+    EKNotifView *note = [[EKNotifView alloc] initWithNotifViewType:EKNotifViewTypeInfo notifPosition:EKNotifViewPositionTop notifTextStyle:EKNotifViewTextStyleTitle andParentView:self.navigationController.topViewController.view];
+    [note changeBackgroundColorToColor:[UIColor peterRiverColor] forViewType:EKNotifViewTypeFailure];
+    [note changeTitleOfLabel:EKNotifViewLabelTypeTitle to:@"Authenticated success ;)"];
+    [note show];
+}
+
 - (void)didLostConnectionOnApp:(NSNotification *)notification
 {
-    EKNotifView *note = [[EKNotifView alloc] initWithNotifViewType:EKNotifViewTypeFailure notifPosition:EKNotifViewPositionBottom notifTextStyle:EKNotifViewTextStyleTitle andParentView:self.navigationController.topViewController.view];
-    [note changeBackgroundColorToColor:[UIColor turquoiseColor] forViewType:EKNotifViewTypeFailure];
+    EKNotifView *note = [[EKNotifView alloc] initWithNotifViewType:EKNotifViewTypeFailure notifPosition:EKNotifViewPositionTop notifTextStyle:EKNotifViewTextStyleTitle andParentView:self.navigationController.topViewController.view];
+    [note changeBackgroundColorToColor:[UIColor alizarinColor] forViewType:EKNotifViewTypeFailure];
     [note changeTitleOfLabel:EKNotifViewLabelTypeTitle to:@"Oops, Lost connection ;("];
     [note show];
 }
+
+
 
 - (void)log:(NSNotification *)notification
 {
