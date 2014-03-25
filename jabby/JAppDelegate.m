@@ -66,6 +66,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedSuccessOnApp:) name:@"Authenticate Success" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReadyToConnectOnApp:) name:@"Ready to connect" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLostConnectionOnApp:) name:@"Lost Connection" object:nil];
+    
+    Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name:kReachabilityChangedNotification
+                                               object:nil];
+    [reach startNotifier];
 
     return YES;
 }
@@ -375,31 +382,16 @@
 }
 
 - (void)reachabilityChanged:(NSNotification *)notification{
-//    Reachability *currentReach = [notification object];
-//    NSParameterAssert([currentReach isKindOfClass:[Reachability class]]);
-//    NetworkStatus status = [currentReach currentReachabilityStatus];
-//    NSString *netMsg = nil;
-//    switch (status) {
-//        case NotReachable:
-//        {
-//            netMsg = @"网络不可用";
-//            break;
-//        }
-//        case ReachableViaWiFi:
-//        {
-//            netMsg = @"通过WiFi上网";
-//            break;
-//        }
-//        case ReachableViaWWAN:
-//        {
-//            netMsg = @"通过3G/GPRS上网";
-//            break;
-//        }
-//    }
-//    
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"联网提示" message:netMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-//    [alert show];
-//    [alert release];
+    Reachability *currentReach = [notification object];
+    NSParameterAssert([currentReach isKindOfClass:[Reachability class]]);
+    NetworkStatus status = [currentReach currentReachabilityStatus];
+    if (status == NotReachable) {
+        [TSMessage showNotificationWithTitle:@"Network error"
+                                    subtitle:@"Couldn't connect to the server. Check your network connection."
+                                        type:TSMessageNotificationTypeError];
+    } else {
+        [[JIMCenter sharedInstance].xmppReconnect manualStart];
+    }
 }
 
 - (void)log:(NSNotification *)notification
