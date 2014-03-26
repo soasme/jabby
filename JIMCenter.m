@@ -382,10 +382,10 @@ static JIMCenter *sharedIMCenterInstance = nil;
 - (void)xmppReconnect:(XMPPReconnect *)sender didDetectAccidentalDisconnect:(SCNetworkConnectionFlags)connectionFlags {
     NSLog(@"didDetectAccidentalDisconnect %@ %d", sender, connectionFlags);
 }
-- (BOOL)xmppReconnect:(XMPPReconnect *)sender shouldAttemptAutoReconnect:(SCNetworkConnectionFlags)connectionFlags {
-    NSLog(@" shouldAttemptAutoReconnect %@ %d %d", sender, connectionFlags, [self connectedToNetwork:connectionFlags]);
-    return YES;
-}
+//- (BOOL)xmppReconnect:(XMPPReconnect *)sender shouldAttemptAutoReconnect:(SCNetworkConnectionFlags)connectionFlags {
+//    NSLog(@" shouldAttemptAutoReconnect %@ %d %d", sender, connectionFlags, [self connectedToNetwork:connectionFlags]);
+//    return YES;
+//}
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
     [[self notiCenter] postNotificationName:@"Lost Connection" object:nil];
     [self.xmppReconnect manualStart];
