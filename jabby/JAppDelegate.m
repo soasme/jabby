@@ -370,7 +370,7 @@
 - (void)didLostConnectionOnApp:(NSNotification *)notification
 {
     [TSMessage showNotificationWithTitle:@"Network error"
-                                subtitle:@"Couldn't connect to the server. Check your network connection."
+                                subtitle:@"Check your network connection."
                                     type:TSMessageNotificationTypeError];
 }
 
@@ -378,7 +378,7 @@
 {
     [TSMessage showNotificationWithTitle:@"Connecting..."
                                 subtitle:@"Trying to connect to the server."
-                                    type:TSMessageNotificationTypeError];
+                                    type:TSMessageNotificationTypeMessage];
 }
 
 - (void)reachabilityChanged:(NSNotification *)notification{
@@ -387,7 +387,7 @@
     NetworkStatus status = [currentReach currentReachabilityStatus];
     if (status == NotReachable) {
         [TSMessage showNotificationWithTitle:@"Network error"
-                                    subtitle:@"Couldn't connect to the server. Check your network connection."
+                                    subtitle:@"Check your network connection."
                                         type:TSMessageNotificationTypeError];
     } else {
         [[JIMCenter sharedInstance].xmppReconnect manualStart];
