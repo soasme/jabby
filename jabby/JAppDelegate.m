@@ -361,7 +361,7 @@
 
 - (void)didAuthenticatedSuccessOnApp:(NSNotification *)notification
 {
-    [TSMessage showNotificationWithTitle:@"Authenticated Success"
+    [TSMessage showNotificationWithTitle:@"Online"
                                 subtitle:nil
                                     type:TSMessageNotificationTypeSuccess];
     
