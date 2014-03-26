@@ -425,4 +425,22 @@ static JIMCenter *sharedIMCenterInstance = nil;
     [self.sessions addObject:jidStr];
 }
 
+- (void)logout
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"UID"];
+    [defaults removeObjectForKey:@"PASS"];
+    [defaults synchronize];
+    [self disconnect];
+    [self.xmppReconnect stop];
+    [self.onlineFriends removeAllObjects];
+    [self.offlineFriends removeAllObjects];
+    [self cacheFriendList];
+}
+
+- (BOOL)isLoggedOut
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return ![defaults valueForKey:@"UID"];
+}
 @end

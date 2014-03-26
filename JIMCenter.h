@@ -67,5 +67,7 @@
 - (void)cacheFriendList;
 - (void)loadCachedFriendList;
 - (void)activeSession:(NSString *)jidStr;
+- (void)logout;
+- (BOOL)isLoggedOut;
 
 @end
