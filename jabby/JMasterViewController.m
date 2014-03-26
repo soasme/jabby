@@ -67,6 +67,10 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    
+    if ([[JIMCenter sharedInstance] isLoggedOut]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Authenticate Failed" object:nil];
+    }
     [self reloadFriendList];
 
     UIBarButtonItem *leftDrawerButton = [PBFlatBarButtonItems menuBarButtonItemWithTarget:self
