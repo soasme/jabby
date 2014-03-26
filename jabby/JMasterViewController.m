@@ -69,6 +69,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     
     if ([[JIMCenter sharedInstance] isLoggedOut]) {
+        [[JIMCenter sharedInstance].xmppReconnect stop];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Authenticate Failed" object:nil];
     }
     [self reloadFriendList];
