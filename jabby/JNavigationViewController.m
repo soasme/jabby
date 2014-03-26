@@ -132,6 +132,7 @@
     [defaults removeObjectForKey:@"PASS"];
     [defaults synchronize];
     [[JIMCenter sharedInstance] disconnect];
+    [[JIMCenter sharedInstance].xmppReconnect stop];
     [[self appDelegate].navigationController performSegueWithIdentifier:@"NavGoToLogin" sender:self];
 }
 
