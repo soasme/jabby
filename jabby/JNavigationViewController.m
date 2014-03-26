@@ -127,12 +127,7 @@
     return info;
 }
 - (IBAction)didLogoutButtonTouchDown:(id)sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObjectForKey:@"UID"];
-    [defaults removeObjectForKey:@"PASS"];
-    [defaults synchronize];
-    [[JIMCenter sharedInstance] disconnect];
-    [[JIMCenter sharedInstance].xmppReconnect stop];
+    [[JIMCenter sharedInstance] logout];
     [[self appDelegate].navigationController performSegueWithIdentifier:@"NavGoToLogin" sender:self];
 }
 
