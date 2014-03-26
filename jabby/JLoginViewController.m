@@ -32,6 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.tipLabel setText:@""];
     // Do any additional setup after loading the view.
     self.loginButton.buttonColor = [UIColor turquoiseColor];
     self.loginButton.shadowColor = [UIColor greenSeaColor];
@@ -48,6 +49,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedSuccessOnLoginView:) name:@"Authenticate Success" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAuthenticatedFailedOnLoginView:) name:@"Authenticate Failed" object:nil];
+    [[JIMCenter sharedInstance].xmppReconnect stop];
 }
 
 - (void)didReceiveMemoryWarning
@@ -65,7 +67,8 @@
 - (void)didAuthenticatedFailedOnLoginView: (NSNotification *)notification
 {
     //TODO we need to notify user that he type wrong account and password.
-    [[self appDelegate] alert:@"Your account and password are wrong!" andTitle:@"Warning"];
+    [self.tipLabel setText:@"Your account and password are wrong!"];
+//    [[self appDelegate] alert:@"Your account and password are wrong!" andTitle:@"Warning"];
 }
 
 /*
