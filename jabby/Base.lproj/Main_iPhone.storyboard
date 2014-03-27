@@ -61,6 +61,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="alert" returnKeyType="done" secureTextEntry="YES"/>
                                 <connections>
+                                    <action selector="passwordDidEndOnExit:" destination="MlR-Jj-V7g" eventType="editingDidEndOnExit" id="3Q8-Za-vQB"/>
+                                    <action selector="passwordEditingDidEnd:" destination="MlR-Jj-V7g" eventType="editingDidEnd" id="ghF-6y-KJQ"/>
                                     <outlet property="delegate" destination="BY0-6B-m5i" id="Xga-Op-8AL"/>
                                 </connections>
                             </textField>

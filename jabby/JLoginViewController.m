@@ -106,4 +106,12 @@
         [[self appDelegate] alert:@"Please input your account and password" andTitle:@"Warning"];
     }
 }
+
+- (IBAction)passwordEditingDidEnd:(id)sender {
+    [self didLoginButtonTouchDown:sender];
+}
+
+- (IBAction)passwordDidEndOnExit:(id)sender {
+//    NSLog(@"did exit");
+}
 @end

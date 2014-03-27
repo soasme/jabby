@@ -20,5 +20,7 @@
 @property (weak, nonatomic) IBOutlet FUIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UILabel *tipLabel;
 - (IBAction)didLoginButtonTouchDown:(id)sender;
+- (IBAction)passwordEditingDidEnd:(id)sender;
+- (IBAction)passwordDidEndOnExit:(id)sender;
 - (JAppDelegate *)appDelegate;
 @end
