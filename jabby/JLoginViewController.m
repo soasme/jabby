@@ -67,7 +67,10 @@
 - (void)didAuthenticatedFailedOnLoginView: (NSNotification *)notification
 {
     //TODO we need to notify user that he type wrong account and password.
-    [self.tipLabel setText:@"Your account and password are wrong!"];
+    if ([self validateWithUser:_accountInput.text andPass:_passwordInput.text]) {
+        [self.tipLabel setText:@"Your account and password are wrong!"];
+    }
+    
 //    [[self appDelegate] alert:@"Your account and password are wrong!" andTitle:@"Warning"];
 }
 
